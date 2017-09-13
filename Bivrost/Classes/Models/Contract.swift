@@ -12,12 +12,6 @@ import Foundation
 struct Contract {
     let elements: [Element]
     
-    enum ParameterType: String {
-        // TODO: fill out
-        case unspecified
-        case uint256
-    }
-    
     struct Constructor {
         let inputs: [FunctionInput]
         let constant: Bool
@@ -65,12 +59,5 @@ struct Contract {
         case constructor(Constructor)
         case fallback(Fallback)
         case event(Event)
-    }
-    
-    enum ElementType: String {
-        case function
-        case constructor
-        case fallback
-        case event
     }
 }

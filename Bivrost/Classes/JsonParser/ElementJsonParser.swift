@@ -13,6 +13,13 @@ fileprivate typealias FunctionInput = Contract.FunctionInput
 fileprivate typealias FunctionOutput = Contract.FunctionOutput
 fileprivate typealias EventInput = Contract.EventInput
 
+fileprivate enum ElementType: String {
+    case function
+    case constructor
+    case fallback
+    case event
+}
+
 struct ElementJsonParser {
     /// Parses a single contract element json into an initialised Contract.Element.
     ///
@@ -25,7 +32,7 @@ struct ElementJsonParser {
         // `type` can be omitted, defaulting to "function"
         let typeString = json[.type] as? String ?? "function"
         
-        guard let type = Contract.ElementType(rawValue: typeString) else {
+        guard let type = ElementType(rawValue: typeString) else {
             throw BivrostError.elementTypeInvalid
         }
         return try parseElement(with: type, from: json)
@@ -34,7 +41,7 @@ struct ElementJsonParser {
 
 // MARK: - Private Element Parsing
 extension ElementJsonParser {
-    fileprivate static func parseElement(with type: Contract.ElementType, from json: [String: Any]) throws -> Contract.Element {
+    fileprivate static func parseElement(with type: ElementType, from json: [String: Any]) throws -> Contract.Element {
         switch type {
         case .function:
             return .function(try parseFunction(from: json))
@@ -53,7 +60,6 @@ extension ElementJsonParser {
         let inputs = try parseFunctionInputs(from: json)
         let outputs = try parseFunctionOutputs(from: json)
         let name = try parseName(from: json)
-        
         return Contract.Function(name: name, inputs: inputs, outputs: outputs, constant: constant, payable: payable)
     }
     
@@ -61,7 +67,6 @@ extension ElementJsonParser {
         let constant = parseConstant(from: json)
         let payable = parsePayable(from: json)
         let inputs = try parseFunctionInputs(from: json)
-        
         return Contract.Constructor(inputs: inputs, constant: constant, payable: payable)
     }
     
@@ -75,7 +80,6 @@ extension ElementJsonParser {
         let name = try parseName(from: json)
         let inputs = try parseEventInputs(from: json)
         let anonymous = parseAnonymous(from: json)
-        
         return Contract.Event(name: name, inputs: inputs, anonymous: anonymous)
     }
     
@@ -97,38 +101,59 @@ extension ElementJsonParser {
         return json[.payable] as? Bool ?? false
     }
     
+    /// Parses the list of function inputs contained in a Json dictionary.
+    ///
+    /// - Parameter json: Dictionary describing a function. This dictionary should
+    ///     include the key `inputs`. Otherwise an empty list is returned.
+    /// - Returns: The list of `FunctionInput`s or an empty list.
+    /// - Throws: Throws a BivrostError in case the json was malformed or there
+    ///     was an error.
     fileprivate static func parseFunctionInputs(from json: [String: Any]) throws -> [FunctionInput] {
-        guard let jsonInputs = json[.inputs] as? [[String: Any]] else {
-            return []
-        }
+        let jsonInputs = json[.inputs] as? [[String: Any]] ?? []
         return try jsonInputs.map { try ElementJsonParser.parseFunctionInput(from: $0) }
     }
     
+    /// Parses the function input contained in the Json dictionary.
+    ///
+    /// - Parameter json: Dictionary describing an Input to a function.
+    /// - Returns: The corresponding FunctionInput.
+    /// - Throws: Throws a BivrostError in case the json was malformed or there
+    ///     was an error.
     private static func parseFunctionInput(from json: [String: Any]) throws -> FunctionInput {
-        guard let name = json[.name] as? String,
-            let typeString = json[.type] as? String,
-            let type = Contract.ParameterType(rawValue: typeString) else {
-                throw BivrostError.functionInputInvalid
+        guard let name = json[.name] as? String else {
+            throw BivrostError.functionInputInvalid
         }
+        
+        let type = try ParameterParser.parseParameterType(from: json)
         return FunctionInput(name: name, type: type)
     }
     
+    /// Parses the list of function outputs contained in a Json dictionary.
+    ///
+    /// - Parameter json: Dictionary describing a function. This dictionary should
+    ///     include the key `outputs`. Otherwise an empty list is returned.
+    /// - Returns: The list of `FunctionOutput`s or an empty list.
+    /// - Throws: Throws a BivrostError in case the json was malformed or there
+    ///     was an error.
     fileprivate static func parseFunctionOutputs(from json: [String: Any]) throws -> [FunctionOutput] {
-        guard let jsonOutputs = json[.outputs] as? [[String: Any]] else {
-            return []
-        }
+        let jsonOutputs = json[.outputs] as? [[String: Any]] ?? []
         return try jsonOutputs.map { try ElementJsonParser.parseFunctionOutput(from: $0) }
     }
     
+    /// Parses the function output contained in the Json dictionary.
+    ///
+    /// - Parameter json: Dictionary describing an Output to a function.
+    /// - Returns: The corresponding FunctionOutput.
+    /// - Throws: Throws a BivrostError in case the json was malformed or there
+    ///     was an error.
     private static func parseFunctionOutput(from json: [String: Any]) throws -> FunctionOutput {
-        guard let name = json[.name] as? String,
-            let typeString = json[.type] as? String,
-            let type = Contract.ParameterType(rawValue: typeString) else {
-                throw BivrostError.functionOutputInvalid
+        guard let name = json[.name] as? String else {
+            throw BivrostError.functionOutputInvalid
         }
+
+        let type = try ParameterParser.parseParameterType(from: json)
         return FunctionOutput(name: name, type: type)
     }
-    
 }
 
 // MARK: - Private Event Field Parsing
@@ -141,22 +166,27 @@ extension ElementJsonParser {
     /// single contract element.
     ///
     /// - Parameter json: Should include the key `inputs` on a top level.
-    /// - Returns: A list of event inputs mapped from that json.
+    /// - Returns: A list of event inputs mapped from that json. Empty list is
+    ///     returned if there are no inputs defined in the json.
     /// - Throws: Throws if at least one of these inputs was malformed.
     fileprivate static func parseEventInputs(from json: [String: Any]) throws -> [EventInput] {
-        guard let jsonInputs = json[.inputs] as? [[String: Any]] else {
-            return []
-        }
+        let jsonInputs = json[.inputs] as? [[String: Any]] ?? []
         return try jsonInputs.map { try ElementJsonParser.parseEventInput(from: $0) }
     }
-    
+
+    /// Returns the event input from the json dictionary representing a single
+    /// event input.
+    ///
+    /// - Parameter json: Dictionary describing the input to an event.
+    /// - Returns: The corresponding.
+    /// - Throws: Throws if the input was malformed.
     private static func parseEventInput(from json: [String: Any]) throws -> EventInput {
         guard let name = json[.name] as? String,
-            let typeString = json[.type] as? String,
-            let type = Contract.ParameterType(rawValue: typeString),
             let indexed = json[.indexed] as? Bool else {
                 throw BivrostError.eventInputInvalid
         }
+        
+        let type = try ParameterParser.parseParameterType(from: json)
         return EventInput(name: name, type: type, indexed: indexed)
     }
 }
