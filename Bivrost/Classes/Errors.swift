@@ -11,8 +11,9 @@ import Foundation
 
 enum BivrostError: Error {
     case elementTypeInvalid
-    case nameInvalid
+    case elementNameInvalid
     case functionInputInvalid
     case functionOutputInvalid
+    case eventInputInvalid
     case notImplemented
 }

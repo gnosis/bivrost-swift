@@ -4,17 +4,17 @@ import Quick
 import Nimble
 @testable import Bivrost
 
-class TableOfContentsSpec: QuickSpec {
+class JsonParserSpec: QuickSpec {
     override func spec() {
-        describe("JSONParser") {
+        describe("JsonParser") {
 
             // NOT USEFUL RIGHT NOW
-//            it("should throw when given an empty contract or element") {
-//                expect { try ContractJSONParser.parseContractElement(from: [:]) }
-//                    .to(throwError())
-//                expect { try ContractJSONParser.parseContract(from: [[:]]) }
-//                    .to(throwError())
-//            }
+            it("should throw when given an empty contract or element") {
+                expect { try ContractJSONParser.parseContractElement(from: [:]) }
+                    .to(throwError())
+                expect { try ContractJSONParser.parseContract(from: [[:]]) }
+                    .to(throwError())
+            }
             
             context("Fallback Function") {
                 it("should parse an empty fallback element correctly with defaults") {
@@ -107,7 +107,42 @@ class TableOfContentsSpec: QuickSpec {
                         })
                 }
             }
-
+            context("Event Element") {
+                it("should throw when given an event element without proper fields") {
+                    let json = ["type": "event"]
+                    expect { try ContractJSONParser.parseContractElement(from: json) }
+                        .to(throwError())
+                }
+                
+                it("should parse a mostly empty event element correctly with defaults") {
+                    let json = ["type": "event", "name": "foo"]
+                    expect { try ContractJSONParser.parseContractElement(from: json) }
+                        .to(beEvent { event in
+                            expect(event.inputs).to(beEmpty())
+                            expect(event.name).to(equal("foo"))
+                            expect(event.anonymous).to(equal(false))
+                        })
+                }
+                
+                it("should parse an event element correctly") {
+                    // TODO: test more parametertypes
+                    let json: [String: Any] = ["type": "event",
+                                               "name": "foo2",
+                                               "anonymous": true,
+                                               "inputs": [["name":"a", "type":"uint256", "indexed": true]]
+                    ]
+                    expect { try ContractJSONParser.parseContractElement(from: json) }
+                        .to(beEvent { event in
+                            expect(event.inputs.count).to(equal(1))
+                            expect(event.inputs.first?.name).to(equal("a"))
+                            expect(event.inputs.first?.type).to(equal(Contract.ParameterType.uint256))
+                            expect(event.inputs.first?.indexed).to(equal(true))
+                            
+                            expect(event.name).to(equal("foo2"))
+                            expect(event.anonymous).to(equal(true))
+                        })
+                }
+            }
         }
     }
 }
@@ -144,6 +179,18 @@ func beFunction(test: @escaping (Contract.Function) -> () = { _ in } ) -> Matche
         if let actual = try expression.evaluate(),
             case let .function(function) = actual {
             test(function)
+            return true
+        }
+        return false
+    }
+}
+
+func beEvent(test: @escaping (Contract.Event) -> () = { _ in } ) -> MatcherFunc<Contract.Element> {
+    return MatcherFunc { expression, message in
+        message.postfixMessage = "be an Event object"
+        if let actual = try expression.evaluate(),
+            case let .event(event) = actual {
+            test(event)
             return true
         }
         return false

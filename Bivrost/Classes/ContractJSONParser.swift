@@ -11,6 +11,7 @@ import Foundation
 
 fileprivate typealias FunctionInput = Contract.FunctionInput
 fileprivate typealias FunctionOutput = Contract.FunctionOutput
+fileprivate typealias EventInput = Contract.EventInput
 
 enum JSONKey: String {
     case type
@@ -19,6 +20,8 @@ enum JSONKey: String {
     case outputs
     case constant
     case payable
+    case anonymous
+    case indexed
 }
 
 extension Dictionary where Key == String {
@@ -88,7 +91,18 @@ extension ContractJSONParser {
     }
     
     fileprivate static func parseEvent(from json: [String: Any]) throws -> Contract.Event {
-        throw BivrostError.notImplemented
+        let name = try parseName(from: json)
+        let inputs = try parseEventInputs(from: json)
+        let anonymous = parseAnonymous(from: json)
+        
+        return Contract.Event(name: name, inputs: inputs, anonymous: anonymous)
+    }
+    
+    private static func parseName(from json: [String: Any]) throws -> String {
+        guard let name = json[.name] as? String else {
+            throw BivrostError.elementNameInvalid
+        }
+        return name
     }
 }
 
@@ -100,13 +114,6 @@ extension ContractJSONParser {
     
     fileprivate static func parsePayable(from json: [String: Any]) -> Bool {
         return json[.payable] as? Bool ?? false
-    }
-    
-    fileprivate static func parseName(from json: [String: Any]) throws -> String {
-        guard let name = json[.name] as? String else {
-            throw BivrostError.nameInvalid
-        }
-        return name
     }
     
     fileprivate static func parseFunctionInputs(from json: [String: Any]) throws -> [FunctionInput] {
@@ -145,5 +152,31 @@ extension ContractJSONParser {
 
 // MARK: - Private Event Field Parsing
 extension ContractJSONParser {
+    fileprivate static func parseAnonymous(from json: [String: Any]) -> Bool {
+        return json[.anonymous] as? Bool ?? false
+    }
+    
+    /// Returns a list of event inputs from a json dictionary representing a 
+    /// single contract element.
+    ///
+    /// - Parameter json: Should include the key `inputs` on a top level.
+    /// - Returns: A list of event inputs mapped from that json.
+    /// - Throws: Throws if at least one of these inputs was malformed.
+    fileprivate static func parseEventInputs(from json: [String: Any]) throws -> [EventInput] {
+        guard let jsonInputs = json[.inputs] as? [[String: Any]] else {
+            return []
+        }
+        return try jsonInputs.flatMap { try ContractJSONParser.parseEventInput(from: $0) }
+    }
+    
+    private static func parseEventInput(from json: [String: Any]) throws -> EventInput {
+        guard let name = json[.name] as? String,
+            let typeString = json[.type] as? String,
+            let type = Contract.ParameterType(rawValue: typeString),
+            let indexed = json[.indexed] as? Bool else {
+                throw BivrostError.eventInputInvalid
+        }
+        return EventInput(name: name, type: type, indexed: indexed)
+    }
     
 }
