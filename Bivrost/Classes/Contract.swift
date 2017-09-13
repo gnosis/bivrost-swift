@@ -1,5 +1,5 @@
 //
-//  ContractJSONParser.swift
+//  Contract.swift
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 12.09.17.

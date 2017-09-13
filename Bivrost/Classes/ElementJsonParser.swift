@@ -1,8 +1,8 @@
 //
-//  ContractJSONParser.swift
+//  ElementJsonParser.swift
 //  Bivrost
 //
-//  Created by Luis Reisewitz on 12.09.17.
+//  Created by Luis Reisewitz on 13.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 //
@@ -13,44 +13,11 @@ fileprivate typealias FunctionInput = Contract.FunctionInput
 fileprivate typealias FunctionOutput = Contract.FunctionOutput
 fileprivate typealias EventInput = Contract.EventInput
 
-enum JSONKey: String {
-    case type
-    case name
-    case inputs
-    case outputs
-    case constant
-    case payable
-    case anonymous
-    case indexed
-}
-
-extension Dictionary where Key == String {
-    subscript(key: JSONKey) -> Value? {
-        get {
-            return self[key.rawValue]
-        }
-        set {
-            self[key.rawValue] = newValue
-        }
-    }
-}
-
-struct ContractJSONParser {
-    /// Parses a list of json contract elements into a Contract struct.
-    ///
-    /// - Parameter json: Should be a valid JSON array containing functions and 
-    ///     events, according to 
-    ///     https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#json
-    /// - Returns: An initialised contract struct.
-    /// - Throws: Throws if the json was malformed, e.g. a required field was missing.
-    static func parseContract(from json: [[String: Any]]) throws -> Contract {
-        throw BivrostError.notImplemented
-    }
-    
+struct ElementJsonParser {
     /// Parses a single contract element json into an initialised Contract.Element.
     ///
     /// - Parameter json: Should be a valid JSON object containing the fields for
-    ///     the element, according to 
+    ///     the element, according to
     ///     https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#json
     /// - Returns: An initialised contract element struct.
     /// - Throws: Throws if the json was malformed, e.g. a required field was missing.
@@ -66,7 +33,7 @@ struct ContractJSONParser {
 }
 
 // MARK: - Private Element Parsing
-extension ContractJSONParser {
+extension ElementJsonParser {
     fileprivate static func parseElement(with type: Contract.ElementType, from json: [String: Any]) throws -> Contract.Element {
         switch type {
         case .function:
@@ -121,7 +88,7 @@ extension ContractJSONParser {
 }
 
 // MARK: - Private Function Field parsing
-extension ContractJSONParser {
+extension ElementJsonParser {
     fileprivate static func parseConstant(from json: [String: Any]) -> Bool {
         return json[.constant] as? Bool ?? false
     }
@@ -134,7 +101,7 @@ extension ContractJSONParser {
         guard let jsonInputs = json[.inputs] as? [[String: Any]] else {
             return []
         }
-        return try jsonInputs.flatMap { try ContractJSONParser.parseFunctionInput(from: $0) }
+        return try jsonInputs.map { try ElementJsonParser.parseFunctionInput(from: $0) }
     }
     
     private static func parseFunctionInput(from json: [String: Any]) throws -> FunctionInput {
@@ -150,7 +117,7 @@ extension ContractJSONParser {
         guard let jsonOutputs = json[.outputs] as? [[String: Any]] else {
             return []
         }
-        return try jsonOutputs.flatMap { try ContractJSONParser.parseFunctionOutput(from: $0) }
+        return try jsonOutputs.map { try ElementJsonParser.parseFunctionOutput(from: $0) }
     }
     
     private static func parseFunctionOutput(from json: [String: Any]) throws -> FunctionOutput {
@@ -165,12 +132,12 @@ extension ContractJSONParser {
 }
 
 // MARK: - Private Event Field Parsing
-extension ContractJSONParser {
+extension ElementJsonParser {
     fileprivate static func parseAnonymous(from json: [String: Any]) -> Bool {
         return json[.anonymous] as? Bool ?? false
     }
     
-    /// Returns a list of event inputs from a json dictionary representing a 
+    /// Returns a list of event inputs from a json dictionary representing a
     /// single contract element.
     ///
     /// - Parameter json: Should include the key `inputs` on a top level.
@@ -180,7 +147,7 @@ extension ContractJSONParser {
         guard let jsonInputs = json[.inputs] as? [[String: Any]] else {
             return []
         }
-        return try jsonInputs.flatMap { try ContractJSONParser.parseEventInput(from: $0) }
+        return try jsonInputs.map { try ElementJsonParser.parseEventInput(from: $0) }
     }
     
     private static func parseEventInput(from json: [String: Any]) throws -> EventInput {
@@ -192,5 +159,4 @@ extension ContractJSONParser {
         }
         return EventInput(name: name, type: type, indexed: indexed)
     }
-    
 }
