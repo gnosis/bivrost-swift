@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'Bivrost'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of Bivrost.'
+  s.summary          = '🔥 🌈 Bridge between Solidity Contracts and Swift'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,9 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Bivrost generates Swift classes to interact with Solidity contracts.
+You supply the contract interface as a `.json` file and Bivrost generates Swift
+files from it.
                        DESC
 
   s.homepage         = 'https://github.com/gnosis/bivrost-swift'
