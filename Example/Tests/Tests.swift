@@ -37,7 +37,7 @@ class TableOfContentsSpec: QuickSpec {
             }
             
             context("Constructor Function") {
-                it("should parse an empty fallback element correctly with defaults") {
+                it("should parse an empty constructor element correctly with defaults") {
                     let json = ["type": "constructor"]
                     expect { try ContractJSONParser.parseContractElement(from: json) }
                         .to(beConstructor { constructor in
@@ -47,7 +47,7 @@ class TableOfContentsSpec: QuickSpec {
                         })
                 }
                 
-                it("should parse a fallback element correctly") {
+                it("should parse a constructor element correctly") {
                     let json: [String: Any] = ["type": "constructor",
                                                "constant": true,
                                                "payable": true,
@@ -60,6 +60,50 @@ class TableOfContentsSpec: QuickSpec {
                             expect(constructor.inputs.first?.type).to(equal(Contract.ParameterType.uint256))
                             expect(constructor.constant).to(equal(true))
                             expect(constructor.payable).to(equal(true))
+                        })
+                }
+            }
+            
+            context("Function Function") {
+                it("should throw when given a function element without proper fields") {
+                    let json = ["type": "function"]
+                    expect { try ContractJSONParser.parseContractElement(from: json) }
+                        .to(throwError())
+                }
+                
+                it("should parse a mostly empty function element correctly with defaults") {
+                    let json = ["type": "function", "name": "foo"]
+                    expect { try ContractJSONParser.parseContractElement(from: json) }
+                        .to(beFunction { function in
+                            expect(function.inputs).to(beEmpty())
+                            expect(function.outputs).to(beEmpty())
+                            expect(function.constant).to(equal(false))
+                            expect(function.payable).to(equal(false))
+                            expect(function.name).to(equal("foo"))
+                        })
+                }
+                
+                it("should parse a function element without type correctly") {
+                    // TODO: test more parametertypes
+                    let json: [String: Any] = ["name": "foo2",
+                                               "constant": true,
+                                               "payable": false,
+                                               "inputs": [["name":"a", "type":"uint256"]],
+                                               "outputs": [["name":"b", "type":"uint256"]]
+                    ]
+                    expect { try ContractJSONParser.parseContractElement(from: json) }
+                        .to(beFunction { function in
+                            expect(function.inputs.count).to(equal(1))
+                            expect(function.inputs.first?.name).to(equal("a"))
+                            expect(function.inputs.first?.type).to(equal(Contract.ParameterType.uint256))
+                            
+                            expect(function.outputs.count).to(equal(1))
+                            expect(function.outputs.first?.name).to(equal("b"))
+                            expect(function.outputs.first?.type).to(equal(Contract.ParameterType.uint256))
+                            
+                            expect(function.constant).to(equal(true))
+                            expect(function.payable).to(equal(false))
+                            expect(function.name).to(equal("foo2"))
                         })
                 }
             }
@@ -88,6 +132,18 @@ func beConstructor(test: @escaping (Contract.Constructor) -> () = { _ in } ) -> 
         if let actual = try expression.evaluate(),
             case let .constructor(constructor) = actual {
             test(constructor)
+            return true
+        }
+        return false
+    }
+}
+
+func beFunction(test: @escaping (Contract.Function) -> () = { _ in } ) -> MatcherFunc<Contract.Element> {
+    return MatcherFunc { expression, message in
+        message.postfixMessage = "be a Function object"
+        if let actual = try expression.evaluate(),
+            case let .function(function) = actual {
+            test(function)
             return true
         }
         return false

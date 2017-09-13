@@ -10,11 +10,13 @@
 import Foundation
 
 fileprivate typealias FunctionInput = Contract.FunctionInput
+fileprivate typealias FunctionOutput = Contract.FunctionOutput
 
 enum JSONKey: String {
     case type
     case name
     case inputs
+    case outputs
     case constant
     case payable
 }
@@ -62,13 +64,19 @@ extension ContractJSONParser {
     }
     
     fileprivate static func parseFunction(from json: [String: Any]) throws -> Contract.Function {
-        throw BivrostError.notImplemented
+        let constant = parseConstant(from: json)
+        let payable = parsePayable(from: json)
+        let inputs = try parseFunctionInputs(from: json)
+        let outputs = try parseFunctionOutputs(from: json)
+        let name = try parseName(from: json)
+        
+        return Contract.Function(name: name, inputs: inputs, outputs: outputs, constant: constant, payable: payable)
     }
     
     fileprivate static func parseConstructor(from json: [String: Any]) throws -> Contract.Constructor {
         let constant = parseConstant(from: json)
         let payable = parsePayable(from: json)
-        let inputs = parseInputs(from: json)
+        let inputs = try parseFunctionInputs(from: json)
         
         return Contract.Constructor(inputs: inputs, constant: constant, payable: payable)
     }
@@ -94,20 +102,43 @@ extension ContractJSONParser {
         return json[.payable] as? Bool ?? false
     }
     
-    fileprivate static func parseInputs(from json: [String: Any]) -> [FunctionInput] {
+    fileprivate static func parseName(from json: [String: Any]) throws -> String {
+        guard let name = json[.name] as? String else {
+            throw BivrostError.nameInvalid
+        }
+        return name
+    }
+    
+    fileprivate static func parseFunctionInputs(from json: [String: Any]) throws -> [FunctionInput] {
         guard let jsonInputs = json[.inputs] as? [[String: Any]] else {
             return []
         }
-        return jsonInputs.flatMap { try? ContractJSONParser.parseInput(from: $0) }
+        return try jsonInputs.flatMap { try ContractJSONParser.parseFunctionInput(from: $0) }
     }
     
-    fileprivate static func parseInput(from json: [String: Any]) throws -> FunctionInput {
+    private static func parseFunctionInput(from json: [String: Any]) throws -> FunctionInput {
         guard let name = json[.name] as? String,
             let typeString = json[.type] as? String,
             let type = Contract.ParameterType(rawValue: typeString) else {
-                throw BivrostError.functionInputValid
+                throw BivrostError.functionInputInvalid
         }
         return FunctionInput(name: name, type: type)
+    }
+    
+    fileprivate static func parseFunctionOutputs(from json: [String: Any]) throws -> [FunctionOutput] {
+        guard let jsonOutputs = json[.outputs] as? [[String: Any]] else {
+            return []
+        }
+        return try jsonOutputs.flatMap { try ContractJSONParser.parseFunctionOutput(from: $0) }
+    }
+    
+    private static func parseFunctionOutput(from json: [String: Any]) throws -> FunctionOutput {
+        guard let name = json[.name] as? String,
+            let typeString = json[.type] as? String,
+            let type = Contract.ParameterType(rawValue: typeString) else {
+                throw BivrostError.functionOutputInvalid
+        }
+        return FunctionOutput(name: name, type: type)
     }
     
 }
