@@ -36,10 +36,24 @@ extension Dictionary where Key == String {
 }
 
 struct ContractJSONParser {
+    /// Parses a list of json contract elements into a Contract struct.
+    ///
+    /// - Parameter json: Should be a valid JSON array containing functions and 
+    ///     events, according to 
+    ///     https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#json
+    /// - Returns: An initialised contract struct.
+    /// - Throws: Throws if the json was malformed, e.g. a required field was missing.
     static func parseContract(from json: [[String: Any]]) throws -> Contract {
         throw BivrostError.notImplemented
     }
     
+    /// Parses a single contract element json into an initialised Contract.Element.
+    ///
+    /// - Parameter json: Should be a valid JSON object containing the fields for
+    ///     the element, according to 
+    ///     https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#json
+    /// - Returns: An initialised contract element struct.
+    /// - Throws: Throws if the json was malformed, e.g. a required field was missing.
     static func parseContractElement(from json: [String: Any]) throws -> Contract.Element {
         // `type` can be omitted, defaulting to "function"
         let typeString = json[.type] as? String ?? "function"
