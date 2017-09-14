@@ -6,6 +6,8 @@ import Nimble
 
 class ElementJsonParserSpec: QuickSpec {
     override func spec() {
+        // TODO: test more complex (arrays + nested arrays) parametertypes
+        
         describe("ElementJsonParser") {
 
             it("should throw when given an empty element") {
@@ -48,14 +50,13 @@ class ElementJsonParserSpec: QuickSpec {
                     let json: [String: Any] = ["type": "constructor",
                                                "constant": true,
                                                "payable": true,
-                                               "inputs": [["name":"a", "type":"uint256"]]
+                                               "inputs": [["name":"a", "type":"uint"]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beConstructor { constructor in
                             expect(constructor.inputs.count).to(equal(1))
                             expect(constructor.inputs.first?.name).to(equal("a"))
-                            // FIXME: implement equatable for ParameterType
-//                            expect(constructor.inputs.first?.type).to(equal(Contract.ParameterType.uint256))
+                            expect(constructor.inputs.first?.type).to(equal(.staticType(.uint(bits: 256))))
                             expect(constructor.constant).to(equal(true))
                             expect(constructor.payable).to(equal(true))
                         })
@@ -82,30 +83,71 @@ class ElementJsonParserSpec: QuickSpec {
                 }
                 
                 it("should parse a function element without type correctly") {
-                    // TODO: test more parametertypes
                     let json: [String: Any] = ["name": "foo2",
                                                "constant": true,
                                                "payable": false,
-                                               "inputs": [["name":"a", "type":"uint256"]],
-                                               "outputs": [["name":"b", "type":"uint256"]]
+                                               "inputs": [["name":"a", "type":"string"]],
+                                               "outputs": [["name":"b", "type":"uint"]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFunction { function in
                             expect(function.inputs.count).to(equal(1))
                             expect(function.inputs.first?.name).to(equal("a"))
-                            // FIXME: implement equatable for ParameterType
-//                            expect(function.inputs.first?.type).to(equal(ParameterType.uint256))
+                            expect(function.inputs.first?.type).to(equal(.dynamicType(.string)))
                             
                             expect(function.outputs.count).to(equal(1))
                             expect(function.outputs.first?.name).to(equal("b"))
-                            // FIXME: implement equatable for ParameterType
-//                            expect(function.outputs.first?.type).to(equal(Contract.ParameterType.uint256))
+                            expect(function.outputs.first?.type).to(equal(.staticType(.uint(bits: 256))))
                             
                             expect(function.constant).to(equal(true))
                             expect(function.payable).to(equal(false))
                             expect(function.name).to(equal("foo2"))
                         })
                 }
+                
+                it("should parse a function element with all exact parameter types correctly") {
+                    let json: [String: Any] = ["name": "foo2",
+                                               "constant": true,
+                                               "payable": false,
+                                               "inputs": [["name":"a", "type":"address"],
+                                                          ["name":"b", "type":"uint"],
+                                                          ["name":"c", "type":"int"],
+                                                          ["name":"d", "type":"bool"],
+                                                          ["name":"e", "type":"function"],
+                                                          ["name":"f", "type":"bytes"],
+                                                          ["name":"g", "type":"string"]],
+                                               "outputs": [["name":"b", "type":"uint"]]
+                    ]
+                    expect { try ElementJsonParser.parseContractElement(from: json) }
+                        .to(beFunction { function in
+                            // Test Inputs
+                            expect(function.inputs.count).to(equal(7))
+                            expect(function.inputs[0].name).to(equal("a"))
+                            expect(function.inputs[0].type).to(equal(.staticType(.address)))
+                            expect(function.inputs[1].name).to(equal("b"))
+                            expect(function.inputs[1].type).to(equal(.staticType(.uint(bits: 256))))
+                            expect(function.inputs[2].name).to(equal("c"))
+                            expect(function.inputs[2].type).to(equal(.staticType(.int(bits: 256))))
+                            expect(function.inputs[3].name).to(equal("d"))
+                            expect(function.inputs[3].type).to(equal(.staticType(.bool)))
+                            expect(function.inputs[4].name).to(equal("e"))
+                            expect(function.inputs[4].type).to(equal(.staticType(.function)))
+                            expect(function.inputs[5].name).to(equal("f"))
+                            expect(function.inputs[5].type).to(equal(.dynamicType(.bytes)))
+                            expect(function.inputs[6].name).to(equal("g"))
+                            expect(function.inputs[6].type).to(equal(.dynamicType(.string)))
+                            // Test Output
+                            expect(function.outputs.count).to(equal(1))
+                            expect(function.outputs.first?.name).to(equal("b"))
+                            expect(function.outputs.first?.type).to(equal(.staticType(.uint(bits: 256))))
+                            // Test function properties
+                            expect(function.constant).to(equal(true))
+                            expect(function.payable).to(equal(false))
+                            expect(function.name).to(equal("foo2"))
+                        })
+                }
+                
+                
             }
             context("Event Element") {
                 it("should throw when given an event element without proper fields") {
@@ -125,20 +167,17 @@ class ElementJsonParserSpec: QuickSpec {
                 }
                 
                 it("should parse an event element correctly") {
-                    // TODO: test more parametertypes
                     let json: [String: Any] = ["type": "event",
                                                "name": "foo2",
                                                "anonymous": true,
-                                               "inputs": [["name":"a", "type":"uint256", "indexed": true]]
+                                               "inputs": [["name":"a", "type":"bytes", "indexed": true]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beEvent { event in
                             expect(event.inputs.count).to(equal(1))
                             expect(event.inputs.first?.name).to(equal("a"))
-                            // FIXME: implement equatable for ParameterType
-//                            expect(event.inputs.first?.type).to(equal(Contract.ParameterType.uint256))
+                            expect(event.inputs.first?.type).to(equal(.dynamicType(.bytes)))
                             expect(event.inputs.first?.indexed).to(equal(true))
-                            
                             expect(event.name).to(equal("foo2"))
                             expect(event.anonymous).to(equal(true))
                         })

@@ -16,4 +16,5 @@ enum BivrostError: Error {
     case functionOutputInvalid
     case eventInputInvalid
     case notImplemented
+    case parameterTypeInvalid
 }
