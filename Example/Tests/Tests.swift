@@ -50,13 +50,13 @@ class ElementJsonParserSpec: QuickSpec {
                     let json: [String: Any] = ["type": "constructor",
                                                "constant": true,
                                                "payable": true,
-                                               "inputs": [["name":"a", "type":"uint"]]
+                                               "inputs": [["name": "a", "type": "uint"]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beConstructor { constructor in
                             expect(constructor.inputs.count).to(equal(1))
                             expect(constructor.inputs.first?.name).to(equal("a"))
-                            expect(constructor.inputs.first?.type).to(equal(.staticType(.uint(bits: 256))))
+                            expect(constructor.inputs.first?.type) == .staticType(.uint(bits: 256))
                             expect(constructor.constant).to(equal(true))
                             expect(constructor.payable).to(equal(true))
                         })
@@ -93,11 +93,11 @@ class ElementJsonParserSpec: QuickSpec {
                         .to(beFunction { function in
                             expect(function.inputs.count).to(equal(1))
                             expect(function.inputs.first?.name).to(equal("a"))
-                            expect(function.inputs.first?.type).to(equal(.dynamicType(.string)))
+                            expect(function.inputs.first?.type) == .dynamicType(.string)
                             
                             expect(function.outputs.count).to(equal(1))
                             expect(function.outputs.first?.name).to(equal("b"))
-                            expect(function.outputs.first?.type).to(equal(.staticType(.uint(bits: 256))))
+                            expect(function.outputs.first?.type) == .staticType(.uint(bits: 256))
                             
                             expect(function.constant).to(equal(true))
                             expect(function.payable).to(equal(false))
@@ -139,7 +139,7 @@ class ElementJsonParserSpec: QuickSpec {
                             // Test Output
                             expect(function.outputs.count).to(equal(1))
                             expect(function.outputs.first?.name).to(equal("b"))
-                            expect(function.outputs.first?.type).to(equal(.staticType(.uint(bits: 256))))
+                            expect(function.outputs.first?.type) == .staticType(.uint(bits: 256))
                             // Test function properties
                             expect(function.constant).to(equal(true))
                             expect(function.payable).to(equal(false))
@@ -176,7 +176,7 @@ class ElementJsonParserSpec: QuickSpec {
                         .to(beEvent { event in
                             expect(event.inputs.count).to(equal(1))
                             expect(event.inputs.first?.name).to(equal("a"))
-                            expect(event.inputs.first?.type).to(equal(.dynamicType(.bytes)))
+                            expect(event.inputs.first?.type) == .dynamicType(.bytes)
                             expect(event.inputs.first?.indexed).to(equal(true))
                             expect(event.name).to(equal("foo2"))
                             expect(event.anonymous).to(equal(true))
@@ -189,50 +189,50 @@ class ElementJsonParserSpec: QuickSpec {
 
 // MARK: - Matchers
 
-func beFallback(test: @escaping (Contract.Fallback) -> () = { _ in } ) -> MatcherFunc<Contract.Element> {
-    return MatcherFunc { expression, message in
-        message.postfixMessage = "be a Fallback object"
+fileprivate func beFallback(test: @escaping (Contract.Fallback) -> () = { _ in } ) -> Predicate<Contract.Element> {
+    return Predicate { expression in
+        let message = ExpectationMessage.expectedTo("be a Fallback object")
         if let actual = try expression.evaluate(),
             case let .fallback(fallback) = actual {
             test(fallback)
-            return true
+            return PredicateResult(bool: true, message: message)
         }
-        return false
+        return PredicateResult(bool: false, message: message)
     }
 }
 
-func beConstructor(test: @escaping (Contract.Constructor) -> () = { _ in } ) -> MatcherFunc<Contract.Element> {
-    return MatcherFunc { expression, message in
-        message.postfixMessage = "be a Constructor object"
+fileprivate func beConstructor(test: @escaping (Contract.Constructor) -> () = { _ in } ) -> Predicate<Contract.Element> {
+    return Predicate { expression in
+        let message = ExpectationMessage.expectedTo("be a Constructor object")
         if let actual = try expression.evaluate(),
             case let .constructor(constructor) = actual {
             test(constructor)
-            return true
+            return PredicateResult(bool: true, message: message)
         }
-        return false
+        return PredicateResult(bool: false, message: message)
     }
 }
 
-func beFunction(test: @escaping (Contract.Function) -> () = { _ in } ) -> MatcherFunc<Contract.Element> {
-    return MatcherFunc { expression, message in
-        message.postfixMessage = "be a Function object"
+fileprivate func beFunction(test: @escaping (Contract.Function) -> () = { _ in } ) -> Predicate<Contract.Element> {
+    return Predicate { expression in
+        let message = ExpectationMessage.expectedTo("be a Function object")
         if let actual = try expression.evaluate(),
             case let .function(function) = actual {
             test(function)
-            return true
+            return PredicateResult(bool: true, message: message)
         }
-        return false
+        return PredicateResult(bool: false, message: message)
     }
 }
 
-func beEvent(test: @escaping (Contract.Event) -> () = { _ in } ) -> MatcherFunc<Contract.Element> {
-    return MatcherFunc { expression, message in
-        message.postfixMessage = "be an Event object"
+fileprivate func beEvent(test: @escaping (Contract.Event) -> () = { _ in } ) -> Predicate<Contract.Element> {
+    return Predicate { expression in
+        let message = ExpectationMessage.expectedTo("be an Event object")
         if let actual = try expression.evaluate(),
             case let .event(event) = actual {
             test(event)
-            return true
+            return PredicateResult(bool: true, message: message)
         }
-        return false
+        return PredicateResult(bool: false, message: message)
     }
 }
