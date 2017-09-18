@@ -1,4 +1,11 @@
-// https://github.com/Quick/Quick
+//
+//  ElementJsonParserSpec.swift
+//  Bivrost
+//
+//  Created by Luis Reisewitz on 10.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
+//
+//
 
 import Quick
 import Nimble
