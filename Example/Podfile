@@ -2,6 +2,6 @@ use_frameworks!
 target 'Bivrost_Tests' do
   pod 'Bivrost', :path => '../'
   
-  pod 'Quick'
-  pod 'Nimble'
+  pod 'Quick', :git => 'https://github.com/Quick/Quick.git'
+  pod 'Nimble', :git => 'https://github.com/Quick/Nimble.git'
 end
