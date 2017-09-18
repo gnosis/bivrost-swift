@@ -20,8 +20,8 @@ class ElementJsonParserSpec: QuickSpec {
                     let json = ["type": "fallback"]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFallback { fallback in
-                            expect(fallback.constant).to(equal(false))
-                            expect(fallback.payable).to(equal(false))
+                            expect(fallback.constant) == false
+                            expect(fallback.payable) == false
                         })
                 }
                 
@@ -29,8 +29,8 @@ class ElementJsonParserSpec: QuickSpec {
                     let json: [String: Any] = ["type": "fallback", "constant": true, "payable": true]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFallback { fallback in
-                            expect(fallback.constant).to(equal(true))
-                            expect(fallback.payable).to(equal(true))
+                            expect(fallback.constant) == true
+                            expect(fallback.payable) == true
                         })
                 }
             }
@@ -41,8 +41,8 @@ class ElementJsonParserSpec: QuickSpec {
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beConstructor { constructor in
                             expect(constructor.inputs).to(beEmpty())
-                            expect(constructor.constant).to(equal(false))
-                            expect(constructor.payable).to(equal(false))
+                            expect(constructor.constant) == false
+                            expect(constructor.payable) == false
                         })
                 }
                 
@@ -54,11 +54,11 @@ class ElementJsonParserSpec: QuickSpec {
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beConstructor { constructor in
-                            expect(constructor.inputs.count).to(equal(1))
-                            expect(constructor.inputs.first?.name).to(equal("a"))
+                            expect(constructor.inputs.count) == 1
+                            expect(constructor.inputs.first?.name) == "a"
                             expect(constructor.inputs.first?.type) == .staticType(.uint(bits: 256))
-                            expect(constructor.constant).to(equal(true))
-                            expect(constructor.payable).to(equal(true))
+                            expect(constructor.constant) == true
+                            expect(constructor.payable) == true
                         })
                 }
             }
@@ -76,9 +76,9 @@ class ElementJsonParserSpec: QuickSpec {
                         .to(beFunction { function in
                             expect(function.inputs).to(beEmpty())
                             expect(function.outputs).to(beEmpty())
-                            expect(function.constant).to(equal(false))
-                            expect(function.payable).to(equal(false))
-                            expect(function.name).to(equal("foo"))
+                            expect(function.constant) == false
+                            expect(function.payable) == false
+                            expect(function.name) == "foo"
                         })
                 }
                 
@@ -91,17 +91,17 @@ class ElementJsonParserSpec: QuickSpec {
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFunction { function in
-                            expect(function.inputs.count).to(equal(1))
-                            expect(function.inputs.first?.name).to(equal("a"))
+                            expect(function.inputs.count) == 1
+                            expect(function.inputs.first?.name) == "a"
                             expect(function.inputs.first?.type) == .dynamicType(.string)
                             
-                            expect(function.outputs.count).to(equal(1))
-                            expect(function.outputs.first?.name).to(equal("b"))
+                            expect(function.outputs.count) == 1
+                            expect(function.outputs.first?.name) == "b"
                             expect(function.outputs.first?.type) == .staticType(.uint(bits: 256))
                             
-                            expect(function.constant).to(equal(true))
-                            expect(function.payable).to(equal(false))
-                            expect(function.name).to(equal("foo2"))
+                            expect(function.constant) == true
+                            expect(function.payable) == false
+                            expect(function.name) == "foo2"
                         })
                 }
                 
@@ -121,29 +121,29 @@ class ElementJsonParserSpec: QuickSpec {
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFunction { function in
                             // Test Inputs
-                            expect(function.inputs.count).to(equal(7))
-                            expect(function.inputs[0].name).to(equal("a"))
-                            expect(function.inputs[0].type).to(equal(.staticType(.address)))
-                            expect(function.inputs[1].name).to(equal("b"))
-                            expect(function.inputs[1].type).to(equal(.staticType(.uint(bits: 256))))
-                            expect(function.inputs[2].name).to(equal("c"))
-                            expect(function.inputs[2].type).to(equal(.staticType(.int(bits: 256))))
-                            expect(function.inputs[3].name).to(equal("d"))
-                            expect(function.inputs[3].type).to(equal(.staticType(.bool)))
-                            expect(function.inputs[4].name).to(equal("e"))
-                            expect(function.inputs[4].type).to(equal(.staticType(.function)))
-                            expect(function.inputs[5].name).to(equal("f"))
-                            expect(function.inputs[5].type).to(equal(.dynamicType(.bytes)))
-                            expect(function.inputs[6].name).to(equal("g"))
-                            expect(function.inputs[6].type).to(equal(.dynamicType(.string)))
+                            expect(function.inputs.count) == 7
+                            expect(function.inputs[0].name) == "a"
+                            expect(function.inputs[0].type) == .staticType(.address)
+                            expect(function.inputs[1].name) == "b"
+                            expect(function.inputs[1].type) == .staticType(.uint(bits: 256))
+                            expect(function.inputs[2].name) == "c"
+                            expect(function.inputs[2].type) == .staticType(.int(bits: 256))
+                            expect(function.inputs[3].name) == "d"
+                            expect(function.inputs[3].type) == .staticType(.bool)
+                            expect(function.inputs[4].name) == "e"
+                            expect(function.inputs[4].type) == .staticType(.function)
+                            expect(function.inputs[5].name) == "f"
+                            expect(function.inputs[5].type) == .dynamicType(.bytes)
+                            expect(function.inputs[6].name) == "g"
+                            expect(function.inputs[6].type) == .dynamicType(.string)
                             // Test Output
-                            expect(function.outputs.count).to(equal(1))
-                            expect(function.outputs.first?.name).to(equal("b"))
+                            expect(function.outputs.count) == 1
+                            expect(function.outputs.first?.name) == "b"
                             expect(function.outputs.first?.type) == .staticType(.uint(bits: 256))
                             // Test function properties
-                            expect(function.constant).to(equal(true))
-                            expect(function.payable).to(equal(false))
-                            expect(function.name).to(equal("foo2"))
+                            expect(function.constant) == true
+                            expect(function.payable) == false
+                            expect(function.name) == "foo2"
                         })
                 }
                 
@@ -161,8 +161,8 @@ class ElementJsonParserSpec: QuickSpec {
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beEvent { event in
                             expect(event.inputs).to(beEmpty())
-                            expect(event.name).to(equal("foo"))
-                            expect(event.anonymous).to(equal(false))
+                            expect(event.name) == "foo"
+                            expect(event.anonymous) == false
                         })
                 }
                 
@@ -174,12 +174,12 @@ class ElementJsonParserSpec: QuickSpec {
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beEvent { event in
-                            expect(event.inputs.count).to(equal(1))
-                            expect(event.inputs.first?.name).to(equal("a"))
+                            expect(event.inputs.count) == 1
+                            expect(event.inputs.first?.name) == "a"
                             expect(event.inputs.first?.type) == .dynamicType(.bytes)
-                            expect(event.inputs.first?.indexed).to(equal(true))
-                            expect(event.name).to(equal("foo2"))
-                            expect(event.anonymous).to(equal(true))
+                            expect(event.inputs.first?.indexed) == true
+                            expect(event.name) == "foo2"
+                            expect(event.anonymous) == true
                         })
                 }
             }
