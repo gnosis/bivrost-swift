@@ -1,22 +1,34 @@
 PODS:
   - Bivrost (0.1.0)
-  - Nimble (5.1.1)
-  - Quick (1.0.0)
+  - Nimble (7.0.1)
+  - Quick (1.1.0)
 
 DEPENDENCIES:
   - Bivrost (from `../`)
-  - Nimble (~> 5.1.1)
-  - Quick (~> 1.0.0)
+  - Nimble (from `https://github.com/Quick/Nimble.git`)
+  - Quick (from `https://github.com/Quick/Quick.git`)
 
 EXTERNAL SOURCES:
   Bivrost:
     :path: ../
+  Nimble:
+    :git: https://github.com/Quick/Nimble.git
+  Quick:
+    :git: https://github.com/Quick/Quick.git
+
+CHECKOUT OPTIONS:
+  Nimble:
+    :commit: a63252b16eba6cdebec4e4936388c90552165a68
+    :git: https://github.com/Quick/Nimble.git
+  Quick:
+    :commit: 3665ae9570b682a562df847cccbb46811864676a
+    :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
-  Bivrost: 23b4e426ec01be0d3ec56d871cbc23e5fb00f1ca
-  Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
-  Quick: 8024e4a47e6cc03a9d5245ef0948264fc6d27cff
+  Bivrost: c7c346a4ccd08bb6add7c741a099aa8f7b2dce7e
+  Nimble: 1b6670c36e5750169b9e4cc2e9cfa82a7603c69e
+  Quick: 4700beb8056662b579facd79eaca7f04fb3d48e6
 
-PODFILE CHECKSUM: 8986a5eda37d4463fb35d406cbb0dbcd3139209d
+PODFILE CHECKSUM: 6f2e1cfe3eb67ff08fb29d0869c6f06a34526cce
 
 COCOAPODS: 1.3.1
