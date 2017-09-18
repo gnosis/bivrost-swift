@@ -9,11 +9,44 @@
 
 import Foundation
 
+/// Describes the interface of an Ethereum/Solidity Contract
 struct Contract {
     let elements: [Element]
+}
+
+// MARK: - Element
+extension Contract {
+    enum Element {
+        case function(Function)
+        case constructor(Constructor)
+        case fallback(Fallback)
+        case event(Event)
+    }
+}
+
+// MARK: - Function
+extension Contract.Element {
+    struct Function {
+        let name: String
+        let inputs: [Input]
+        let outputs: [Output]
+        let constant: Bool
+        let payable: Bool
+        
+        struct Output {
+            /// FunctionOutput names can also be empty strings.
+            let name: String
+            let type: ParameterType
+        }
+        
+        struct Input {
+            let name: String
+            let type: ParameterType
+        }
+    }
     
     struct Constructor {
-        let inputs: [FunctionInput]
+        let inputs: [Function.Input]
         let constant: Bool
         let payable: Bool
     }
@@ -22,42 +55,19 @@ struct Contract {
         let constant: Bool
         let payable: Bool
     }
-    
-    struct Function {
-        let name: String
-        let inputs: [FunctionInput]
-        let outputs: [FunctionOutput]
-        let constant: Bool
-        let payable: Bool
-    }
-    
-    struct FunctionInput {
-        let name: String
-        let type: ParameterType
-    }
-    
-    struct FunctionOutput {
-        // TODO: find out if this is correct
-        let name: String
-        let type: ParameterType
-    }
-    
-    struct EventInput {
-        let name: String
-        let type: ParameterType
-        let indexed: Bool
-    }
-    
+}
+
+// MARK: - Event
+extension Contract.Element {
     struct Event {
         let name: String
-        let inputs: [EventInput]
+        let inputs: [Input]
         let anonymous: Bool
-    }
-    
-    enum Element {
-        case function(Function)
-        case constructor(Constructor)
-        case fallback(Fallback)
-        case event(Event)
+        
+        struct Input {
+            let name: String
+            let type: ParameterType
+            let indexed: Bool
+        }
     }
 }

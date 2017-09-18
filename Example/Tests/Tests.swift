@@ -4,6 +4,8 @@ import Quick
 import Nimble
 @testable import Bivrost
 
+fileprivate typealias Element = Contract.Element
+
 class ElementJsonParserSpec: QuickSpec {
     override func spec() {
         // TODO: test more complex (arrays + nested arrays) parametertypes
@@ -189,7 +191,7 @@ class ElementJsonParserSpec: QuickSpec {
 
 // MARK: - Matchers
 
-fileprivate func beFallback(test: @escaping (Contract.Fallback) -> () = { _ in } ) -> Predicate<Contract.Element> {
+fileprivate func beFallback(test: @escaping (Element.Fallback) -> () = { _ in } ) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be a Fallback object")
         if let actual = try expression.evaluate(),
@@ -201,7 +203,7 @@ fileprivate func beFallback(test: @escaping (Contract.Fallback) -> () = { _ in }
     }
 }
 
-fileprivate func beConstructor(test: @escaping (Contract.Constructor) -> () = { _ in } ) -> Predicate<Contract.Element> {
+fileprivate func beConstructor(test: @escaping (Element.Constructor) -> () = { _ in } ) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be a Constructor object")
         if let actual = try expression.evaluate(),
@@ -213,7 +215,7 @@ fileprivate func beConstructor(test: @escaping (Contract.Constructor) -> () = { 
     }
 }
 
-fileprivate func beFunction(test: @escaping (Contract.Function) -> () = { _ in } ) -> Predicate<Contract.Element> {
+fileprivate func beFunction(test: @escaping (Element.Function) -> () = { _ in } ) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be a Function object")
         if let actual = try expression.evaluate(),
@@ -225,7 +227,7 @@ fileprivate func beFunction(test: @escaping (Contract.Function) -> () = { _ in }
     }
 }
 
-fileprivate func beEvent(test: @escaping (Contract.Event) -> () = { _ in } ) -> Predicate<Contract.Element> {
+fileprivate func beEvent(test: @escaping (Element.Event) -> () = { _ in } ) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be an Event object")
         if let actual = try expression.evaluate(),
