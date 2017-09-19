@@ -64,3 +64,39 @@ extension Contract.Element.ParameterType: Equatable {
         }
     }
 }
+
+// MARK: - ParameterType Validity
+extension Contract.Element.ParameterType: AbiValidating {
+    var isValid: Bool {
+        switch self {
+        case .staticType(let type):
+            return type.isValid
+        case .dynamicType(let type):
+            return type.isValid
+        }
+    }
+}
+
+// MARK: - ParameterType.StaticType Validity
+extension Contract.Element.ParameterType.StaticType: AbiValidating {
+    var isValid: Bool {
+        switch self {
+        case .uint(let bits), .int(let bits):
+            return bits > 0 && bits <= 256 && bits % 8 == 0
+        case .bytes(let length):
+            return length > 0 && length <= 32
+        case let .array(type, _):
+            return type.isValid
+        default:
+            return true
+        }
+    }
+}
+
+// MARK: - ParameterType.DynamicType Validity
+extension Contract.Element.ParameterType.DynamicType: AbiValidating {
+    var isValid: Bool {
+        // Right now we cannot create invalid dynamic types.
+        return true
+    }
+}

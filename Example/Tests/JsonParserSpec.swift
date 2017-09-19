@@ -9,7 +9,6 @@
 import Quick
 import Nimble
 @testable import Bivrost
-//import Foundation
 
 class JsonParserSpec: QuickSpec {
     override func spec() {
@@ -17,21 +16,19 @@ class JsonParserSpec: QuickSpec {
             it("should not throw when parsing MultiSigWalletWithDailyLimit-Abi.json") {
                 let filename = "MultiSigWalletWithDailyLimit-Abi"
                 let json = jsonArray(from: filename)
-                let contract = try! JsonParser.parseContract(from: json)
                 expect { try JsonParser.parseContract(from: json) }.toNot(throwError())
             }
             
             it("should not throw when parsing TestToken-Abi") {
                 let filename = "TestToken-Abi"
                 let json = jsonArray(from: filename)
-                let contract = try! JsonParser.parseContract(from: json)
                 expect { try JsonParser.parseContract(from: json) }.toNot(throwError())
             }
         }
     }
 }
 
-func jsonArray(from jsonFileName: String) -> [[String: Any]] {
+fileprivate func jsonArray(from jsonFileName: String) -> [[String: Any]] {
     let url = Bundle(for: JsonParserSpec.self).url(forResource: jsonFileName, withExtension: ".json")
     return try! JSONSerialization.jsonObject(with: Data.init(contentsOf: url!, options: []), options: []) as! [[String: Any]]
 }
