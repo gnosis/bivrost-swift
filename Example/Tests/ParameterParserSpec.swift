@@ -21,6 +21,14 @@ class ParameterParserSpec: QuickSpec {
             it("should throw when given an invalid type") {
                 expect { try ParameterParser.parseParameterType(from: ["type": "foo"]) }
                     .to(throwError(BivrostError.parameterTypeInvalid))
+                expect { try ParameterParser.parseParameterType(from: ["type": "uint 32"]) }
+                        .to(throwError(BivrostError.parameterTypeInvalid))
+                expect { try ParameterParser.parseParameterType(from: ["type": "uint [ 16]"]) }
+                    .to(throwError(BivrostError.parameterTypeInvalid))
+                expect { try ParameterParser.parseParameterType(from: ["type": "uint [32]"]) }
+                    .to(throwError(BivrostError.parameterTypeInvalid))
+                expect { try ParameterParser.parseParameterType(from: ["type": "uint16[32]  "]) }
+                    .to(throwError(BivrostError.parameterTypeInvalid))
             }
             
             context("dynamic arrays") {
