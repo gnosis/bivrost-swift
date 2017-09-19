@@ -70,12 +70,30 @@ class ParameterParserSpec: QuickSpec {
                     expect { try ParameterParser.parseParameterType(from: ["type": "bytes3"]) } == .staticType(.bytes(length: 3))
                 }
                 
-                it("should throw when parsing invalid length/type combinations") {
+                it("should throw when parsing non-length types with length") {
                     expect { try ParameterParser.parseParameterType(from: ["type": "address16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                     expect { try ParameterParser.parseParameterType(from: ["type": "int[16]16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                     expect { try ParameterParser.parseParameterType(from: ["type": "function16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                     expect { try ParameterParser.parseParameterType(from: ["type": "foo16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                     expect { try ParameterParser.parseParameterType(from: ["type": "bool32"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                }
+                
+                it("should throw when parsing length types with invalid length") {
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint0"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint257"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint9"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint7"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int257"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int9"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int7"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int2000"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint2000"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "bytes64"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "bytes0"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "bytes000"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint17[]"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int33[16][16]"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint0016"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                 }
             }
         }

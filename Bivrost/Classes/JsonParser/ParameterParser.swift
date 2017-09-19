@@ -63,14 +63,12 @@ fileprivate func parameterType(from string: String) throws -> ParameterType {
         ?? matchFixedArray(from: string)
     
     // Step 5
-    guard let foundType = possibleType else {
-        throw BivrostError.parameterTypeInvalid
+    guard let foundType = possibleType,
+        foundType.isValid else {
+            throw BivrostError.parameterTypeInvalid
     }
+    
     // Step 6:
-//    guard foundType.isValid else {
-//        throw BivrostError.parameterTypeInvalid
-//    }
-    // Step 7:
     return foundType
 }
 
@@ -117,7 +115,7 @@ fileprivate func exactMatchType(from string: String) -> ParameterType? {
     }
 }
 
-fileprivate let numberSuffixRegex = "^(.*?)([0-9]+)$"
+fileprivate let numberSuffixRegex = "^(.*?)([1-9][0-9]*)$"
 
 fileprivate func numberSuffixMatch(from string: String) throws -> ParameterType? {
     //  if we have a number at the end,
@@ -229,14 +227,41 @@ fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
         throw BivrostError.parameterTypeInvalid
     }
 
-    // TODO: validate new type (array length <= 32)
     return ParameterType.staticType(.array(unwrappedType, length: length))
 }
 
-// MARK: - Validity Checks
-extension ParameterType {
+// MARK: - ParameterType Validity
+extension ParameterType: AbiValidating {
     var isValid: Bool {
-        // FIXME: implement checks here
-        return false
+        switch self {
+        case .staticType(let type):
+            return type.isValid
+        case .dynamicType(let type):
+            return type.isValid
+        }
+    }
+}
+
+// MARK: - ParameterType.StaticType Validity
+extension ParameterType.StaticType: AbiValidating {
+    var isValid: Bool {
+        switch self {
+        case .uint(let bits), .int(let bits):
+            return bits > 0 && bits <= 256 && bits % 8 == 0
+        case .bytes(let length):
+            return length > 0 && length <= 32
+        case let .array(type, _):
+            return type.isValid
+        default:
+            return true
+        }
+    }
+}
+
+// MARK: - ParameterType.DynamicType Validity
+extension ParameterType.DynamicType: AbiValidating {
+    var isValid: Bool {
+        // Right now we cannot create invalid dynamic types.
+        return true
     }
 }
