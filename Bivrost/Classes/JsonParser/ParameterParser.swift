@@ -137,12 +137,13 @@ fileprivate func matchDynamicArray(from string: String) throws -> ParameterType?
     guard string.hasSuffix("[]") else {
         return nil
     }
+    // String ends with []. We now cut off the remainder string and parse the type for that
     let endOfStringIndex = string.endIndex
     let endOfRemainderIndex = string.index(endOfStringIndex, offsetBy: -2)
     let remainderString = String(string[string.startIndex..<endOfRemainderIndex])
     
     let type = try parameterType(from: remainderString)
-    // TODO: Right now dynamic arrays cannot contain dynamic types, so make sure
+    // Right now dynamic arrays cannot contain dynamic types, so make sure
     // this does not happen
     guard case .staticType(let unwrappedType) = type else {
         throw BivrostError.parameterTypeInvalid
@@ -150,9 +151,44 @@ fileprivate func matchDynamicArray(from string: String) throws -> ParameterType?
     return .dynamicType(.array(unwrappedType))
 }
 
-fileprivate func matchFixedArray(from string: String) -> ParameterType? {
-    // TODO: Should only succeed when trailing brackets are not empty
-    return nil
+fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
+    //  if we have ] at the end (that is not covered above)
+    //      reverse search for next [
+    //      parse substring between into number
+    //         get type for rest of string
+    //         add our fixed length array to the remainder type, if possible
+    //      possible types: <fixed>[<M>]
+    
+    // If the string does not end with ] or does not include an opening bracket
+    // abort and return nil (does not match)
+    guard string.hasSuffix("]"),
+        let indexOfOpeningBracket = string.lastIndex(of: "[") else {
+            return nil
+    }
+    // We want to get the contents between the two brackets, but without the brackets
+    let indexOfClosingBracket = string.index(string.endIndex, offsetBy: -1)
+    let lengthSubstring = string[string.index(indexOfOpeningBracket, offsetBy: 1) ..< indexOfClosingBracket]
+    // Check that we actually have a length between the brackets
+    guard !lengthSubstring.isEmpty else {
+        return nil
+    }
+    // If the contents of the brackets cannot be parsed to int, we throw
+    guard let length = Int(lengthSubstring) else {
+        throw BivrostError.parameterTypeInvalid
+    }
+    
+    // We cut off brackets and get the base type for the remainderString
+    let remainderString = String(string[string.startIndex..<indexOfOpeningBracket])
+    let type = try parameterType(from: remainderString)
+
+    // Right now fixed length arrays can only contain static types, so make sure
+    // we have one of those
+    guard case .staticType(let unwrappedType) = type else {
+        throw BivrostError.parameterTypeInvalid
+    }
+
+    // TODO: validate new type (array length <= 32)
+    return ParameterType.staticType(.array(unwrappedType, length: length))
 }
 
 // MARK: - Validity Checks
