@@ -35,7 +35,6 @@ class ParameterParserSpec: QuickSpec {
                 expect { try ParameterParser.parseParameterType(from: ["type": "bytes[]"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                 expect { try ParameterParser.parseParameterType(from: ["type": "string[]"]) }.to(throwError(BivrostError.parameterTypeInvalid))
                 expect { try ParameterParser.parseParameterType(from: ["type": "int[][]"]) }.to(throwError(BivrostError.parameterTypeInvalid))
-
             }
         }
     }
