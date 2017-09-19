@@ -20,3 +20,13 @@ extension String {
         return range.lowerBound
     }
 }
+
+extension String {
+    var fullRange: Range<Index> {
+        return startIndex..<endIndex
+    }
+    
+    var fullNSRange: NSRange {
+        return NSRange(fullRange, in: self)
+    }
+}

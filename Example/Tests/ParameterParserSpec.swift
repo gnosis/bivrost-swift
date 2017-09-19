@@ -62,6 +62,22 @@ class ParameterParserSpec: QuickSpec {
                     expect { try ParameterParser.parseParameterType(from: ["type": "int[5][9]"]) } == .staticType(.array(.array(.int(bits: 256), length: 5), length: 9))
                 }
             }
+            
+            context("number types") {
+                it("should parse lengths of exact matches correctly") {
+                    expect { try ParameterParser.parseParameterType(from: ["type": "uint16"]) } == .staticType(.uint(bits: 16))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int64"]) } == .staticType(.int(bits: 64))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "bytes3"]) } == .staticType(.bytes(length: 3))
+                }
+                
+                it("should throw when parsing invalid length/type combinations") {
+                    expect { try ParameterParser.parseParameterType(from: ["type": "address16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "int[16]16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "function16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "foo16"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                    expect { try ParameterParser.parseParameterType(from: ["type": "bool32"]) }.to(throwError(BivrostError.parameterTypeInvalid))
+                }
+            }
         }
     }
 }

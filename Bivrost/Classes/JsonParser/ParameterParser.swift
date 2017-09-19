@@ -25,35 +25,34 @@ struct ParameterParser {
     }
 }
 
+// Parsing Logic Pseudo Code:
+
+// 1. if we find an exact full string match with any "atomic" type
+//      return the matching type
+//      Note: Recursive exit
+//      possible types: address, uint, int, bool, function, bytes, string
+// 2. else if we have a number at the end,
+//      parse number
+//      split number of from rest of string
+//      get type for rest of string
+//      add our length to the remainder type, if possible
+//      possible types: bytes<M>, uint<M>, int<M>
+// 3. else if we have [] at the end,
+//      split [] off from rest of string
+//      get type for rest of string
+//         add our dynamic array to the remainder type, if possible
+//         possible types: <fixed>[]
+// 4. else if we have ] at the end (that is not covered above)
+//      reverse search for next [
+//      parse substring between into number
+//         get type for rest of string
+//         add our fixed length array to the remainder type, if possible
+//      possible types: <fixed>[<M>]
+// 5. if no valid type found (e.g. uint7 or empty string)
+//      throw BivrostError.parameterTypeInvalid
+// 6. Return detected type
 
 fileprivate func parameterType(from string: String) throws -> ParameterType {
-    // Parsing Logic Pseudo Code:
-    
-    // 1. if we find an exact full string match with any "atomic" type
-    //      return the matching type
-    //      Note: Recursive exit
-    //      possible types: address, uint, int, bool, function, bytes, string
-    // 2. else if we have a number at the end,
-    //      parse number
-    //      split number of from rest of string
-    //      get type for rest of string
-    //      add our length to the remainder type, if possible
-    //      possible types: bytes<M>, uint<M>, int<M>
-    // 3. else if we have [] at the end,
-    //      split [] off from rest of string
-    //      get type for rest of string
-    // 	    add our dynamic array to the remainder type, if possible
-    // 	    possible types: <fixed>[]
-    // 4. else if we have ] at the end (that is not covered above)
-    //      reverse search for next [
-    //      parse substring between into number
-    // 	    get type for rest of string
-    // 	    add our fixed length array to the remainder type, if possible
-    //      possible types: <fixed>[<M>]
-    // 5. if no valid type found (e.g. uint7 or empty string)
-    //      throw BivrostError.parameterTypeInvalid
-    // 6. Return detected type
-    
     // Step 1:
     let possibleType = try exactMatchType(from: string)
     // Step 2:
@@ -118,8 +117,51 @@ fileprivate func exactMatchType(from string: String) -> ParameterType? {
     }
 }
 
-fileprivate func numberSuffixMatch(from string: String) -> ParameterType? {
-    return nil
+fileprivate let numberSuffixRegex = "^(.*?)([0-9]+)$"
+
+fileprivate func numberSuffixMatch(from string: String) throws -> ParameterType? {
+    //  if we have a number at the end,
+    //      parse number
+    //      split number of from rest of string
+    //      get type for rest of string
+    //      add our length to the remainder type, if possible
+    //      possible types: bytes<M>, uint<M>, int<M>
+
+    let numberSuffixMatcher = try NSRegularExpression(pattern: numberSuffixRegex, options: [])
+    let matches = numberSuffixMatcher.matches(in: string, options: [], range: string.fullNSRange)
+
+    // If we don't have a match, this is not a number suffix match
+    // 1st capture group is full string, 3rd is the numeric suffix,
+    // 2nd group is the remaining string which we will parse further
+    guard let firstMatch = matches.first,
+        firstMatch.numberOfRanges == 3,
+        let remainderRange = Range(firstMatch.range(at: 1), in: string),
+        let lengthRange = Range(firstMatch.range(at: 2), in: string) else {
+            return nil
+    }
+    guard let length = Int(string[lengthRange]) else {
+        throw BivrostError.parameterTypeInvalid
+    }
+    
+    let remainderString = String(string[remainderRange])
+    let type = try parameterType(from: remainderString)
+    
+    // In a successful parsing case (e.g. type:"uint32") we get length=32 in
+    // this function and we will then get an exact match for "uint" in the
+    // `parameterType(from:)` method. This exact match is delivered to us as a
+    // `.uint(bits: 256)`. We ignore the bits and set our own length.
+    // bytes<M> will get matched as an exact dynamic type, but adding the numbers
+    // converts this into a static type.
+    switch type {
+    case .staticType(.int(bits: 256)):
+        return .staticType(.int(bits: length))
+    case .staticType(.uint(bits: 256)):
+        return .staticType(.uint(bits: length))
+    case .dynamicType(.bytes):
+        return .staticType(.bytes(length: length))
+    default:
+        throw BivrostError.parameterTypeInvalid
+    }
 }
 
 /// Parses the string (backwards) and returns the dynamic array defined by the string.
