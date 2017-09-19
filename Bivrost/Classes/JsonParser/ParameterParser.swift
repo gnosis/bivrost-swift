@@ -94,10 +94,8 @@ fileprivate func exactMatchType(from string: String) -> ParameterType? {
     case .address?:
         return .staticType(.address)
     case .uint?:
-        // FIXME: this mapping might not be cool, in case "not to be used for function selector" is important
         return .staticType(.uint(bits: 256))
     case .int?:
-        // FIXME: this mapping might not be cool, in case "not to be used for function selector" is important
         return .staticType(.int(bits: 256))
     case .bool?:
         return .staticType(.bool)
@@ -110,7 +108,7 @@ fileprivate func exactMatchType(from string: String) -> ParameterType? {
     case .string?:
         return .dynamicType(.string)
     default:
-        // We have a more complicated type. Continue parsing below.
+        // We could not find a type with an exact match.
         return nil
     }
 }

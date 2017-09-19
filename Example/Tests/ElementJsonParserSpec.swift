@@ -15,8 +15,6 @@ fileprivate typealias Element = Contract.Element
 
 class ElementJsonParserSpec: QuickSpec {
     override func spec() {
-        // TODO: test more complex (arrays + nested arrays) parametertypes
-        
         describe("ElementJsonParser") {
 
             it("should throw when given an empty element") {
