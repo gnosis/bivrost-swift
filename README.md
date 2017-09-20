@@ -1,6 +1,6 @@
 # Bivrost
 
-🔥 🌈 Bridge between Solidity Contracts and Kotlin
+🔥 🌈 Bridge between Solidity Contracts and Swift
 
 [![CI Status](http://img.shields.io/travis/gnosis/bivrost-swift.svg?style=flat)](https://travis-ci.org/gnosis/bivrost-swift)
 
