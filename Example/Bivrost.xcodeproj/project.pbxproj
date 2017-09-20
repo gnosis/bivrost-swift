@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		607FACEC1AFB9204008FA782 /* ElementJsonParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* ElementJsonParserSpec.swift */; };
+		A5A474CE1F716407009166FF /* JsonParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A474CD1F716407009166FF /* JsonParserSpec.swift */; };
+		A5A474D21F716A19009166FF /* TestToken-Abi.json in Resources */ = {isa = PBXBuildFile; fileRef = A5A474D01F71654A009166FF /* TestToken-Abi.json */; };
+		A5A474D31F716A54009166FF /* MultiSigWalletWithDailyLimit-Abi.json in Resources */ = {isa = PBXBuildFile; fileRef = A5A474CF1F71654A009166FF /* MultiSigWalletWithDailyLimit-Abi.json */; };
+		A5D267991F704117003EB037 /* ParameterParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D267981F704117003EB037 /* ParameterParserSpec.swift */; };
 		C87557A4FBC0F37F45407133 /* Pods_Bivrost_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD89F3FDDAAC32DCAB86E71E /* Pods_Bivrost_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -15,8 +19,12 @@
 		517310AC2C605A870E6210A9 /* Pods-Bivrost_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bivrost_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bivrost_Tests/Pods-Bivrost_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Bivrost_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Bivrost_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		607FACEB1AFB9204008FA782 /* ElementJsonParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementJsonParserSpec.swift; sourceTree = "<group>"; };
 		6A700981469260BAA33F21C7 /* Pods-Bivrost_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bivrost_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bivrost_Tests/Pods-Bivrost_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		A5A474CD1F716407009166FF /* JsonParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonParserSpec.swift; sourceTree = "<group>"; };
+		A5A474CF1F71654A009166FF /* MultiSigWalletWithDailyLimit-Abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "MultiSigWalletWithDailyLimit-Abi.json"; sourceTree = "<group>"; };
+		A5A474D01F71654A009166FF /* TestToken-Abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "TestToken-Abi.json"; sourceTree = "<group>"; };
+		A5D267981F704117003EB037 /* ParameterParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterParserSpec.swift; sourceTree = "<group>"; };
 		BD89F3FDDAAC32DCAB86E71E /* Pods_Bivrost_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bivrost_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFACFC72CDB0580C9E4AB37A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		DD04F6E153FEDB17E9C19075 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -65,8 +73,10 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				607FACEB1AFB9204008FA782 /* ElementJsonParserSpec.swift */,
+				A5D267981F704117003EB037 /* ParameterParserSpec.swift */,
+				A5A474CD1F716407009166FF /* JsonParserSpec.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -74,6 +84,7 @@
 		607FACE91AFB9204008FA782 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A5A474CA1F7163E7009166FF /* Assets */,
 				607FACEA1AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -96,6 +107,15 @@
 				517310AC2C605A870E6210A9 /* Pods-Bivrost_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		A5A474CA1F7163E7009166FF /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				A5A474CF1F71654A009166FF /* MultiSigWalletWithDailyLimit-Abi.json */,
+				A5A474D01F71654A009166FF /* TestToken-Abi.json */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,7 +149,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0900;
-				ORGANIZATIONNAME = CocoaPods;
+				ORGANIZATIONNAME = Gnosis;
 				TargetAttributes = {
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -161,6 +181,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5A474D21F716A19009166FF /* TestToken-Abi.json in Resources */,
+				A5A474D31F716A54009166FF /* MultiSigWalletWithDailyLimit-Abi.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,7 +251,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				607FACEC1AFB9204008FA782 /* ElementJsonParserSpec.swift in Sources */,
+				A5A474CE1F716407009166FF /* JsonParserSpec.swift in Sources */,
+				A5D267991F704117003EB037 /* ParameterParserSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

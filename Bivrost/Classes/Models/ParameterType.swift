@@ -11,48 +11,9 @@ import Foundation
 
 // Based on https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#types
 
-/// Denotes any type that has a fixed length.
-enum StaticType {
-    /// uint<M>: unsigned integer type of M bits, 0 < M <= 256, M % 8 == 0. e.g. uint32, uint8, uint256.
-    case uint(bits: Int)
-    /// int<M>: two's complement signed integer type of M bits, 0 < M <= 256, M % 8 == 0.
-    case int(bits: Int)
-    /// address: equivalent to uint160, except for the assumed interpretation and language typing.
-    case address
-    /// bool: equivalent to uint8 restricted to the values 0 and 1
-    case bool
-    /// bytes<M>: binary type of M bytes, 0 < M <= 32.
-    case bytes(length: Int)
-    /// function: equivalent to bytes24: an address, followed by a function selector
-    case function
-    /// <type>[M]: a fixed-length array of the given fixed-length type.
-    indirect case array(StaticType, length: Int)
-    
-    // The specification also defines the following types:
-    // uint, int: synonyms for uint256, int256 respectively (not to be used for computing the function selector).
-    // We do not include these in this enum, as we will just be mapping those
-    // to .uint(bits: 256) and .int(bits: 256) directly.
-
-}
-
-/// Denotes any type that has a variable length.
-enum DynamicType {
-    /// bytes: dynamic sized byte sequence.
-    case bytes
-    /// string: dynamic sized unicode string assumed to be UTF-8 encoded.
-    case string
-    /// <type>[]: a variable-length array of the given fixed-length type.
-    case array(StaticType)
-}
-
-/// Specifies the type that a parameter in a contract has.
-enum ParameterType {
-    case dynamicType(DynamicType)
-    case staticType(StaticType)
-}
-
-extension DynamicType: Equatable {
-    public static func ==(lhs: DynamicType, rhs: DynamicType) -> Bool {
+// MARK: - DynamicType Equatable
+extension Contract.Element.ParameterType.DynamicType: Equatable {
+    public static func ==(lhs: Contract.Element.ParameterType.DynamicType, rhs: Contract.Element.ParameterType.DynamicType) -> Bool {
         switch (lhs, rhs) {
         case (.bytes, .bytes):
             return true
@@ -66,8 +27,9 @@ extension DynamicType: Equatable {
     }
 }
 
-extension StaticType: Equatable {
-    public static func ==(lhs: StaticType, rhs: StaticType) -> Bool {
+// MARK: - StaticType Equatable
+extension Contract.Element.ParameterType.StaticType: Equatable {
+    public static func ==(lhs: Contract.Element.ParameterType.StaticType, rhs: Contract.Element.ParameterType.StaticType) -> Bool {
         switch (lhs, rhs) {
         case let (.uint(length1), .uint(length2)):
             return length1 == length2
@@ -89,8 +51,9 @@ extension StaticType: Equatable {
     }
 }
 
-extension ParameterType: Equatable {
-    public static func ==(lhs: ParameterType, rhs: ParameterType) -> Bool {
+// MARK: - ParameterType Equatable
+extension Contract.Element.ParameterType: Equatable {
+    public static func ==(lhs: Contract.Element.ParameterType, rhs: Contract.Element.ParameterType) -> Bool {
         switch (lhs, rhs) {
         case (.dynamicType(let value1), .dynamicType(let value2)):
             return value1 == value2
@@ -99,5 +62,41 @@ extension ParameterType: Equatable {
         default:
             return false
         }
+    }
+}
+
+// MARK: - ParameterType Validity
+extension Contract.Element.ParameterType: AbiValidating {
+    var isValid: Bool {
+        switch self {
+        case .staticType(let type):
+            return type.isValid
+        case .dynamicType(let type):
+            return type.isValid
+        }
+    }
+}
+
+// MARK: - ParameterType.StaticType Validity
+extension Contract.Element.ParameterType.StaticType: AbiValidating {
+    var isValid: Bool {
+        switch self {
+        case .uint(let bits), .int(let bits):
+            return bits > 0 && bits <= 256 && bits % 8 == 0
+        case .bytes(let length):
+            return length > 0 && length <= 32
+        case let .array(type, _):
+            return type.isValid
+        default:
+            return true
+        }
+    }
+}
+
+// MARK: - ParameterType.DynamicType Validity
+extension Contract.Element.ParameterType.DynamicType: AbiValidating {
+    var isValid: Bool {
+        // Right now we cannot create invalid dynamic types.
+        return true
     }
 }

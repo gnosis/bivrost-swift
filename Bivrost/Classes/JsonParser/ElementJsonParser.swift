@@ -8,10 +8,10 @@
 //
 
 import Foundation
-
-fileprivate typealias FunctionInput = Contract.FunctionInput
-fileprivate typealias FunctionOutput = Contract.FunctionOutput
-fileprivate typealias EventInput = Contract.EventInput
+fileprivate typealias Element = Contract.Element
+fileprivate typealias FunctionInput = Element.Function.Input
+fileprivate typealias FunctionOutput = Element.Function.Output
+fileprivate typealias EventInput = Element.Event.Input
 
 fileprivate enum ElementType: String {
     case function
@@ -54,33 +54,33 @@ extension ElementJsonParser {
         }
     }
     
-    fileprivate static func parseFunction(from json: [String: Any]) throws -> Contract.Function {
+    fileprivate static func parseFunction(from json: [String: Any]) throws -> Contract.Element.Function {
         let constant = parseConstant(from: json)
         let payable = parsePayable(from: json)
         let inputs = try parseFunctionInputs(from: json)
         let outputs = try parseFunctionOutputs(from: json)
         let name = try parseName(from: json)
-        return Contract.Function(name: name, inputs: inputs, outputs: outputs, constant: constant, payable: payable)
+        return Element.Function(name: name, inputs: inputs, outputs: outputs, constant: constant, payable: payable)
     }
     
-    fileprivate static func parseConstructor(from json: [String: Any]) throws -> Contract.Constructor {
+    fileprivate static func parseConstructor(from json: [String: Any]) throws -> Element.Constructor {
         let constant = parseConstant(from: json)
         let payable = parsePayable(from: json)
         let inputs = try parseFunctionInputs(from: json)
-        return Contract.Constructor(inputs: inputs, constant: constant, payable: payable)
+        return Element.Constructor(inputs: inputs, constant: constant, payable: payable)
     }
     
-    fileprivate static func parseFallback(from json: [String: Any]) throws -> Contract.Fallback {
+    fileprivate static func parseFallback(from json: [String: Any]) throws -> Element.Fallback {
         let constant = parseConstant(from: json)
         let payable = parsePayable(from: json)
-        return Contract.Fallback(constant: constant, payable: payable)
+        return Element.Fallback(constant: constant, payable: payable)
     }
     
-    fileprivate static func parseEvent(from json: [String: Any]) throws -> Contract.Event {
+    fileprivate static func parseEvent(from json: [String: Any]) throws -> Element.Event {
         let name = try parseName(from: json)
         let inputs = try parseEventInputs(from: json)
         let anonymous = parseAnonymous(from: json)
-        return Contract.Event(name: name, inputs: inputs, anonymous: anonymous)
+        return Element.Event(name: name, inputs: inputs, anonymous: anonymous)
     }
     
     private static func parseName(from json: [String: Any]) throws -> String {
