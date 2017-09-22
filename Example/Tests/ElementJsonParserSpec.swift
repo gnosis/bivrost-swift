@@ -86,6 +86,8 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(function.constant) == false
                             expect(function.payable) == false
                             expect(function.name) == "foo"
+                            expect(function.signature) == "foo()"
+                            expect(function.methodId) == "c2985578"
                         })
                 }
                 
@@ -109,6 +111,8 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(function.constant) == true
                             expect(function.payable) == false
                             expect(function.name) == "foo2"
+                            expect(function.signature) == "foo2(string)"
+                            expect(function.methodId) == "bfe4a119"
                         })
                 }
                 
@@ -151,6 +155,8 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(function.constant) == true
                             expect(function.payable) == false
                             expect(function.name) == "foo2"
+                            expect(function.signature) == "foo2(address,uint256,int256,bool,function,bytes,string)"
+                            expect(function.methodId) == "ebd557ad"
                         })
                 }
                 

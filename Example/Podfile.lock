@@ -1,5 +1,7 @@
 PODS:
-  - Bivrost (0.1.0)
+  - Bivrost (0.1.0):
+    - CryptoSwift
+  - CryptoSwift (0.7.2)
   - Nimble (7.0.1)
   - Quick (1.1.0)
 
@@ -25,7 +27,8 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
-  Bivrost: c7c346a4ccd08bb6add7c741a099aa8f7b2dce7e
+  Bivrost: 89404aa79e20580b600df946af41656379a8e1c0
+  CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
   Nimble: 1b6670c36e5750169b9e4cc2e9cfa82a7603c69e
   Quick: 4700beb8056662b579facd79eaca7f04fb3d48e6
 

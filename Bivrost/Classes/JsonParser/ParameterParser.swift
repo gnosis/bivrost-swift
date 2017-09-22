@@ -227,3 +227,68 @@ fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
 
     return ParameterType.staticType(.array(unwrappedType, length: length))
 }
+//
+//// MARK: - AbiDecoding
+//protocol AbiDecoding {
+//    init?(abiRepresentation: String)
+//}
+//
+//extension ParameterType: AbiDecoding {
+//    init?(abiRepresentation: String) {
+//        guard let type = try? parameterType(from: abiRepresentation) else {
+//            return nil
+//        }
+//        self = type
+//    }
+//}
+
+// MARK: - AbiEncoding
+
+protocol AbiEncoding {
+    var abiRepresentation: String { get }
+}
+
+extension ParameterType: AbiEncoding {
+    var abiRepresentation: String {
+        switch self {
+        case .staticType(let type):
+            return type.abiRepresentation
+        case .dynamicType(let type):
+            return type.abiRepresentation
+        }
+    }
+}
+
+extension ParameterType.StaticType: AbiEncoding {
+    var abiRepresentation: String {
+        switch self {
+        case .uint(let bits):
+            return "uint\(bits)"
+        case .int(let bits):
+            return "int\(bits)"
+        case .address:
+            return "address"
+        case .bool:
+            return "bool"
+        case .bytes(let length):
+            return "bytes\(length)"
+        case .function:
+            return "function"
+        case let .array(type, length):
+            return "\(type.abiRepresentation)[\(length)]"
+        }
+    }
+}
+
+extension ParameterType.DynamicType: AbiEncoding {
+    var abiRepresentation: String {
+        switch self {
+        case .bytes:
+            return "bytes"
+        case .string:
+            return "string"
+        case .array(let type):
+            return "\(type.abiRepresentation)[]"
+        }
+    }
+}
