@@ -8,18 +8,9 @@
 import CryptoSwift
 import BigInt
 
-private let solidityBytesPad = 32
-private let solidityHexStringPad = solidityBytesPad * 2
-
 // MARK: - Solidity Types
 public struct Solidity {
     // MARK: Static Types
-    public struct Address: SolidityEncodable {
-        func encode() -> EncodeFormat {
-            // FIXME: implement
-            return ""
-        }
-    }
     
     // FIXME: done
     public struct Bool: SolidityEncodable {
@@ -33,14 +24,23 @@ public struct Solidity {
     public struct UInt8: SolidityEncodable {
         let value: Swift.UInt8
         func encode() -> EncodeFormat {
-            return UInt256(value: BigUInt(value)).encode()
+            return UInt256(trustedUInt: BigUInt(value)).encode()
         }
     }
     
+    public struct UInt16: SolidityEncodable {
+        let value: Swift.UInt16
+        func encode() -> SolidityEncodable.EncodeFormat {
+            return UInt256(trustedUInt: BigUInt(value)).encode()
+        }
+    }
+
+    // FIXME: implement/generate more uint types
     public struct UInt32: SolidityEncodable {
         let value: Swift.UInt32
         func encode() -> SolidityEncodable.EncodeFormat {
-            return UInt256(value: BigUInt(value)).encode()
+            return UInt256(trustedUInt: BigUInt(value)).encode()
+            
         }
     }
     
@@ -50,26 +50,54 @@ public struct Solidity {
         func encode() -> EncodeFormat {
             return value.serialize().toHexString().padToSolidity()
         }
+        
+        public init?(_ bigUint: BigUInt) {
+            guard bigUint.bitWidth <= 256 else {
+                return nil
+            }
+            value = bigUint
+        }
+        
+        init(trustedUInt: BigUInt) {
+            guard trustedUInt.bitWidth <= 256 else {
+                fatalError("UInt256 created with a BigUInt that does not fit into 256 bits.")
+            }
+            value = trustedUInt
+        }
     }
     
-
+    public struct UInt160: SolidityEncodable {
+        let value: BigUInt
+        func encode() -> EncodeFormat {
+            return UInt256(trustedUInt: value).encode()
+        }
+        
+        // FIXME: this can be parametrized with the bit length and stuff
+        public init?(_ bigUint: BigUInt) {
+            guard bigUint.bitWidth <= 160 else {
+                return nil
+            }
+            value = bigUint
+        }
+    }
+    
+    public struct Address: SolidityEncodable {
+        let value: UInt160
+        func encode() -> SolidityEncodable.EncodeFormat {
+            return value.encode()
+        }
+        
+        init?(_ address: String) {
+            let hex = address.hasPrefix("0x") ? String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
+            guard let bigInt = BigUInt(hex, radix: 16),
+                let uint = UInt160(bigInt) else {
+                return nil
+            }
+            value = uint
+        }
+    }
     
     // MARK: Dynamic Types
-}
-
-extension String {
-    func pad(toMultipleOf multiple: Int, character: Character) -> String {
-        let originalLength = self.characters.count
-        let desiredLength = ((originalLength - 1)|(multiple - 1)) + 1
-        let paddingLength = desiredLength - originalLength
-        let padding = String(repeating: character, count: paddingLength)
-        return padding + self
-    }
-    
-    func padToSolidity(character: Character = "0") -> String {
-        return pad(toMultipleOf: solidityHexStringPad, character: character)
-        
-    }
 }
 
 protocol SolidityEncodable {
@@ -112,7 +140,7 @@ struct StandardToken {
         }
         static func decode(arguments: String) -> Arguments {
             // FIXME: implement
-            return Arguments(spender: Solidity.Address(), value: Solidity.UInt256(value: BigUInt(1)))
+            return Arguments(spender: Solidity.Address("FF")!, value: Solidity.UInt256(BigUInt(1))!)
         }
     }
     
