@@ -41,4 +41,5 @@ files from it.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'CryptoSwift'
+  s.dependency 'BigInt', '~> 3.0'
 end

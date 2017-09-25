@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		607FACEC1AFB9204008FA782 /* ElementJsonParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* ElementJsonParserSpec.swift */; };
+		A58B27141F7915950038489F /* SolidityBaseSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B27131F7915950038489F /* SolidityBaseSpec.swift */; };
 		A5A474CE1F716407009166FF /* JsonParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A474CD1F716407009166FF /* JsonParserSpec.swift */; };
 		A5A474D21F716A19009166FF /* TestToken-Abi.json in Resources */ = {isa = PBXBuildFile; fileRef = A5A474D01F71654A009166FF /* TestToken-Abi.json */; };
 		A5A474D31F716A54009166FF /* MultiSigWalletWithDailyLimit-Abi.json in Resources */ = {isa = PBXBuildFile; fileRef = A5A474CF1F71654A009166FF /* MultiSigWalletWithDailyLimit-Abi.json */; };
@@ -21,6 +22,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* ElementJsonParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementJsonParserSpec.swift; sourceTree = "<group>"; };
 		6A700981469260BAA33F21C7 /* Pods-Bivrost_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bivrost_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bivrost_Tests/Pods-Bivrost_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		A58B27131F7915950038489F /* SolidityBaseSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidityBaseSpec.swift; sourceTree = "<group>"; };
 		A5A474CD1F716407009166FF /* JsonParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonParserSpec.swift; sourceTree = "<group>"; };
 		A5A474CF1F71654A009166FF /* MultiSigWalletWithDailyLimit-Abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "MultiSigWalletWithDailyLimit-Abi.json"; sourceTree = "<group>"; };
 		A5A474D01F71654A009166FF /* TestToken-Abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "TestToken-Abi.json"; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				607FACEB1AFB9204008FA782 /* ElementJsonParserSpec.swift */,
 				A5D267981F704117003EB037 /* ParameterParserSpec.swift */,
 				A5A474CD1F716407009166FF /* JsonParserSpec.swift */,
+				A58B27131F7915950038489F /* SolidityBaseSpec.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -214,17 +217,21 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Bivrost_Tests/Pods-Bivrost_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/Bivrost/Bivrost.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bivrost.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -253,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A58B27141F7915950038489F /* SolidityBaseSpec.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* ElementJsonParserSpec.swift in Sources */,
 				A5A474CE1F716407009166FF /* JsonParserSpec.swift in Sources */,
 				A5D267991F704117003EB037 /* ParameterParserSpec.swift in Sources */,

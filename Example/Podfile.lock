@@ -1,9 +1,13 @@
 PODS:
+  - BigInt (3.0.0):
+    - SipHash (~> 1.2)
   - Bivrost (0.1.0):
+    - BigInt (~> 3.0)
     - CryptoSwift
   - CryptoSwift (0.7.2)
   - Nimble (7.0.1)
   - Quick (1.1.0)
+  - SipHash (1.2.0)
 
 DEPENDENCIES:
   - Bivrost (from `../`)
@@ -27,10 +31,12 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
-  Bivrost: 89404aa79e20580b600df946af41656379a8e1c0
+  BigInt: a7864bcecd2976bced91963baef90079dbdcca25
+  Bivrost: 2576e4cdadbaad03ff3f93d8c1aa3aee2ff15331
   CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
   Nimble: 1b6670c36e5750169b9e4cc2e9cfa82a7603c69e
   Quick: 4700beb8056662b579facd79eaca7f04fb3d48e6
+  SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
 
 PODFILE CHECKSUM: 6f2e1cfe3eb67ff08fb29d0869c6f06a34526cce
 
