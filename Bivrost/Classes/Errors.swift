@@ -7,8 +7,6 @@
 //
 //
 
-import Foundation
-
 enum BivrostError: Error {
     case elementTypeInvalid
     case elementNameInvalid

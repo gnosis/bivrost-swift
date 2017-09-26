@@ -7,7 +7,6 @@
 //
 //
 
-import Foundation
 fileprivate typealias Element = Contract.Element
 fileprivate typealias FunctionInput = Element.Function.Input
 fileprivate typealias FunctionOutput = Element.Function.Output

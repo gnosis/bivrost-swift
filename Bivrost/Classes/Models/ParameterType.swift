@@ -7,8 +7,6 @@
 //
 //
 
-import Foundation
-
 // Based on https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#types
 
 // MARK: - DynamicType Equatable

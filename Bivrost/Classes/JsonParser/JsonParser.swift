@@ -7,8 +7,6 @@
 //
 //
 
-import Foundation
-
 struct JsonParser {
     /// Parses a list of json contract elements into a Contract struct.
     ///

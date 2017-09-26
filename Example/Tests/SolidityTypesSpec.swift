@@ -6,7 +6,6 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import Foundation
 
 import Quick
 import Nimble
@@ -18,8 +17,8 @@ class SolidityTypesSpec: QuickSpec {
         describe("SolidityTypes") {
             context("Address") {
                 it("should be able to parse a hex address with or without leading 0x") {
-                    expect(Solidity2.Address("0xFF")).toNot(beNil())
-                    expect(Solidity2.Address("FF")).toNot(beNil())
+                    expect(Solidity.Address("0xFF")).toNot(beNil())
+                    expect(Solidity.Address("FF")).toNot(beNil())
                 }
                 
             }

@@ -8,80 +8,6 @@
 import CryptoSwift
 import BigInt
 
-// MARK: - Solidity Types
-public struct Solidity2 {
-    // MARK: Static Types
-    
-    // FIXME: done
-    
-    public struct Address: SolidityEncodable {
-        let value: Solidity.UInt160
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return value.encode()
-        }
-        
-        init?(_ address: String) {
-            let hex = address.hasPrefix("0x") ? String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
-            guard let bigInt = BigUInt(hex, radix: 16),
-                let uint = Solidity.UInt160(bigInt) else {
-                return nil
-            }
-            value = uint
-        }
-    }
-    
-    private class BytesXBase: SolidityEncodable {
-        let length: UInt
-        let value: Data
-        init?(length: UInt, value: Data) {
-            guard value.count <= length else {
-                return nil
-            }
-            self.length = length
-            self.value = value
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            guard value.count <= length else {
-                fatalError("BytesXBase created with Data that does not fit into \(length) bytes.")
-            }
-            return value.encode()
-        }
-        
-    }
-    
-    public struct Bytes1: SolidityEncodable {
-        private let wrapper: BytesXBase
-        
-        init?(value: Data) {
-            guard let wrapper = BytesXBase(length: 1, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
-        }
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
-        }
-    }
-    
-    public struct Bytes32: SolidityEncodable {
-        private let wrapper: BytesXBase
-        
-        init?(value: Data) {
-            guard let wrapper = BytesXBase(length: 32, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
-        }
-    }
-    
-    // MARK: Dynamic Types
-}
-
 // MARK: - Data SolidityEncodable
 extension Data: SolidityEncodable {
     func encode() -> SolidityEncodable.EncodeFormat {
@@ -118,7 +44,7 @@ protocol SolidityFunction {
 struct StandardToken {
     struct Approve: SolidityFunction {
         static let methodId = "095ea7b3"
-        typealias Arguments = (spender: Solidity2.Address, value: Solidity.UInt256)
+        typealias Arguments = (spender: Solidity.Address, value: Solidity.UInt256)
         typealias Return = Solidity.Bool
         
         static func encodeCall(arguments: Arguments) -> String {
@@ -132,7 +58,7 @@ struct StandardToken {
         }
         static func decode(arguments: String) -> Arguments {
             // FIXME: implement
-            return Arguments(spender: Solidity2.Address("FF")!, value: Solidity.UInt256(BigUInt(1))!)
+            return Arguments(spender: Solidity.Address("FF")!, value: Solidity.UInt256(BigUInt(1))!)
         }
     }
     
