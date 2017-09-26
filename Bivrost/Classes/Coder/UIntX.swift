@@ -8,7 +8,7 @@
 import BigInt
 
 extension Solidity {
-    class UIntXBase: SolidityEncodable {
+    class UIntXBase: StaticType {
         let value: BigUInt
         
         public init?(bits: UInt, bigUint: BigUInt) {
@@ -23,7 +23,7 @@ extension Solidity {
         }
     }
     
-    public struct UInt8: SolidityEncodable {
+    public struct UInt8: StaticType {
         private let wrapper: UIntXBase
         
         init?(_ value: BigUInt) {
@@ -38,7 +38,7 @@ extension Solidity {
         }
     }
     
-    public struct UInt32: SolidityEncodable {
+    public struct UInt32: StaticType {
         private let wrapper: UIntXBase
         
         init?(_ value: BigUInt) {
@@ -53,7 +53,7 @@ extension Solidity {
         }
     }
     
-    public struct UInt128: SolidityEncodable {
+    public struct UInt128: StaticType {
         private let wrapper: UIntXBase
         
         init?(_ value: BigUInt) {
@@ -68,7 +68,7 @@ extension Solidity {
         }
     }
     
-    public struct UInt160: SolidityEncodable {
+    public struct UInt160: StaticType {
         private let wrapper: UIntXBase
         
         init?(_ value: BigUInt) {
@@ -83,7 +83,7 @@ extension Solidity {
         }
     }
     
-    public struct UInt256: SolidityEncodable {
+    public struct UInt256: StaticType {
         private let wrapper: UIntXBase
         
         init?(_ value: BigUInt) {

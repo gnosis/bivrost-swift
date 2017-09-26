@@ -47,6 +47,16 @@ class SolidityTypesSpec: QuickSpec {
                     expect(Solidity.Int8(BigInt(123))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
                 }
             }
+            
+            context("FixedArray") {
+                it("should encode multiple positive numbers correctly") {
+                    let array = Solidity.FixedArray(items: [
+                        Solidity.Int256(BigInt(-1))!,
+                        Solidity.Int256(BigInt(123))!
+                    ])
+                    expect(array.encode()) == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000007b"
+                }
+            }
         }
     }
 }

@@ -6,9 +6,10 @@
 //
 
 extension Solidity {
-    private class BytesXBase: SolidityEncodable {
+    private class BytesXBase: StaticType {
         let length: UInt
         let value: Data
+        
         init?(length: UInt, value: Data) {
             guard value.count <= length else {
                 return nil
@@ -21,11 +22,12 @@ extension Solidity {
             guard value.count <= length else {
                 fatalError("BytesXBase somehow created with Data that does not fit into \(length) bytes.")
             }
-            return value.encode()
+            // If data is too small for 32bytes, right pad with 0 elements
+            return value.toHexString().padToSolidity(location: .right)
         }
     }
     
-    public struct Bytes1: SolidityEncodable {
+    public struct Bytes1: StaticType {
         private let wrapper: BytesXBase
         
         init?(value: Data) {
@@ -39,7 +41,7 @@ extension Solidity {
         }
     }
     
-    public struct Bytes32: SolidityEncodable {
+    public struct Bytes32: StaticType {
         private let wrapper: BytesXBase
         
         init?(value: Data) {

@@ -8,7 +8,7 @@
 import BigInt
 
 extension Solidity {
-    public struct Bool: SolidityEncodable {
+    public struct Bool: StaticType {
         private let wrapper: UIntXBase
         
         init(_ value: Swift.Bool) {

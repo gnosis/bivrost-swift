@@ -8,7 +8,7 @@
 import BigInt
 
 extension Solidity {
-    class IntXBase: SolidityEncodable {
+    class IntXBase: StaticType {
         let value: BigInt
         
         public init?(bits: UInt, bigInt: BigInt) {
@@ -24,7 +24,7 @@ extension Solidity {
         }
     }
     
-    public struct Int8: SolidityEncodable {
+    public struct Int8: StaticType {
         private let wrapper: IntXBase
         
         init?(_ value: BigInt) {
@@ -39,7 +39,7 @@ extension Solidity {
         }
     }
     
-    public struct Int256: SolidityEncodable {
+    public struct Int256: StaticType {
         private let wrapper: IntXBase
         
         init?(_ value: BigInt) {
@@ -52,17 +52,5 @@ extension Solidity {
         func encode() -> SolidityEncodable.EncodeFormat {
             return wrapper.encode()
         }
-    }
-}
-
-extension BigInt {
-    /// Returns the binary data for the two's complement.
-    ///
-    /// - Returns: This number in two's complement.
-    func serialize() -> Data {
-        guard sign == .minus else {
-            return magnitude.serialize()
-        }
-        return ((~magnitude) + 1).serialize()
     }
 }

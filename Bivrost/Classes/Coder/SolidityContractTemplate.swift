@@ -8,26 +8,6 @@
 import CryptoSwift
 import BigInt
 
-// MARK: - Data SolidityEncodable
-extension Data: SolidityEncodable {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        // If data is too small for 32bytes, right pad with 0 elements
-        return toHexString().padToSolidity(location: .right)
-    }
-}
-
-protocol SolidityEncodable {
-    typealias EncodeFormat = String
-    func encode() -> EncodeFormat
-}
-
-struct SolidityBase {
-    static func encode(arguments: SolidityEncodable...) -> SolidityEncodable.EncodeFormat {
-        // FIXME: implement add dynamic types
-        return arguments.map { $0.encode() }.reduce("", +)
-    }
-}
-
 protocol SolidityFunction {
     associatedtype Arguments
     associatedtype Return

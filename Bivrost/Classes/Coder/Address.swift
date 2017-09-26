@@ -8,7 +8,7 @@
 import BigInt
 
 extension Solidity {
-    public struct Address: SolidityEncodable {
+    public struct Address: StaticType {
         let value: Solidity.UInt160
         func encode() -> SolidityEncodable.EncodeFormat {
             return value.encode()
