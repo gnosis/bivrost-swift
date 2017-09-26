@@ -22,10 +22,29 @@ class SolidityTypesSpec: QuickSpec {
                 }
                 
             }
-            context("UInt256") {
+            context("UInt") {
                 it("should not be created when the given value does not fit into 256 bits") {
                    // Random large number bigger than 2**256
                     expect(Solidity.UInt256(BigUInt("65767676766576587658679697687685765765765765765765t765765765765765765765765765765765765765765757657657657657657657657657657657657657657657657657657657657657657657657657657657657657657657658768768768768687687687876876876876876876876876876876876876876876876876876876", radix: 36)!)).to(beNil())
+                }
+                
+                it("should encode positive numbers correctly") {
+                    expect(Solidity.UInt256(BigUInt(123))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
+                }
+            }
+            
+            context("Int") {
+                it("should not be created when the given value does not fit into 256 bits") {
+                    // Random large number bigger than 2**255
+                    expect(Solidity.Int256(BigInt("65767676766576587658679697687685765765765765765765t765765765765765765765765765765765765765765757657657657657657657657657657657657657657657657657657657657657657657657657657657657657657657658768768768768687687687876876876876876876876876876876876876876876876876876876", radix: 36)!)).to(beNil())
+                }
+                
+                it("should encode negative numbers correctly") {
+                    expect(Solidity.Int256(BigInt(-1))?.encode()) == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                }
+                
+                it("should encode positive numbers correctly") {
+                    expect(Solidity.Int8(BigInt(123))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
                 }
             }
         }
