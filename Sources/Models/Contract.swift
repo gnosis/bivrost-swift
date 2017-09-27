@@ -7,6 +7,8 @@
 //
 //
 
+import Protocols
+
 /// Describes the interface of an Ethereum/Solidity Contract
 struct Contract {
     let elements: [Element]

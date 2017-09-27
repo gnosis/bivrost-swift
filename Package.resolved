@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BigInt",
+        "repositoryURL": "https://github.com/attaswift/BigInt.git",
+        "state": {
+          "branch": null,
+          "revision": "50208597616c8ab08729bbc33edf295bd06da27c",
+          "version": "3.0.0"
+        }
+      },
+      {
+        "package": "CryptoSwift",
+        "repositoryURL": "https://github.com/zweigraf/CryptoSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "f9e9cdc2c94a87e6a08da9de2e431a910f5c00f7",
+          "version": "0.7.2"
+        }
+      },
+      {
+        "package": "SipHash",
+        "repositoryURL": "https://github.com/attaswift/SipHash",
+        "state": {
+          "branch": null,
+          "revision": "7b47e3f23a66770b1eb18e15e20546aad398c9dd",
+          "version": "1.2.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
