@@ -1,6 +1,6 @@
 //
 //  SolidityBaseSpec.swift
-//  Bivrost
+//  BivrostBaseTests
 //
 //  Created by Luis Reisewitz on 25.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-@testable import BivrostFramework
+@testable import BivrostBase
 import BigInt
 
 class SolidityBaseSpec: QuickSpec {

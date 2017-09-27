@@ -4,6 +4,7 @@
 //
 //  Created by Luis Reisewitz on 26.09.17.
 //
+import Foundation
 
 extension Solidity {
     private class BytesXBase: StaticType {

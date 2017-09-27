@@ -15,8 +15,26 @@
         "repositoryURL": "https://github.com/zweigraf/CryptoSwift.git",
         "state": {
           "branch": null,
-          "revision": "f9e9cdc2c94a87e6a08da9de2e431a910f5c00f7",
-          "version": "0.7.2"
+          "revision": "fdd115318528c9c25a06c0a89553f71bde7233da",
+          "version": null
+        }
+      },
+      {
+        "package": "Nimble",
+        "repositoryURL": "https://github.com/Quick/Nimble.git",
+        "state": {
+          "branch": null,
+          "revision": "38c9ab0846a3fbec308eb2aa9ef68b10a7434eb4",
+          "version": "7.0.2"
+        }
+      },
+      {
+        "package": "Quick",
+        "repositoryURL": "https://github.com/Quick/Quick.git",
+        "state": {
+          "branch": null,
+          "revision": "c498edf4aabb694a5b8a861ec3d69f0c5ab57d9e",
+          "version": null
         }
       },
       {

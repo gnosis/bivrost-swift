@@ -5,6 +5,7 @@
 //  Created by Luis Reisewitz on 26.09.17.
 //
 
+import Foundation
 import BigInt
 
 extension BigInt {

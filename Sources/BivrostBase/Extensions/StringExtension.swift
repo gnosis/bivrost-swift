@@ -5,6 +5,8 @@
 //  Created by Luis Reisewitz on 19.09.17.
 //
 
+import Foundation
+
 // MARK: - Search Helpers
 extension String {
     func lastIndex(of char: Character) -> Index? {

@@ -1,6 +1,6 @@
 //
 //  ParameterParserSpec.swift
-//  Bivrost
+//  BivrostBaseTests
 //
 //  Created by Luis Reisewitz on 18.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-@testable import BivrostFramework
+@testable import BivrostBase
 
 class ParameterParserSpec: QuickSpec {
     override func spec() {

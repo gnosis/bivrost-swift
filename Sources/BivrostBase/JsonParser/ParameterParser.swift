@@ -7,6 +7,8 @@
 //
 //
 
+import Foundation
+
 fileprivate typealias ParameterType = Contract.Element.ParameterType
 
 struct ParameterParser {
