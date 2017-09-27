@@ -8,31 +8,38 @@
 /// Blanket Holder for Solidity Types
 struct Solidity {}
 
-
 protocol SolidityEncodable {
     typealias EncodeFormat = String
+    func head() -> EncodeFormat
+    func tail() -> EncodeFormat
     func encode() -> EncodeFormat
-    var isDynamic: Bool { get }
 }
 
 protocol StaticType: SolidityEncodable {}
+
 protocol DynamicType: SolidityEncodable {}
 
 extension StaticType {
-    var isDynamic: Bool {
-        return false
+    func head() -> SolidityEncodable.EncodeFormat {
+        return encode()
+    }
+    func tail() -> SolidityEncodable.EncodeFormat {
+        return ""
     }
 }
 
 extension DynamicType {
-    var isDynamic: Bool {
-        return true
+    func tail() -> SolidityEncodable.EncodeFormat {
+        return encode()
     }
 }
 
 struct SolidityBase {
     static func encode(arguments: SolidityEncodable...) -> SolidityEncodable.EncodeFormat {
-        // FIXME: implement add dynamic types
-        return arguments.map { $0.encode() }.reduce("", +)
+        // FIXME: this could work depending on architecture, but probably we need
+        // pass the current head size or something into `head()` for the dynamic types
+        let head = arguments.map { $0.head() }.reduce("", +)
+        let tail = arguments.map { $0.tail() }.reduce("", +)
+        return head + tail
     }
 }

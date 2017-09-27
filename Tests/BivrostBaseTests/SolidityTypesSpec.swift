@@ -11,10 +11,12 @@ import Quick
 import Nimble
 @testable import BivrostBase
 import BigInt
+import Foundation
 
 class SolidityTypesSpec: QuickSpec {
     override func spec() {
         describe("SolidityTypes") {
+            // MARK: Static Types
             context("Address") {
                 it("should be able to parse a hex address with or without leading 0x") {
                     expect(Solidity.Address("0xFF")).toNot(beNil())
@@ -55,6 +57,24 @@ class SolidityTypesSpec: QuickSpec {
                         Solidity.Int256(BigInt(123))!
                     ])
                     expect(array.encode()) == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000007b"
+                }
+            }
+            
+            // MARK: Dynamic Types
+            
+            context("Bytes") {
+                it("should encode a few bytes correctly") {
+                    let bytes: [UInt8] = [0, 1, 2, 3, 4, 5, 255, 220, 10, 64]
+                    let data = Data(bytes: bytes)
+                    let type = Solidity.Bytes(data)!
+                    expect(type.encode().uppercased()) == "000000000000000000000000000000000000000000000000000000000000000A000102030405FFDC0A4000000000000000000000000000000000000000000000"
+                }
+                
+                it("should encode \"dave\" correctly") {
+                    let string = "dave"
+                    let data = string.data(using: .ascii)
+                    let type = Solidity.Bytes(data!)!
+                    expect(type.encode().uppercased()) == "00000000000000000000000000000000000000000000000000000000000000046461766500000000000000000000000000000000000000000000000000000000"
                 }
             }
         }
