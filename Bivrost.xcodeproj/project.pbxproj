@@ -10,6 +10,8 @@
 		493DEE1A76F6BD2F3B17C8F9 /* Pods_BivrostFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E3110CF66B9A49C5763B1CE /* Pods_BivrostFramework.framework */; };
 		72689971F363964E51EBF33F /* Pods_BivrostFrameworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E14D75C506F5516BA735156 /* Pods_BivrostFrameworkTests.framework */; };
 		8A4CC358DFE490A2035061C9 /* Pods_Bivrost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C86F57CD7FBD9A25C8FBF870 /* Pods_Bivrost.framework */; };
+		A54F49601F7BD4EE00AF0975 /* MultiSigWalletWithDailyLimit-Abi.json in Resources */ = {isa = PBXBuildFile; fileRef = A5606E981F7BCE7B00C6A86F /* MultiSigWalletWithDailyLimit-Abi.json */; };
+		A54F49611F7BD4F000AF0975 /* TestToken-Abi.json in Resources */ = {isa = PBXBuildFile; fileRef = A5606E991F7BCE7B00C6A86F /* TestToken-Abi.json */; };
 		A550660E1F7BD1D800F5ECBE /* BivrostFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5606E501F7BCD9300C6A86F /* BivrostFramework.framework */; };
 		A5606E591F7BCD9300C6A86F /* BivrostFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5606E501F7BCD9300C6A86F /* BivrostFramework.framework */; };
 		A5606E601F7BCD9300C6A86F /* BivrostFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = A5606E521F7BCD9300C6A86F /* BivrostFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -423,6 +425,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A54F49611F7BD4F000AF0975 /* TestToken-Abi.json in Resources */,
+				A54F49601F7BD4EE00AF0975 /* MultiSigWalletWithDailyLimit-Abi.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,7 +799,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = BivrostFrameworkTests/Info.plist;
+				INFOPLIST_FILE = Tests/BivrostFrameworkTests/Assets/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = pm.gnosis.BivrostFrameworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -809,7 +813,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = BivrostFrameworkTests/Info.plist;
+				INFOPLIST_FILE = Tests/BivrostFrameworkTests/Assets/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = pm.gnosis.BivrostFrameworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
