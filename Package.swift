@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "BivrostFramework",
+    name: "Bivrost",
     products: [
         .executable(name: "Bivrost", targets: ["Bivrost"]),
         .library(name: "BivrostBase", targets: ["BivrostBase"])
