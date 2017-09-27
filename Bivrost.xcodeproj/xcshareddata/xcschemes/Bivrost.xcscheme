@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "Bivrost_Example.app"
-               BlueprintName = "Bivrost_Example"
-               ReferencedContainer = "container:Bivrost.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "Bivrost_Tests.xctest"
-               BlueprintName = "Bivrost_Tests"
+               BlueprintIdentifier = "A521A96A1F7BC9EA00FF87E9"
+               BuildableName = "Bivrost"
+               BlueprintName = "Bivrost"
                ReferencedContainer = "container:Bivrost.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -41,26 +27,15 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "Bivrost_Tests.xctest"
-               BlueprintName = "Bivrost_Tests"
-               ReferencedContainer = "container:Bivrost.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "Bivrost_Example.app"
-            BlueprintName = "Bivrost_Example"
+            BlueprintIdentifier = "A521A96A1F7BC9EA00FF87E9"
+            BuildableName = "Bivrost"
+            BlueprintName = "Bivrost"
             ReferencedContainer = "container:Bivrost.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +57,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "Bivrost_Example.app"
-            BlueprintName = "Bivrost_Example"
+            BlueprintIdentifier = "A521A96A1F7BC9EA00FF87E9"
+            BuildableName = "Bivrost"
+            BlueprintName = "Bivrost"
             ReferencedContainer = "container:Bivrost.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -101,9 +76,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "Bivrost_Example.app"
-            BlueprintName = "Bivrost_Example"
+            BlueprintIdentifier = "A521A96A1F7BC9EA00FF87E9"
+            BuildableName = "Bivrost"
+            BlueprintName = "Bivrost"
             ReferencedContainer = "container:Bivrost.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

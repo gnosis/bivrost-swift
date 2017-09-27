@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-@testable import Bivrost
+@testable import BivrostFramework
 
 class JsonParserSpec: QuickSpec {
     override func spec() {

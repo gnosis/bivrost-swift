@@ -10,6 +10,7 @@
 // Based on https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#types
 
 // MARK: - DynamicType Equatable
+
 extension Contract.Element.ParameterType.DynamicType: Equatable {
     public static func ==(lhs: Contract.Element.ParameterType.DynamicType, rhs: Contract.Element.ParameterType.DynamicType) -> Bool {
         switch (lhs, rhs) {

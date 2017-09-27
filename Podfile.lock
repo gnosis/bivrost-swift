@@ -1,43 +1,43 @@
 PODS:
   - BigInt (3.0.0):
     - SipHash (~> 1.2)
-  - Bivrost (0.1.0):
-    - BigInt (~> 3.0)
-    - CryptoSwift
   - CryptoSwift (0.7.2)
-  - Nimble (7.0.1)
+  - Nimble (7.0.2)
   - Quick (1.1.0)
   - SipHash (1.2.0)
 
 DEPENDENCIES:
-  - Bivrost (from `../`)
+  - BigInt (~> 3.0)
+  - CryptoSwift (from `https://github.com/zweigraf/CryptoSwift.git`)
   - Nimble (from `https://github.com/Quick/Nimble.git`)
   - Quick (from `https://github.com/Quick/Quick.git`)
 
 EXTERNAL SOURCES:
-  Bivrost:
-    :path: ../
+  CryptoSwift:
+    :git: https://github.com/zweigraf/CryptoSwift.git
   Nimble:
     :git: https://github.com/Quick/Nimble.git
   Quick:
     :git: https://github.com/Quick/Quick.git
 
 CHECKOUT OPTIONS:
+  CryptoSwift:
+    :commit: fdd115318528c9c25a06c0a89553f71bde7233da
+    :git: https://github.com/zweigraf/CryptoSwift.git
   Nimble:
-    :commit: a63252b16eba6cdebec4e4936388c90552165a68
+    :commit: 38c9ab0846a3fbec308eb2aa9ef68b10a7434eb4
     :git: https://github.com/Quick/Nimble.git
   Quick:
-    :commit: 3665ae9570b682a562df847cccbb46811864676a
+    :commit: c498edf4aabb694a5b8a861ec3d69f0c5ab57d9e
     :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
   BigInt: a7864bcecd2976bced91963baef90079dbdcca25
-  Bivrost: 2576e4cdadbaad03ff3f93d8c1aa3aee2ff15331
-  CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
-  Nimble: 1b6670c36e5750169b9e4cc2e9cfa82a7603c69e
+  CryptoSwift: 43aed86b4b52edc487058ff2f0a4c554e57f9cf2
+  Nimble: 5c3b8c4b0229d95c2c7b0005e2edf244937dbb04
   Quick: 4700beb8056662b579facd79eaca7f04fb3d48e6
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
 
-PODFILE CHECKSUM: 6f2e1cfe3eb67ff08fb29d0869c6f06a34526cce
+PODFILE CHECKSUM: 9a07e34536bd8958e005d7d6af718315379706d0
 
 COCOAPODS: 1.3.1
