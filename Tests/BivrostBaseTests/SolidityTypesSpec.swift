@@ -33,6 +33,12 @@ class SolidityTypesSpec: QuickSpec {
                 it("should encode positive numbers correctly") {
                     expect(Solidity.UInt256(BigUInt(123))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
                 }
+                
+                it("should encode 0 correctly") {
+                    expect(Solidity.UInt8(BigUInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.UInt256(BigUInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.UInt160(BigUInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                }
             }
             
             context("Int") {
@@ -47,6 +53,12 @@ class SolidityTypesSpec: QuickSpec {
                 
                 it("should encode positive numbers correctly") {
                     expect(Solidity.Int8(BigInt(123))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
+                }
+                
+                it("should encode 0 correctly") {
+                    expect(Solidity.Int8(BigInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Int160(BigInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Int256(BigInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                 }
             }
             
@@ -75,6 +87,22 @@ class SolidityTypesSpec: QuickSpec {
                     let data = string.data(using: .ascii)
                     let type = Solidity.Bytes(data!)!
                     expect(type.encode().uppercased()) == "00000000000000000000000000000000000000000000000000000000000000046461766500000000000000000000000000000000000000000000000000000000"
+                }
+            }
+            
+            context("String") {
+                it("should encode \"dave\" correctly") {
+                    let string = "dave"
+                    let type = Solidity.String(string)!
+                    expect(type.encode().uppercased()) == "00000000000000000000000000000000000000000000000000000000000000046461766500000000000000000000000000000000000000000000000000000000"
+                }
+            }
+            
+            context("VariableArray") {
+                it("should encode some UInt8s correctly") {
+                    let bytes = [0, 1, 2, 3, 4, 5, 255, 220, 10, 64].flatMap { Solidity.UInt8(BigUInt($0)) }
+                    let type = Solidity.VariableArray(bytes)!
+                    expect(type.encode().uppercased()) == "000000000000000000000000000000000000000000000000000000000000000A00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000FF00000000000000000000000000000000000000000000000000000000000000DC000000000000000000000000000000000000000000000000000000000000000A0000000000000000000000000000000000000000000000000000000000000040"
                 }
             }
         }

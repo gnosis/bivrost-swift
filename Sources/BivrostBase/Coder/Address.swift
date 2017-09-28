@@ -14,8 +14,8 @@ extension Solidity {
             return value.encode()
         }
         
-        init?(_ address: String) {
-            let hex = address.hasPrefix("0x") ? String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
+        init?(_ address: Swift.String) {
+            let hex = address.hasPrefix("0x") ? Swift.String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
             guard let bigInt = BigUInt(hex, radix: 16),
                 let uint = Solidity.UInt160(bigInt) else {
                     return nil

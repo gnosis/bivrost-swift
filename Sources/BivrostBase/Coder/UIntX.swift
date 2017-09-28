@@ -19,6 +19,12 @@ extension Solidity {
         }
         
         func encode() -> SolidityEncodable.EncodeFormat {
+            // BigUInt returns an empty Data when serializing '0' which will be
+            // turned into the empty string. Check early here to guarantee that
+            // we actually return 32bytes of 0.
+            guard value.signum() != 0 else {
+                return "0".padToSolidity()
+            }
             return value.serialize().toHexString().padToSolidity()
         }
     }
