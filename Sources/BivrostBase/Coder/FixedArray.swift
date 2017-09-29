@@ -6,12 +6,17 @@
 //
 
 extension Solidity {
-    struct FixedArray<T: StaticType>: StaticType {
+    struct FixedArray<T: SolidityEncodable>: SolidityEncodable {
+        static var isDynamic: Swift.Bool {
+            // TODO: For a correct isDynamic response this should look at the
+            // allocated capacity for the (generated?) SolidityArray. e.g. bytes[0] is always static.
+            return T.isDynamic
+        }
+        
         let items: [T]
         // FIXME: This does not check length of the array
         func encode() -> SolidityEncodable.EncodeFormat {
-            // FIXME: This only works for static types, fix when using dynamic types.
-            return items.lazy.map { $0.encode() }.reduce("", +)
+            return SolidityBase.encode(items)
         }
     }
 }

@@ -18,11 +18,6 @@ extension Solidity {
             self.wrapper = bytes
         }
         
-        func head() -> SolidityEncodable.EncodeFormat {
-            // FIXME: implement
-            return ""
-        }
-        
         func encode() -> SolidityEncodable.EncodeFormat {
             return wrapper.encode()
         }

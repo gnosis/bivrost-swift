@@ -28,7 +28,6 @@ struct StandardToken {
         typealias Return = Solidity.Bool
         
         static func encodeCall(arguments: Arguments) -> String {
-            // FIXME: DONE
             return "0x\(methodId)\(SolidityBase.encode(arguments: arguments.spender, arguments.value))"
         }
         

@@ -42,6 +42,48 @@ extension Solidity {
         }
     }
     
+    public struct Bytes2: StaticType {
+        private let wrapper: BytesXBase
+        
+        init?(value: Data) {
+            guard let wrapper = BytesXBase(length: 2, value: value) else {
+                return nil
+            }
+            self.wrapper = wrapper
+        }
+        func encode() -> SolidityEncodable.EncodeFormat {
+            return wrapper.encode()
+        }
+    }
+    
+    public struct Bytes3: StaticType {
+        private let wrapper: BytesXBase
+        
+        init?(value: Data) {
+            guard let wrapper = BytesXBase(length: 3, value: value) else {
+                return nil
+            }
+            self.wrapper = wrapper
+        }
+        func encode() -> SolidityEncodable.EncodeFormat {
+            return wrapper.encode()
+        }
+    }
+    
+    public struct Bytes4: StaticType {
+        private let wrapper: BytesXBase
+        
+        init?(value: Data) {
+            guard let wrapper = BytesXBase(length: 4, value: value) else {
+                return nil
+            }
+            self.wrapper = wrapper
+        }
+        func encode() -> SolidityEncodable.EncodeFormat {
+            return wrapper.encode()
+        }
+    }
+    
     public struct Bytes32: StaticType {
         private let wrapper: BytesXBase
         

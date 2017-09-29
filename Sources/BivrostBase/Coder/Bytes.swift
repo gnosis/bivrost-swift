@@ -21,11 +21,6 @@ extension Solidity {
             self.length = length
         }
         
-        func head() -> SolidityEncodable.EncodeFormat {
-            // FIXME: implement
-            return ""
-        }
-        
         func encode() -> SolidityEncodable.EncodeFormat {
             return length.encode() + value.toHexString().padToSolidity(location: .right)
         }

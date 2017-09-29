@@ -8,27 +8,20 @@
 import BigInt
 
 extension Solidity {
-    struct VariableArray<T: StaticType>: DynamicType {
-        let value: [T]
+    struct VariableArray<T: SolidityEncodable>: DynamicType {
+        let items: [T]
         let length: Solidity.UInt256
         
-        func head() -> SolidityEncodable.EncodeFormat {
-            // FIXME: implement
-            return ""
-        }
-        
-        init?(_ value: [T]) {
-            guard let length = Solidity.UInt256(BigUInt(value.count)) else {
+        init?(_ items: [T]) {
+            guard let length = Solidity.UInt256(BigUInt(items.count)) else {
                 return nil
             }
-            self.value = value
+            self.items = items
             self.length = length
         }
    
         func encode() -> SolidityEncodable.EncodeFormat {
-            // FIXME: This only works for static types, fix when using dynamic types.
-            let dataPart = value.lazy.map { $0.encode() }.reduce("", +)
-            return length.encode() + dataPart.padToSolidity(location: .right)
+            return length.encode() + SolidityBase.encode(items)
         }
     }
 }
