@@ -3,11 +3,11 @@
 //  BivrostBase
 //
 //  Created by Luis Reisewitz on 28.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-
 extension Solidity {
-    public struct String: DynamicType {
+    public struct String {
         let wrapper: Solidity.Bytes
         
         init?(_ value: Swift.String) {
@@ -17,9 +17,12 @@ extension Solidity {
             }
             self.wrapper = bytes
         }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
-        }
+    }
+}
+
+// MARK: - DynamicType
+extension Solidity.String: DynamicType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return wrapper.encode()
     }
 }

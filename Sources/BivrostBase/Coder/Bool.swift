@@ -3,12 +3,13 @@
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 26.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
 import BigInt
 
 extension Solidity {
-    public struct Bool: StaticType {
+    public struct Bool {
         private let wrapper: UIntXBase
         
         init(_ value: Swift.Bool) {
@@ -17,9 +18,12 @@ extension Solidity {
             }
             self.wrapper = wrapper
         }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
-        }
+    }
+}
+
+// MARK: - StaticType
+extension Solidity.Bool: StaticType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return wrapper.encode()
     }
 }

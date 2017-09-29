@@ -3,13 +3,14 @@
 //  BivrostBase
 //
 //  Created by Luis Reisewitz on 27.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
 import Foundation
 import BigInt
 
 extension Solidity {
-    public struct Bytes: DynamicType {
+    public struct Bytes {
         let value: Data
         let length: UInt256
         
@@ -20,9 +21,12 @@ extension Solidity {
             self.value = value
             self.length = length
         }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return length.encode() + value.toHexString().padToSolidity(location: .right)
-        }
+    }
+}
+
+// MARK: - DynamicType
+extension Solidity.Bytes: DynamicType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return length.encode() + value.toHexString().padToSolidity(location: .right)
     }
 }

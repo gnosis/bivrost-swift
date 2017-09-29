@@ -3,12 +3,13 @@
 //  BivrostBase
 //
 //  Created by Luis Reisewitz on 28.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
 import BigInt
 
 extension Solidity {
-    struct VariableArray<T: SolidityEncodable>: DynamicType {
+    struct VariableArray<T: SolidityEncodable> {
         let items: [T]
         let length: Solidity.UInt256
         
@@ -19,10 +20,12 @@ extension Solidity {
             self.items = items
             self.length = length
         }
-   
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return length.encode() + SolidityBase.encode(items)
-        }
     }
 }
 
+// MARK: - DynamicType
+extension Solidity.VariableArray: DynamicType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return length.encode() + SolidityBase.encode(items)
+    }
+}

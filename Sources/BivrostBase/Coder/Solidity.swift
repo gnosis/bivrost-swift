@@ -3,11 +3,12 @@
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 26.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-/// Blanket Holder for Solidity Types
 import BigInt
 
+/// Blanket Holder for Solidity Types
 struct Solidity {}
 
 protocol SolidityEncodable {

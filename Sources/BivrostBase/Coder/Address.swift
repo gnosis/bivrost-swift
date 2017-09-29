@@ -3,16 +3,14 @@
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 26.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
 import BigInt
 
 extension Solidity {
-    public struct Address: StaticType {
+    public struct Address {
         let value: Solidity.UInt160
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return value.encode()
-        }
         
         init?(_ address: Swift.String) {
             let hex = address.hasPrefix("0x") ? Swift.String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
@@ -22,5 +20,12 @@ extension Solidity {
             }
             value = uint
         }
+    }
+}
+
+// MARK: - StaticType
+extension Solidity.Address: StaticType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return value.encode()
     }
 }

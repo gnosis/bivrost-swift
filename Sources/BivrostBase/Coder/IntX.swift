@@ -3,12 +3,13 @@
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 26.09.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
 import BigInt
 
 extension Solidity {
-    class IntXBase: StaticType {
+    fileprivate class IntXBase: StaticType {
         let value: BigInt
         
         public init?(bits: UInt, bigInt: BigInt) {
@@ -29,7 +30,9 @@ extension Solidity {
             return value.serialize().toHexString().padToSolidity(character: padCharacter).lowercased()
         }
     }
-    
+}
+
+extension Solidity {
     public struct Int8: StaticType {
         private let wrapper: IntXBase
         
@@ -44,7 +47,9 @@ extension Solidity {
             return wrapper.encode()
         }
     }
-    
+}
+
+extension Solidity {
     public struct Int160: StaticType {
         private let wrapper: IntXBase
         
@@ -59,7 +64,9 @@ extension Solidity {
             return wrapper.encode()
         }
     }
-    
+}
+
+extension Solidity {
     public struct Int256: StaticType {
         private let wrapper: IntXBase
         
