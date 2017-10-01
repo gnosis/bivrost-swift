@@ -81,4 +81,17 @@ struct SolidityBase {
     static func encode(arguments: SolidityEncodable...) -> SolidityEncodable.EncodeFormat {
         return encode(arguments)
     }
+    
+    static func encodeUnPadded(uint: BigUInt, bitWidth: UInt) -> SolidityEncodable.EncodeFormat {
+        guard uint.bitWidth <= bitWidth else {
+            fatalError("\(#function) called with UInt \(uint) that is too big for bit width \(bitWidth).")
+        }
+        // BigUInt returns an empty Data when serializing '0' which will be
+        // turned into the empty string. Check early here to guarantee that
+        // we actually return 0.
+        guard uint.signum() != 0 else {
+            return "0"
+        }
+        return uint.serialize().toHexString()
+    }
 }

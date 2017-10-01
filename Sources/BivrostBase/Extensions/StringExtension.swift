@@ -46,7 +46,7 @@ extension String {
         case right
     }
     
-    fileprivate func pad(toMultipleOf multiple: Int, character: Character, location: PadLocation) -> String {
+    func pad(toMultipleOf multiple: Int, character: Character, location: PadLocation) -> String {
         let originalLength = self.characters.count
         let desiredLength = ((originalLength - 1)|(multiple - 1)) + 1
         let paddingLength = desiredLength - originalLength

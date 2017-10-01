@@ -11,22 +11,18 @@ import BigInt
 extension Solidity {
     fileprivate class UIntXBase: StaticType {
         let value: BigUInt
+        let bitWidth: UInt
         
         public init?(bits: UInt, bigUint: BigUInt) {
             guard bigUint.bitWidth <= bits else {
                 return nil
             }
             value = bigUint
+            bitWidth = bits
         }
         
         func encode() -> SolidityEncodable.EncodeFormat {
-            // BigUInt returns an empty Data when serializing '0' which will be
-            // turned into the empty string. Check early here to guarantee that
-            // we actually return 32bytes of 0.
-            guard value.signum() != 0 else {
-                return "0".padToSolidity()
-            }
-            return value.serialize().toHexString().padToSolidity()
+            return SolidityBase.encodeUnPadded(uint: value, bitWidth: bitWidth).padToSolidity()
         }
     }
 }
@@ -84,10 +80,13 @@ extension Solidity {
 
 extension Solidity {
     public struct UInt160: StaticType {
+        // TODO: This could be refactored for every type (when generating types maybe)
+        // Currently only used for Address encoding
+        let bitWidth: UInt = 160
         private let wrapper: UIntXBase
         
         init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: 160, bigUint: value) else {
+            guard let wrapper = UIntXBase(bits: bitWidth, bigUint: value) else {
                 return nil
             }
             self.wrapper = wrapper

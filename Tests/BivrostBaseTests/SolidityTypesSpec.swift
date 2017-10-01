@@ -23,6 +23,26 @@ class SolidityTypesSpec: QuickSpec {
                     expect(Solidity.Address("FF")).toNot(beNil())
                 }
                 
+                it("should return exactly 40 chars when encoding unpadded") {
+                    expect(Solidity.Address("0xFF")?.encodeUnpadded()) == "00000000000000000000000000000000000000ff"
+                    expect(Solidity.Address("0x0")?.encodeUnpadded().characters.count) == 40
+                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encodeUnpadded()) == "ffffffffffffffffffffffffffffffffffffffff"
+                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encodeUnpadded().characters.count) == 40
+                }
+                
+                it("should return exactly 64 chars when encoding normally") {
+                    expect(Solidity.Address("0xFF")?.encode()) == "00000000000000000000000000000000000000000000000000000000000000ff"
+                    expect(Solidity.Address("0x0")?.encode().characters.count) == 64
+                    
+                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encode()) == "000000000000000000000000ffffffffffffffffffffffffffffffffffffffff"
+                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encode().characters.count) == 64
+                }
+                
+                it("should return nil when handling invalid address (too large)") {
+                   
+                    // Exactly one nibble too large (20.5 bytes)
+                    expect(Solidity.Address("0xfdadadafa000000000000000000fdadadafafffff")).to(beNil())
+                }
             }
             context("UIntX") {
                 it("should not be created when the given value does not fit into 256 bits") {
@@ -68,38 +88,38 @@ class SolidityTypesSpec: QuickSpec {
             context("BytesX") {
                 it("should encode byte arrays correctly") {
                     let data1 = Data([UInt8](arrayLiteral: 0))
-                    expect(Solidity.Bytes1(value: data1)?.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes1(data1)?.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                     let data2 = Data([UInt8](arrayLiteral: 0, 1))
-                    expect(Solidity.Bytes2(value: data2)?.encode()) == "0001000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes2(data2)?.encode()) == "0001000000000000000000000000000000000000000000000000000000000000"
                     let data3 = Data([UInt8](arrayLiteral: 0, 1, 2))
-                    expect(Solidity.Bytes3(value: data3)?.encode()) == "0001020000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes3(data3)?.encode()) == "0001020000000000000000000000000000000000000000000000000000000000"
                     let string = "dave"
                     let data4 = string.data(using: .ascii)!
-                    expect(Solidity.Bytes4(value: data4)?.encode()) == "6461766500000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes4(data4)?.encode()) == "6461766500000000000000000000000000000000000000000000000000000000"
                 }
                 
                 it("should return nil when given data is too big for the type") {
                     let data1 = Data([UInt8](arrayLiteral: 0, 1))
-                    expect(Solidity.Bytes1(value: data1)?.encode()).to(beNil())
+                    expect(Solidity.Bytes1(data1)?.encode()).to(beNil())
                     let data2 = Data([UInt8](arrayLiteral: 0, 1, 2))
-                    expect(Solidity.Bytes2(value: data2)?.encode()).to(beNil())
+                    expect(Solidity.Bytes2(data2)?.encode()).to(beNil())
                     let data3 = Data([UInt8](arrayLiteral: 0, 1, 2, 3))
-                    expect(Solidity.Bytes3(value: data3)?.encode()).to(beNil())
+                    expect(Solidity.Bytes3(data3)?.encode()).to(beNil())
                     let string = "davedavedavedavedavedavedavedavedavedavedavedavedavedavedavedave"
                     let data4 = string.data(using: .ascii)!
-                    expect(Solidity.Bytes32(value: data4)?.encode()).to(beNil())
+                    expect(Solidity.Bytes32(data4)?.encode()).to(beNil())
                 }
                 
                 it("should correctly pad if given data is smaller than the capacity") {
                     let data1 = Data([UInt8](arrayLiteral: 0))
-                    expect(Solidity.Bytes2(value: data1)?.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes2(data1)?.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                     let data2 = Data([UInt8](arrayLiteral: 0, 1))
-                    expect(Solidity.Bytes3(value: data2)?.encode()) == "0001000000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes3(data2)?.encode()) == "0001000000000000000000000000000000000000000000000000000000000000"
                     let data3 = Data([UInt8](arrayLiteral: 0, 1, 2))
-                    expect(Solidity.Bytes4(value: data3)?.encode()) == "0001020000000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes4(data3)?.encode()) == "0001020000000000000000000000000000000000000000000000000000000000"
                     let string = "dave"
                     let data4 = string.data(using: .ascii)!
-                    expect(Solidity.Bytes32(value: data4)?.encode()) == "6461766500000000000000000000000000000000000000000000000000000000"
+                    expect(Solidity.Bytes32(data4)?.encode()) == "6461766500000000000000000000000000000000000000000000000000000000"
                 }
             }
             
@@ -193,6 +213,27 @@ class SolidityTypesSpec: QuickSpec {
                         .flatMap { Solidity.String($0) }
                     let type = Solidity.VariableArray(strings)!
                     expect(type.encode()) == Assets.encodedVariableStringArray
+                }
+            }
+            
+            context("Function") {
+                it("should reject invalid function selectors") {
+                    let testAddress = Solidity.Address("0xFF")!
+                    // Function selector too small (only 4 chars/ 2 bytes)
+                    expect(Solidity.Function("0000", at: testAddress)).to(beNil())
+                    // Function selector too long (9 chars/ 4.5 bytes)
+                    expect(Solidity.Function("000000000", at: testAddress)).to(beNil())
+                    // Function selector empty
+                    expect(Solidity.Function("", at: testAddress)).to(beNil())
+                }
+                
+                it("should encode correctly") {
+                    let testAddress = Solidity.Address("0xFF")!
+                    let functionSelector = "095ea7b3"
+                    // Address encoded as 20 bytes, then 4 bytes function selector,
+                    // then padding to 32 bytes on the right
+                    let testString = "00000000000000000000000000000000000000ff\(functionSelector)0000000000000000"
+                        expect(Solidity.Function(functionSelector, at: testAddress)?.encode()) == testString
                 }
             }
         }

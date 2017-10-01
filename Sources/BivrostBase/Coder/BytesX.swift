@@ -39,7 +39,7 @@ extension Solidity {
     public struct Bytes1 {
         private let wrapper: BytesXBase
         
-        init?(value: Data) {
+        init?(_ value: Data) {
             guard let wrapper = BytesXBase(length: 1, value: value) else {
                 return nil
             }
@@ -60,7 +60,7 @@ extension Solidity {
     public struct Bytes2 {
         private let wrapper: BytesXBase
         
-        init?(value: Data) {
+        init?(_ value: Data) {
             guard let wrapper = BytesXBase(length: 2, value: value) else {
                 return nil
             }
@@ -81,7 +81,7 @@ extension Solidity {
     public struct Bytes3 {
         private let wrapper: BytesXBase
         
-        init?(value: Data) {
+        init?(_ value: Data) {
             guard let wrapper = BytesXBase(length: 3, value: value) else {
                 return nil
             }
@@ -102,7 +102,7 @@ extension Solidity {
     public struct Bytes4 {
         private let wrapper: BytesXBase
         
-        init?(value: Data) {
+        init?(_ value: Data) {
             guard let wrapper = BytesXBase(length: 4, value: value) else {
                 return nil
             }
@@ -118,12 +118,33 @@ extension Solidity.Bytes4: StaticType {
     }
 }
 
+// MARK: - Bytes24
+extension Solidity {
+    public struct Bytes24 {
+        private let wrapper: BytesXBase
+        
+        init?(_ value: Data) {
+            guard let wrapper = BytesXBase(length: 24, value: value) else {
+                return nil
+            }
+            self.wrapper = wrapper
+        }
+    }
+}
+
+// MARK: - Bytes32 StaticType
+extension Solidity.Bytes24: StaticType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return wrapper.encode()
+    }
+}
+
 // MARK: - Bytes32
 extension Solidity {
     public struct Bytes32 {
         private let wrapper: BytesXBase
         
-        init?(value: Data) {
+        init?(_ value: Data) {
             guard let wrapper = BytesXBase(length: 32, value: value) else {
                 return nil
             }
