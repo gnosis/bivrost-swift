@@ -25,6 +25,6 @@ extension Solidity.FixedArray: SolidityEncodable {
     
     // FIXME: This does not check length of the array
     func encode() -> SolidityEncodable.EncodeFormat {
-        return SolidityBase.encode(items)
+        return BaseEncoder.encode(items)
     }
 }

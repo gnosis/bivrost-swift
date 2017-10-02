@@ -29,7 +29,7 @@ struct StandardToken {
         typealias Return = Solidity.Bool
         
         static func encodeCall(arguments: Arguments) -> String {
-            return "0x\(methodId)\(SolidityBase.encode(arguments: arguments.spender, arguments.value))"
+            return "0x\(methodId)\(BaseEncoder.encode(arguments: arguments.spender, arguments.value))"
         }
         
         static func decode(return: String) -> Return {
@@ -47,7 +47,7 @@ struct StandardToken {
         typealias Arguments = (x: Solidity.UInt32, y: Solidity.Bool)
         
         static func encodeCall(arguments: Arguments) -> String {
-            return "0x\(methodId)\(SolidityBase.encode(arguments: arguments.x, arguments.y))"
+            return "0x\(methodId)\(BaseEncoder.encode(arguments: arguments.x, arguments.y))"
         }
     }
 }

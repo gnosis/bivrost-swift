@@ -22,7 +22,7 @@ extension Solidity {
         }
         
         func encode() -> SolidityEncodable.EncodeFormat {
-            return SolidityBase.encodeUnPadded(uint: value, bitWidth: bitWidth).padToSolidity()
+            return BaseEncoder.encodeUnPadded(uint: value, bitWidth: bitWidth).padToSolidity()
         }
     }
 }

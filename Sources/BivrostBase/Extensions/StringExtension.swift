@@ -23,6 +23,10 @@ extension String {
         }
         return range.lowerBound
     }
+    
+    func endIndex(startDistance distance: Int) -> String.Index {
+        return index(startIndex, offsetBy: distance)
+    }
 }
 
 // MARK: - Range Helpers
@@ -36,8 +40,8 @@ extension String {
     }
 }
 
-private let solidityBytesPad = 32
-private let solidityHexStringPad = solidityBytesPad * 2
+private let solidityLineLengthBytes = 32
+private let solidityLineLengthHexString = solidityLineLengthBytes * 2
 
 // MARK: - Solidity Helpers
 extension String {
@@ -62,6 +66,37 @@ extension String {
     ///   - location: Where to apply the padding. Defaults to .left.
     /// - Returns: The padded string so that string.characters.count % 64 == 0.
     func padToSolidity(character: Character = "0", location: PadLocation = .left) -> String {
-        return pad(toMultipleOf: solidityHexStringPad, character: character, location: location)
+        return pad(toMultipleOf: solidityLineLengthHexString, character: character, location: location)
+    }
+    
+    func splitSolidityLines() -> [String] {
+        return splitByLength(solidityLineLengthHexString)
+    }
+}
+
+extension String {
+    fileprivate func splitByLength(_ length: Int) -> [String] {
+        var result = [String]()
+        var collectedCharacters = [Character]()
+        collectedCharacters.reserveCapacity(length)
+        var count = 0
+        
+        for character in self.characters {
+            collectedCharacters.append(character)
+            count += 1
+            if (count == length) {
+                // Reached the desired length
+                count = 0
+                result.append(String(collectedCharacters))
+                collectedCharacters.removeAll(keepingCapacity: true)
+            }
+        }
+        
+        // Append the remainder
+        if !collectedCharacters.isEmpty {
+            result.append(String(collectedCharacters))
+        }
+        
+        return result
     }
 }

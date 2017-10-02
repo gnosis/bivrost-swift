@@ -7,13 +7,25 @@
 //
 //
 
+import Foundation
+
 enum BivrostError: Error {
+    // Parser Errors
+    
     case elementTypeInvalid
     case elementNameInvalid
     case functionInputInvalid
     case functionOutputInvalid
     case eventInputInvalid
-    case notImplemented
     case parameterTypeInvalid
     case parameterTypeNotFound
+    
+    case notImplemented
+    
+    // Decoder Errors
+    case invalidBool(hex: String)
+    case invalidUInt(hex: String)
+    case invalidBytesX(hex: String, capacity: Int)
+    case invalidBytesLength(hex: String)
+    case invalidStringEncoding(data: Data)
 }

@@ -30,7 +30,7 @@ extension Solidity {
         /// - Returns: A 20 byte/40 character hex representation of the address.
         func encodeUnpadded() -> SolidityEncodable.EncodeFormat {
             let paddedSize = Int(value.bitWidth) / 8 * 2
-            return SolidityBase
+            return BaseEncoder
                 .encodeUnPadded(uint: bigInt, bitWidth: value.bitWidth)
                 .pad(toMultipleOf: paddedSize, character: "0", location: .left)
         }

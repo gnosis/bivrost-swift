@@ -26,6 +26,6 @@ extension Solidity {
 // MARK: - DynamicType
 extension Solidity.VariableArray: DynamicType {
     func encode() -> SolidityEncodable.EncodeFormat {
-        return length.encode() + SolidityBase.encode(items)
+        return length.encode() + BaseEncoder.encode(items)
     }
 }
