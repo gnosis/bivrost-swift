@@ -167,6 +167,19 @@ struct BaseDecoder {
         }
         return string
     }
+    
+    static func decodeArray<T>(data: String, decoder: (String) throws -> T) throws -> [T] {
+        let lines = partitionData(inHex: data)
+        let sizePart = lines[0]
+        guard let size = Int(sizePart, radix: 16),
+            size == lines.count - 1 else {
+            throw BivrostError.invalidArrayLength(hex: sizePart)
+        }
+        guard size != 0 else {
+            return []
+        }
+        return try (1..<lines.count).map { try decoder(lines[$0]) }
+    }
 }
 
 extension BaseDecoder {

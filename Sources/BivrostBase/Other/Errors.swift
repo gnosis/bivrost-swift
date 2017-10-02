@@ -29,4 +29,5 @@ enum BivrostError: Error {
     case invalidBytesX(hex: String, capacity: Int)
     case invalidBytesLength(hex: String)
     case invalidStringEncoding(data: Data)
+    case invalidArrayLength(hex: String)
 }

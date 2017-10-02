@@ -52,6 +52,16 @@ class BaseDecoderSpec: QuickSpec {
             it("should decode Strings correctly") {
                 expect(try? BaseDecoder.decodeString(source: BaseDecoder.PartitionData(data:  "000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c642100000000000000000000000000000000000000"))) == "Hello, world!"
             }
+            
+            it("should decode Static Arrays correctly") {
+                // Test normal decoding
+                expect(try? BaseDecoder.decodeArray(data: "000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789", decoder: BaseDecoder.decodeUInt)) == [BigUInt("456", radix: 16)!, BigUInt("789", radix: 16)!]
+                expect(try? BaseDecoder.decodeArray(data: "000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000", decoder: BaseDecoder.decodeBool)) == [true, false]
+                expect(try? BaseDecoder.decodeArray(data: "0000000000000000000000000000000000000000000000000000000000000000", decoder: BaseDecoder.decodeBool)) == []
+                
+                // Test invalid array decoding (size too big)
+                expect { try BaseDecoder.decodeArray(data: "000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789", decoder: BaseDecoder.decodeUInt) }.to(throwError())
+            }
         }
     }
 }
