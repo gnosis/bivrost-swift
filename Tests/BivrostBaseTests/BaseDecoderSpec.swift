@@ -26,6 +26,14 @@ class BaseDecoderSpec: QuickSpec {
                 expect(try? BaseDecoder.decodeBool(data:"0000000000000000000000000000000000000000000000000000000000000001")) == true
             }
             
+            it("should decode Ints correctly") {
+                expect(try? BaseDecoder.decodeInt(data: "0000000000000000000000000000000000000000000000000000000000000000")) == BigInt(0)
+                expect(try? BaseDecoder.decodeInt(data:"0000000000000000000000000000000000000000000000000000000000000001")) == BigInt(1)
+                expect(try? BaseDecoder.decodeInt(data:"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")) == BigInt(-1)
+                expect(try? BaseDecoder.decodeInt(data:"000000000000000000000000000000000000000000000000000000000000007f")) == BigInt(127)
+                expect(try? BaseDecoder.decodeInt(data:"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80")) == BigInt(-128)
+            }
+            
             it("should decode BytesX correctly") {
                 expect(try? BaseDecoder.decodeBytesX(data: "0000000000000000000000000000000000000000000000000000000000000000", length: 1)) == Data(bytes: [0])
                 expect(try? BaseDecoder.decodeBytesX(data: "0001000000000000000000000000000000000000000000000000000000000000", length: 2)) == Data(bytes: [0, 1])

@@ -127,6 +127,13 @@ struct BaseDecoder {
         }
     }
     
+    static func decodeInt(data: String) throws -> BigInt {
+        guard let bigInt = BigInt(twosComplementHex: data) else {
+            throw BivrostError.invalidInt(hex: data)
+        }
+        return bigInt
+    }
+    
     static func decodeBytesX(data: String, length: Int) throws -> Data {
         let hexStringSize = String.hexStringSize(forBytes: length)
         let endIndex = data.index(data.startIndex, offsetBy: hexStringSize)

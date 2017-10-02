@@ -25,6 +25,7 @@ enum BivrostError: Error {
     // Decoder Errors
     case invalidBool(hex: String)
     case invalidUInt(hex: String)
+    case invalidInt(hex: String)
     case invalidBytesX(hex: String, capacity: Int)
     case invalidBytesLength(hex: String)
     case invalidStringEncoding(data: Data)
