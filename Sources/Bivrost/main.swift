@@ -7,5 +7,6 @@
 //
 
 import BivrostBase
+import BigInt
 
-print("Hello World from Bivrost!")
+print(Solidity.UInt256(BigUInt(1234567890)))

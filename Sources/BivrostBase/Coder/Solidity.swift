@@ -10,14 +10,14 @@ import BigInt
 import Foundation
 
 /// Blanket Holder for Solidity Types
-struct Solidity {}
+public struct Solidity {}
 
 // FIXME: Rename to something more appropriate
 protocol SolidityEncodable {
     typealias EncodeFormat = String
-    func encode() -> EncodeFormat
     static var isDynamic: Swift.Bool { get }
     
+    func encode() -> EncodeFormat
     static func decode(source: BaseDecoder.PartitionData) throws -> Self
 }
 
@@ -171,7 +171,7 @@ struct BaseDecoder {
         return string
     }
     
-    static func decodeArray<T>(data: SolidityEncodable.EncodeFormat, decoder: (String) throws -> T) throws -> [T] {
+    static func decodeArray<T>(data: SolidityEncodable.EncodeFormat, decoder: (SolidityEncodable.EncodeFormat) throws -> T) throws -> [T] {
         let lines = partitionData(inHex: data)
         let sizePart = lines[0]
         guard let size = Int(sizePart, radix: 16),
@@ -182,6 +182,20 @@ struct BaseDecoder {
             return []
         }
         return try (1..<lines.count).map { try decoder(lines[$0]) }
+    }
+    
+    static func decodeArray<T: SolidityEncodable>(source: PartitionData, capacity: UInt, decoder: (PartitionData) throws -> T) throws -> [T] {
+        guard capacity != 0 else {
+            return []
+        }
+        guard T.isDynamic else {
+            // Static parameter case is easy, just use all the data instantly
+            return try (0..<capacity).map { _ in try decoder(source) }
+        }
+        // We have dynamic types, we need to check the dynamic array
+        // Consume all locations to jump cursor ahead to dynamic section
+        (0..<capacity).forEach { _ in _ = source.consume() }
+        return try (0..<capacity).map { _ in try decoder(source) }
     }
 }
 

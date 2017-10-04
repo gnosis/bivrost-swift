@@ -51,7 +51,7 @@ extension Solidity {
         let wrapper: UIntXBase
         static var bits: UInt = 8
         
-        init?(_ value: BigUInt) {
+        public init?(_ value: BigUInt) {
             guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
@@ -65,7 +65,7 @@ extension Solidity {
         let wrapper: UIntXBase
         static var bits: UInt = 32
         
-        init?(_ value: BigUInt) {
+        public init?(_ value: BigUInt) {
             guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
@@ -79,7 +79,7 @@ extension Solidity {
         let wrapper: UIntXBase
         static var bits: UInt = 128
         
-        init?(_ value: BigUInt) {
+        public init?(_ value: BigUInt) {
             guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
@@ -93,7 +93,7 @@ extension Solidity {
         let wrapper: UIntXBase
         static var bits: UInt = 160
         
-        init?(_ value: BigUInt) {
+        public init?(_ value: BigUInt) {
             guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
@@ -107,7 +107,7 @@ extension Solidity {
         let wrapper: UIntXBase
         static var bits: UInt = 256
         
-        init?(_ value: BigUInt) {
+        public init?(_ value: BigUInt) {
             guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }

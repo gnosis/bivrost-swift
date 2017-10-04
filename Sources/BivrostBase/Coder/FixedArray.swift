@@ -18,6 +18,7 @@ extension Solidity {
 
 extension Solidity.FixedArray: SolidityEncodable {
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.FixedArray<T> {
+        // FIXME: we need length of the array here
         throw BivrostError.notImplemented
     }
     

@@ -38,6 +38,7 @@ enum BivrostError: Error {
         case couldNotCreateInt(source: BaseDecoder.PartitionData, bits: UInt)
         case couldNotCreateUInt(source: BaseDecoder.PartitionData, bits: UInt)
         case couldNotCreateAddress(source: BaseDecoder.PartitionData)
+        case couldNotCreateVariableArray(source: BaseDecoder.PartitionData)
     }
     
 }
