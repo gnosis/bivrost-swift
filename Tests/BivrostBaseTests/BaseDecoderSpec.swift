@@ -62,15 +62,6 @@ class BaseDecoderSpec: QuickSpec {
                 // Test invalid array decoding (size too big)
                 expect { try BaseDecoder.decodeArray(data: "000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789", decoder: BaseDecoder.decodeUInt) }.to(throwError())
             }
-            
-            it("should decode dynamic string arrays correctly") {
-                let strings = ["Hi", "I", "want", "to", "learn", "Solidity"]
-                    .flatMap { Solidity.String($0) }
-                let expectedType = Solidity.VariableArray(strings)!
-                let source = BaseDecoder.PartitionData(data: Assets.encodedVariableStringArray)
-                
-                expect { try Solidity.VariableArray<Solidity.String>.decode(source: source) } == expectedType
-            }
         }
     }
 }
