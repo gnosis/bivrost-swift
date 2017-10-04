@@ -66,10 +66,10 @@ class BaseDecoderSpec: QuickSpec {
             it("should decode dynamic string arrays correctly") {
                 let strings = ["Hi", "I", "want", "to", "learn", "Solidity"]
                     .flatMap { Solidity.String($0) }
-                let type = Solidity.VariableArray(strings)!
+                let expectedType = Solidity.VariableArray(strings)!
                 let source = BaseDecoder.PartitionData(data: Assets.encodedVariableStringArray)
-                let decodedArray = try! Solidity.VariableArray<Solidity.String>.decode(source: source)
-                expect(type).to(equal(decodedArray))
+                
+                expect { try Solidity.VariableArray<Solidity.String>.decode(source: source) } == expectedType
             }
         }
     }

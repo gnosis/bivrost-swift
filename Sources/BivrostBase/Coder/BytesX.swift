@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - BytesXBase
 extension Solidity {
-    fileprivate class BytesXBase {
+    class BytesXBase {
         let length: UInt
         let value: Data
         
@@ -31,7 +31,7 @@ extension Solidity {
     }
 }
 
-fileprivate protocol SolidityBytesXType: StaticType {
+protocol SolidityBytesXType: StaticType {
     static var bytes: UInt { get }
     var wrapper: Solidity.BytesXBase { get }
     init?(_ value: Data)
@@ -53,7 +53,7 @@ extension SolidityBytesXType {
 // MARK: - BytesXBase
 extension Solidity {
     public struct Bytes1: SolidityBytesXType {
-        fileprivate let wrapper: BytesXBase
+        let wrapper: BytesXBase
         static let bytes: UInt = 1
         
         init?(_ value: Data) {
@@ -68,7 +68,7 @@ extension Solidity {
 // MARK: - Bytes2
 extension Solidity {
     public struct Bytes2: SolidityBytesXType {
-        fileprivate let wrapper: BytesXBase
+        let wrapper: BytesXBase
         static let bytes: UInt = 2
         
         init?(_ value: Data) {
@@ -83,7 +83,7 @@ extension Solidity {
 // MARK: - Bytes3
 extension Solidity {
     public struct Bytes3: SolidityBytesXType {
-        fileprivate let wrapper: BytesXBase
+        let wrapper: BytesXBase
         static let bytes: UInt = 3
         
         init?(_ value: Data) {
@@ -98,7 +98,7 @@ extension Solidity {
 // MARK: - Bytes4
 extension Solidity {
     public struct Bytes4: SolidityBytesXType {
-        fileprivate let wrapper: BytesXBase
+        let wrapper: BytesXBase
         static let bytes: UInt = 4
         
         init?(_ value: Data) {
@@ -113,7 +113,7 @@ extension Solidity {
 // MARK: - Bytes24
 extension Solidity {
     public struct Bytes24: SolidityBytesXType {
-        fileprivate let wrapper: BytesXBase
+        let wrapper: BytesXBase
         static let bytes: UInt = 24
         
         init?(_ value: Data) {
@@ -128,7 +128,7 @@ extension Solidity {
 // MARK: - Bytes32
 extension Solidity {
     public struct Bytes32: SolidityBytesXType {
-        fileprivate let wrapper: BytesXBase
+        let wrapper: BytesXBase
         static let bytes: UInt = 32
         
         init?(_ value: Data) {

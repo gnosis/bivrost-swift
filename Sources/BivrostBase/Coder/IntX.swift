@@ -9,7 +9,7 @@
 import BigInt
 
 extension Solidity {
-    fileprivate struct IntXBase {
+    struct IntXBase {
         let value: BigInt
         
         public init?(bits: UInt, bigInt: BigInt) {
@@ -32,7 +32,7 @@ extension Solidity {
     }
 }
 
-fileprivate protocol SolidityIntType: StaticType {
+protocol SolidityIntType: StaticType {
     static var bits: UInt { get }
     var wrapper: Solidity.IntXBase { get }
     init?(_ value: BigInt)
@@ -53,7 +53,7 @@ extension SolidityIntType {
 
 extension Solidity {
     public struct Int8: SolidityIntType {
-        fileprivate let wrapper: Solidity.IntXBase
+        let wrapper: Solidity.IntXBase
         static var bits: UInt = 8
         
         init?(_ value: BigInt) {
@@ -67,7 +67,7 @@ extension Solidity {
 
 extension Solidity {
     public struct Int16: SolidityIntType {
-        fileprivate let wrapper: Solidity.IntXBase
+        let wrapper: Solidity.IntXBase
         static var bits: UInt = 16
         
         init?(_ value: BigInt) {
@@ -81,7 +81,7 @@ extension Solidity {
 
 extension Solidity {
     public struct Int160: SolidityIntType {
-        fileprivate let wrapper: Solidity.IntXBase
+        let wrapper: Solidity.IntXBase
         static var bits: UInt = 160
         
         init?(_ value: BigInt) {
@@ -95,7 +95,7 @@ extension Solidity {
 
 extension Solidity {
     public struct Int256: SolidityIntType {
-        fileprivate let wrapper: Solidity.IntXBase
+        let wrapper: Solidity.IntXBase
         static var bits: UInt = 256
         
         init?(_ value: BigInt) {

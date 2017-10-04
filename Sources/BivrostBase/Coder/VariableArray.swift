@@ -33,3 +33,10 @@ extension Solidity.VariableArray: DynamicType {
         return length.encode() + BaseEncoder.encode(items)
     }
 }
+
+extension Solidity.VariableArray: Equatable {
+    static func ==(lhs: Solidity.VariableArray<T>, rhs: Solidity.VariableArray<T>) -> Bool {
+        return false
+    }
+}
+
