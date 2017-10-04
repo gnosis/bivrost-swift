@@ -32,6 +32,7 @@ enum BivrostError: Error {
         case invalidBytesLength(hex: String)
         case invalidStringEncoding(data: Data)
         case invalidArrayLength(hex: String)
+        
         // Creating Objects
         case couldNotCreateString(source: BaseDecoder.PartitionData)
         case couldNotCreateBytes(source: BaseDecoder.PartitionData)
@@ -41,4 +42,7 @@ enum BivrostError: Error {
         case couldNotCreateVariableArray(source: BaseDecoder.PartitionData)
     }
     
+    enum ArrayX: Error {
+        case itemCountMismatch(expected: UInt, actual: UInt)
+    }
 }

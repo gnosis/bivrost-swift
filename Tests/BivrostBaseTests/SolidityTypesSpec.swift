@@ -62,6 +62,13 @@ class SolidityTypesSpec: QuickSpec {
                     expect(Solidity.UInt256(BigUInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                     expect(Solidity.UInt160(BigUInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                 }
+                
+                it("should decode correctly") {
+                    expect { try Solidity.UInt8.decode(source: BaseDecoder.PartitionData(data: "0000000000000000000000000000000000000000000000000000000000000000")) } == Solidity.UInt8(BigUInt(0))
+                    expect { try Solidity.UInt160.decode(source: BaseDecoder.PartitionData(data: "0000000000000000000000000000000000000000000000000000000000000001")) } == Solidity.UInt160(BigUInt(1))
+                    //Max unsigned integer
+                    expect { try Solidity.UInt256.decode(source: BaseDecoder.PartitionData(data: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")) } == Solidity.UInt256(BigUInt("115792089237316195423570985008687907853269984665640564039457584007913129639935")!)
+                }
             }
             
             context("IntX") {
@@ -123,20 +130,26 @@ class SolidityTypesSpec: QuickSpec {
                 }
             }
             
-            context("FixedArray") {
+            context("ArrayX") {
                 it("should encode multiple positive numbers correctly") {
-                    let array = Solidity.FixedArray([
+                    expect { try Solidity.Array2([
                         Solidity.Int256(BigInt(-1))!,
                         Solidity.Int256(BigInt(123))!
-                    ])
-                    expect(array.encode()) == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000007b"
+                    ]).encode() } == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000007b"
                 }
                 
                 it("should encode a string array correctly") {
                     let strings = ["Hi", "I", "want", "to", "learn", "Solidity"]
                         .flatMap { Solidity.String($0) }
-                    let type = Solidity.FixedArray(strings)
-                    expect(type.encode()) == Assets.encodedFixedStringArray
+                    expect { try Solidity.Array6(strings).encode() } == Assets.encodedFixedStringArray
+                }
+                
+                it("should reject mismatching item counts") {
+                    let strings = ["Hi", "I", "want", "to", "learn", "Solidity"]
+                        .flatMap { Solidity.String($0) }
+                    expect { try Solidity.Array1(strings) }.to(throwError(BivrostError.ArrayX.itemCountMismatch(expected: 1, actual: 6)))
+                    
+                    expect { try Solidity.Array0<Solidity.Bool>([Solidity.Bool(false)]) }.to(throwError(BivrostError.ArrayX.itemCountMismatch(expected: 0, actual: 1)))
                 }
             }
             
