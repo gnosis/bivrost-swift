@@ -29,7 +29,13 @@ extension Solidity.String: DynamicType {
         return string
     }
     
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
+    }
+}
+
+extension Solidity.String: Equatable {
+    public static func ==(lhs: Solidity.String, rhs: Solidity.String) -> Bool {
+        return lhs.wrapper == rhs.wrapper
     }
 }

@@ -11,6 +11,7 @@ import BigInt
 extension Solidity {
     public struct Address {
         let value: Solidity.UInt160
+        /// Only used for some internal calculations, do not use otherwise.
         private let bigInt: BigUInt
         
         init?(_ address: Swift.String) {
@@ -34,7 +35,7 @@ extension Solidity {
         /// can be represented in less bytes (e.g. 0 address).
         ///
         /// - Returns: A 20 byte/40 character hex representation of the address.
-        func encodeUnpadded() -> SolidityEncodable.EncodeFormat {
+        func encodeUnpadded() -> SolidityCodable.EncodeFormat {
             let paddedSize = Int(type(of: value).bits) / 8 * 2
             return BaseEncoder
                 .encodeUnPadded(uint: bigInt, bitWidth: type(of: value).bits)
@@ -45,7 +46,7 @@ extension Solidity {
 
 // MARK: - StaticType
 extension Solidity.Address: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return value.encode()
     }
     
@@ -55,5 +56,11 @@ extension Solidity.Address: StaticType {
             throw BivrostError.Decoder.couldNotCreateAddress(source: source)
         }
         return address
+    }
+}
+
+extension Solidity.Address: Equatable {
+    public static func ==(lhs: Solidity.Address, rhs: Solidity.Address) -> Bool {
+        return lhs.value == rhs.value
     }
 }

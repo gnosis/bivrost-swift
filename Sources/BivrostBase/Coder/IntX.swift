@@ -19,7 +19,7 @@ extension Solidity {
             value = bigInt
         }
         
-        func encode() -> SolidityEncodable.EncodeFormat {
+        func encode() -> SolidityCodable.EncodeFormat {
             // BigInt returns an empty Data when serializing '0' which will be
             // turned into the empty string. Check early here to guarantee that
             // we actually return 32bytes of 0.
@@ -32,14 +32,20 @@ extension Solidity {
     }
 }
 
-protocol SolidityIntType: StaticType {
+extension Solidity.IntXBase: Equatable {
+    public static func ==(lhs: Solidity.IntXBase, rhs: Solidity.IntXBase) -> Bool {
+        return lhs.value == rhs.value
+    }
+}
+
+protocol SolidityIntType: StaticType, Equatable {
     static var bits: UInt { get }
     var wrapper: Solidity.IntXBase { get }
     init?(_ value: BigInt)
 }
 
 extension SolidityIntType {
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
     }
     
@@ -48,6 +54,12 @@ extension SolidityIntType {
             throw BivrostError.Decoder.couldNotCreateInt(source: source, bits: bits)
         }
         return int
+    }
+}
+
+extension SolidityIntType {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.wrapper == rhs.wrapper
     }
 }
 

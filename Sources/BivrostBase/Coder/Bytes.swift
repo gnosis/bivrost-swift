@@ -33,7 +33,13 @@ extension Solidity.Bytes: DynamicType {
         return bytes
     }
     
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return length.encode() + value.toHexString().padToSolidity(location: .right)
+    }
+}
+
+extension Solidity.Bytes: Equatable {
+    public static func ==(lhs: Solidity.Bytes, rhs: Solidity.Bytes) -> Bool {
+        return lhs.length == rhs.length && lhs.value == rhs.value
     }
 }

@@ -31,7 +31,7 @@ extension Solidity {
 
 // MARK: - StaticType
 extension Solidity.Function: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         // Address string padded to 20 bytes
         let addressHex = address.encodeUnpadded()
         
@@ -41,5 +41,11 @@ extension Solidity.Function: StaticType {
     
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.Function {
         throw BivrostError.notImplemented
+    }
+}
+
+extension Solidity.Function: Equatable {
+    static func ==(lhs: Solidity.Function, rhs: Solidity.Function) -> Bool {
+        return lhs.address == rhs.address && lhs.functionSelector == rhs.functionSelector
     }
 }

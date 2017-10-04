@@ -13,7 +13,7 @@ import Foundation
 public struct Solidity {}
 
 // FIXME: Rename to something more appropriate
-protocol SolidityEncodable {
+protocol SolidityCodable {
     typealias EncodeFormat = String
     static var isDynamic: Swift.Bool { get }
     
@@ -23,7 +23,7 @@ protocol SolidityEncodable {
 
 /// To be used as a marker protocol as to not always have to add the `isDynamic` var.
 /// Can only be used if the type is always static.
-protocol StaticType: SolidityEncodable {}
+protocol StaticType: SolidityCodable {}
 extension StaticType {
     static var isDynamic: Bool {
         return false
@@ -32,7 +32,7 @@ extension StaticType {
 
 /// To be used as a marker protocol as to not always have to add the `isDynamic` var.
 /// Can only be used if the type is always dynamic.
-protocol DynamicType: SolidityEncodable {}
+protocol DynamicType: SolidityCodable {}
 extension DynamicType {
     static var isDynamic: Bool {
         return true
@@ -52,8 +52,8 @@ private extension String {
 struct BaseEncoder {
     private static let solidityLocationSizeInBytes = 32
 
-    static func encode(_ arguments: [SolidityEncodable]) -> SolidityEncodable.EncodeFormat {
-        var parts = [(data: SolidityEncodable.EncodeFormat, dynamic: Bool)]()
+    static func encode(_ arguments: [SolidityCodable]) -> SolidityCodable.EncodeFormat {
+        var parts = [(data: SolidityCodable.EncodeFormat, dynamic: Bool)]()
         var sizeOfStaticBlockInBytes = 0
         
         arguments.forEach {
@@ -86,11 +86,11 @@ struct BaseEncoder {
         return staticPart + dynamicPart
     }
     
-    static func encode(arguments: SolidityEncodable...) -> SolidityEncodable.EncodeFormat {
+    static func encode(arguments: SolidityCodable...) -> SolidityCodable.EncodeFormat {
         return encode(arguments)
     }
     
-    static func encodeUnPadded(uint: BigUInt, bitWidth: UInt) -> SolidityEncodable.EncodeFormat {
+    static func encodeUnPadded(uint: BigUInt, bitWidth: UInt) -> SolidityCodable.EncodeFormat {
         guard uint.bitWidth <= bitWidth else {
             fatalError("\(#function) called with UInt \(uint) that is too big for bit width \(bitWidth).")
         }
@@ -105,18 +105,18 @@ struct BaseEncoder {
 }
 
 struct BaseDecoder {
-    static func partitionData(inHex string: SolidityEncodable.EncodeFormat) -> [SolidityEncodable.EncodeFormat] {
+    static func partitionData(inHex string: SolidityCodable.EncodeFormat) -> [SolidityCodable.EncodeFormat] {
         return string.splitSolidityLines()
     }
     
-    static func decodeUInt(data: SolidityEncodable.EncodeFormat) throws -> BigUInt {
+    static func decodeUInt(data: SolidityCodable.EncodeFormat) throws -> BigUInt {
         guard let bigUInt = BigUInt(data, radix: 16) else {
             throw BivrostError.Decoder.invalidUInt(hex: data)
         }
         return bigUInt
     }
     
-    static func decodeBool(data: SolidityEncodable.EncodeFormat) throws -> Bool {
+    static func decodeBool(data: SolidityCodable.EncodeFormat) throws -> Bool {
         guard let bigUInt = BigUInt(data, radix: 16) else {
             throw BivrostError.Decoder.invalidUInt(hex: data)
         }
@@ -130,14 +130,14 @@ struct BaseDecoder {
         }
     }
     
-    static func decodeInt(data: SolidityEncodable.EncodeFormat) throws -> BigInt {
+    static func decodeInt(data: SolidityCodable.EncodeFormat) throws -> BigInt {
         guard let bigInt = BigInt(twosComplementHex: data) else {
             throw BivrostError.Decoder.invalidInt(hex: data)
         }
         return bigInt
     }
     
-    static func decodeBytesX(data: SolidityEncodable.EncodeFormat, length: UInt) throws -> Data {
+    static func decodeBytesX(data: SolidityCodable.EncodeFormat, length: UInt) throws -> Data {
         let hexStringSize = String.hexStringSize(forBytes: length)
         let endIndex = data.index(data.startIndex, offsetBy: Int(hexStringSize))
         let hexPartition = String(data[data.startIndex..<endIndex])
@@ -171,7 +171,7 @@ struct BaseDecoder {
         return string
     }
     
-    static func decodeArray<T>(data: SolidityEncodable.EncodeFormat, decoder: (SolidityEncodable.EncodeFormat) throws -> T) throws -> [T] {
+    static func decodeArray<T>(data: SolidityCodable.EncodeFormat, decoder: (SolidityCodable.EncodeFormat) throws -> T) throws -> [T] {
         let lines = partitionData(inHex: data)
         let sizePart = lines[0]
         guard let size = Int(sizePart, radix: 16),
@@ -184,7 +184,7 @@ struct BaseDecoder {
         return try (1..<lines.count).map { try decoder(lines[$0]) }
     }
     
-    static func decodeArray<T: SolidityEncodable>(source: PartitionData, capacity: UInt, decoder: (PartitionData) throws -> T) throws -> [T] {
+    static func decodeArray<T: SolidityCodable>(source: PartitionData, capacity: UInt, decoder: (PartitionData) throws -> T) throws -> [T] {
         guard capacity != 0 else {
             return []
         }
@@ -201,8 +201,8 @@ struct BaseDecoder {
 
 extension BaseDecoder {
     class PartitionData {
-        let lines: [SolidityEncodable.EncodeFormat]
-        init(_ lines: [SolidityEncodable.EncodeFormat]) {
+        let lines: [SolidityCodable.EncodeFormat]
+        init(_ lines: [SolidityCodable.EncodeFormat]) {
             self.lines = lines
         }
         

@@ -18,16 +18,22 @@ extension Solidity {
             }
             self.wrapper = wrapper
         }
-        
-        static func decode(source: BaseDecoder.PartitionData) throws -> Bool {
-            return try Bool(BaseDecoder.decodeBool(data: source.consume()))
-        }
     }
 }
 
 // MARK: - StaticType
 extension Solidity.Bool: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
+    }
+    
+    static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.Bool {
+        return try Solidity.Bool(BaseDecoder.decodeBool(data: source.consume()))
+    }
+}
+
+extension Solidity.Bool: Equatable {
+    public static func ==(lhs: Solidity.Bool, rhs: Solidity.Bool) -> Bool {
+        return lhs.wrapper == rhs.wrapper
     }
 }

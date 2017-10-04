@@ -21,7 +21,7 @@ extension Solidity {
             self.value = value
         }
         
-        func encode() -> SolidityEncodable.EncodeFormat {
+        func encode() -> SolidityCodable.EncodeFormat {
             guard value.count <= length else {
                 fatalError("BytesXBase somehow created with Data that does not fit into \(length) bytes.")
             }
@@ -31,14 +31,20 @@ extension Solidity {
     }
 }
 
-protocol SolidityBytesXType: StaticType {
+extension Solidity.BytesXBase: Equatable {
+    public static func ==(lhs: Solidity.BytesXBase, rhs: Solidity.BytesXBase) -> Bool {
+        return lhs.length == rhs.length && lhs.value == rhs.value
+    }
+}
+
+protocol SolidityBytesXType: StaticType, Equatable {
     static var bytes: UInt { get }
     var wrapper: Solidity.BytesXBase { get }
     init?(_ value: Data)
 }
 
 extension SolidityBytesXType {
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
     }
     
@@ -47,6 +53,12 @@ extension SolidityBytesXType {
             throw BivrostError.notImplemented
         }
         return bytes
+    }
+}
+
+extension SolidityBytesXType {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.wrapper == rhs.wrapper
     }
 }
 

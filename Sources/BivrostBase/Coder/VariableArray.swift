@@ -9,7 +9,7 @@
 import BigInt
 
 extension Solidity {
-    struct VariableArray<T: SolidityEncodable> {
+    struct VariableArray<T: SolidityCodable & Equatable> {
         let items: [T]
         let length: Solidity.UInt256
         
@@ -37,13 +37,13 @@ extension Solidity.VariableArray: DynamicType {
         return array
     }
     
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return length.encode() + BaseEncoder.encode(items)
     }
 }
 
 extension Solidity.VariableArray: Equatable {
     static func ==(lhs: Solidity.VariableArray<T>, rhs: Solidity.VariableArray<T>) -> Bool {
-        return false
+        return lhs.length == rhs.length && lhs.items == rhs.items
     }
 }

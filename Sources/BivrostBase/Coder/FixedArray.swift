@@ -7,7 +7,7 @@
 //
 
 extension Solidity {
-    struct FixedArray<T: SolidityEncodable> {
+    struct FixedArray<T: SolidityCodable & Equatable> {
         let items: [T]
         
         init(_ items: [T]) {
@@ -16,7 +16,7 @@ extension Solidity {
     }
 }
 
-extension Solidity.FixedArray: SolidityEncodable {
+extension Solidity.FixedArray: SolidityCodable {
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.FixedArray<T> {
         // FIXME: we need length of the array here
         throw BivrostError.notImplemented
@@ -29,7 +29,16 @@ extension Solidity.FixedArray: SolidityEncodable {
     }
     
     // FIXME: This does not check length of the array
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return BaseEncoder.encode(items)
+    }
+}
+
+extension Solidity.FixedArray: Equatable {
+    static func ==(lhs: Solidity.FixedArray<T>, rhs: Solidity.FixedArray<T>) -> Bool {
+        guard lhs.items.count == rhs.items.count else {
+            return false
+        }
+        return lhs.items == rhs.items
     }
 }

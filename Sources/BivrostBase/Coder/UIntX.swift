@@ -21,20 +21,26 @@ extension Solidity {
             bitWidth = bits
         }
         
-        func encode() -> SolidityEncodable.EncodeFormat {
+        func encode() -> SolidityCodable.EncodeFormat {
             return BaseEncoder.encodeUnPadded(uint: value, bitWidth: bitWidth).padToSolidity()
         }
     }
 }
 
-protocol SolidityUIntType: StaticType {
+extension Solidity.UIntXBase: Equatable {
+    public static func ==(lhs: Solidity.UIntXBase, rhs: Solidity.UIntXBase) -> Bool {
+        return lhs.bitWidth == rhs.bitWidth && lhs.value == rhs.value
+    }
+}
+
+protocol SolidityUIntType: StaticType, Equatable {
     static var bits: UInt { get }
     var wrapper: Solidity.UIntXBase { get }
     init?(_ value: BigUInt)
 }
 
 extension SolidityUIntType {
-    func encode() -> SolidityEncodable.EncodeFormat {
+    func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
     }
     
@@ -43,6 +49,12 @@ extension SolidityUIntType {
             throw BivrostError.Decoder.couldNotCreateUInt(source: source, bits: bits)
         }
         return uint
+    }
+}
+
+extension SolidityUIntType {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.wrapper == rhs.wrapper
     }
 }
 
