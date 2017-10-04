@@ -21,7 +21,7 @@ struct ParameterParser {
     ///     was an error.
     static func parseParameterType(from json: [String: Any]) throws -> Contract.Element.ParameterType {
         guard let typeString = json[.type] as? String else {
-            throw BivrostError.parameterTypeNotFound
+            throw BivrostError.Parser.parameterTypeNotFound
         }
         return try parameterType(from: typeString)
     }
@@ -67,7 +67,7 @@ fileprivate func parameterType(from string: String) throws -> ParameterType {
     // Step 5
     guard let foundType = possibleType,
         foundType.isValid else {
-            throw BivrostError.parameterTypeInvalid
+            throw BivrostError.Parser.parameterTypeInvalid
     }
     
     // Step 6:
@@ -138,7 +138,7 @@ fileprivate func numberSuffixMatch(from string: String) throws -> ParameterType?
             return nil
     }
     guard let length = Int(string[lengthRange]) else {
-        throw BivrostError.parameterTypeInvalid
+        throw BivrostError.Parser.parameterTypeInvalid
     }
     
     let remainderString = String(string[remainderRange])
@@ -158,7 +158,7 @@ fileprivate func numberSuffixMatch(from string: String) throws -> ParameterType?
     case .dynamicType(.bytes):
         return .staticType(.bytes(length: length))
     default:
-        throw BivrostError.parameterTypeInvalid
+        throw BivrostError.Parser.parameterTypeInvalid
     }
 }
 
@@ -186,7 +186,7 @@ fileprivate func matchDynamicArray(from string: String) throws -> ParameterType?
     // Right now dynamic arrays cannot contain dynamic types, so make sure
     // this does not happen
     guard case .staticType(let unwrappedType) = type else {
-        throw BivrostError.parameterTypeInvalid
+        throw BivrostError.Parser.parameterTypeInvalid
     }
     return .dynamicType(.array(unwrappedType))
 }
@@ -214,7 +214,7 @@ fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
     }
     // If the contents of the brackets cannot be parsed to int, we throw
     guard let length = Int(lengthSubstring) else {
-        throw BivrostError.parameterTypeInvalid
+        throw BivrostError.Parser.parameterTypeInvalid
     }
     
     // We cut off brackets and get the base type for the remainderString
@@ -224,7 +224,7 @@ fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
     // Right now fixed length arrays can only contain static types, so make sure
     // we have one of those
     guard case .staticType(let unwrappedType) = type else {
-        throw BivrostError.parameterTypeInvalid
+        throw BivrostError.Parser.parameterTypeInvalid
     }
 
     return ParameterType.staticType(.array(unwrappedType, length: length))

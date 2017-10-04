@@ -32,7 +32,7 @@ struct ElementJsonParser {
         let typeString = json[.type] as? String ?? "function"
         
         guard let type = ElementType(rawValue: typeString) else {
-            throw BivrostError.elementTypeInvalid
+            throw BivrostError.Parser.elementTypeInvalid
         }
         return try parseElement(with: type, from: json)
     }
@@ -84,7 +84,7 @@ extension ElementJsonParser {
     
     private static func parseName(from json: [String: Any]) throws -> String {
         guard let name = json[.name] as? String else {
-            throw BivrostError.elementNameInvalid
+            throw BivrostError.Parser.elementNameInvalid
         }
         return name
     }
@@ -120,7 +120,7 @@ extension ElementJsonParser {
     ///     was an error.
     private static func parseFunctionInput(from json: [String: Any]) throws -> FunctionInput {
         guard let name = json[.name] as? String else {
-            throw BivrostError.functionInputInvalid
+            throw BivrostError.Parser.functionInputInvalid
         }
         
         let type = try ParameterParser.parseParameterType(from: json)
@@ -147,7 +147,7 @@ extension ElementJsonParser {
     ///     was an error.
     private static func parseFunctionOutput(from json: [String: Any]) throws -> FunctionOutput {
         guard let name = json[.name] as? String else {
-            throw BivrostError.functionOutputInvalid
+            throw BivrostError.Parser.functionOutputInvalid
         }
 
         let type = try ParameterParser.parseParameterType(from: json)
@@ -182,7 +182,7 @@ extension ElementJsonParser {
     private static func parseEventInput(from json: [String: Any]) throws -> EventInput {
         guard let name = json[.name] as? String,
             let indexed = json[.indexed] as? Bool else {
-                throw BivrostError.eventInputInvalid
+                throw BivrostError.Parser.eventInputInvalid
         }
         
         let type = try ParameterParser.parseParameterType(from: json)

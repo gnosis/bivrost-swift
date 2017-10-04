@@ -9,7 +9,7 @@
 import BigInt
 
 extension Solidity {
-    fileprivate class UIntXBase: StaticType {
+    class UIntXBase {
         let value: BigUInt
         let bitWidth: UInt
         
@@ -27,90 +27,91 @@ extension Solidity {
     }
 }
 
+protocol SolidityUIntType: StaticType {
+    static var bits: UInt { get }
+    var wrapper: Solidity.UIntXBase { get }
+    init?(_ value: BigUInt)
+}
+
+extension SolidityUIntType {
+    func encode() -> SolidityEncodable.EncodeFormat {
+        return wrapper.encode()
+    }
+    
+    static func decode(source: BaseDecoder.PartitionData) throws -> Self {
+        guard let uint = try Self.init(BaseDecoder.decodeUInt(data: source.consume())) else {
+            throw BivrostError.Decoder.couldNotCreateUInt(source: source, bits: bits)
+        }
+        return uint
+    }
+}
+
 extension Solidity {
-    public struct UInt8: StaticType {
-        private let wrapper: UIntXBase
+    public struct UInt8: SolidityUIntType {
+        let wrapper: UIntXBase
+        static var bits: UInt = 8
         
         init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: 8, bigUint: value) else {
+            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
             self.wrapper = wrapper
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
         }
     }
 }
 
 extension Solidity {
-    public struct UInt32: StaticType {
-        private let wrapper: UIntXBase
+    public struct UInt32: SolidityUIntType {
+        let wrapper: UIntXBase
+        static var bits: UInt = 32
         
         init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: 32, bigUint: value) else {
+            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
             self.wrapper = wrapper
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
         }
     }
 }
 
 extension Solidity {
-    public struct UInt128: StaticType {
-        private let wrapper: UIntXBase
+    public struct UInt128: SolidityUIntType {
+        let wrapper: UIntXBase
+        static var bits: UInt = 128
         
         init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: 128, bigUint: value) else {
+            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
             self.wrapper = wrapper
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
         }
     }
 }
 
 extension Solidity {
-    public struct UInt160: StaticType {
-        // TODO: This could be refactored for every type (when generating types maybe)
-        // Currently only used for Address encoding
-        let bitWidth: UInt = 160
-        private let wrapper: UIntXBase
+    public struct UInt160: SolidityUIntType {
+        let wrapper: UIntXBase
+        static var bits: UInt = 160
         
         init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: bitWidth, bigUint: value) else {
+            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
             self.wrapper = wrapper
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
         }
     }
 }
 
 extension Solidity {
-    public struct UInt256: StaticType {
-        private let wrapper: UIntXBase
+    public struct UInt256: SolidityUIntType {
+        let wrapper: UIntXBase
+        static var bits: UInt = 256
         
         init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: 256, bigUint: value) else {
+            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
                 return nil
             }
             self.wrapper = wrapper
-        }
-        
-        func encode() -> SolidityEncodable.EncodeFormat {
-            return wrapper.encode()
         }
     }
 }

@@ -198,16 +198,16 @@ class SolidityTypesSpec: QuickSpec {
                     let numbers: [Solidity.UInt32] = [Solidity.UInt32(BigUInt("456", radix: 16)!)!, Solidity.UInt32(BigUInt("789", radix: 16)!)!]
                     let array2 = Solidity.VariableArray(numbers)!
                     expect(array2.encode()) == "000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789"
-                    
+
                     let bools: [Solidity.Bool] = [Solidity.Bool(true), Solidity.Bool(false)]
                     let array3 = Solidity.VariableArray(bools)!
                     expect(array3.encode()) == "000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000"
-                    
+
                     let empty = [Solidity.Bool]()
                     let array4 = Solidity.VariableArray(empty)!
                     expect(array4.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                 }
-                
+
                 it("should encode a string array correctly") {
                     let strings = ["Hi", "I", "want", "to", "learn", "Solidity"]
                         .flatMap { Solidity.String($0) }

@@ -20,142 +20,122 @@ extension Solidity {
             self.length = length
             self.value = value
         }
+        
+        func encode() -> SolidityEncodable.EncodeFormat {
+            guard value.count <= length else {
+                fatalError("BytesXBase somehow created with Data that does not fit into \(length) bytes.")
+            }
+            // If data is too small for 32bytes, right pad with 0 elements
+            return value.toHexString().padToSolidity(location: .right)
+        }
     }
 }
 
-// MARK: - BytesXBase StaticType
-extension Solidity.BytesXBase: StaticType {
+fileprivate protocol SolidityBytesXType: StaticType {
+    static var bytes: UInt { get }
+    var wrapper: Solidity.BytesXBase { get }
+    init?(_ value: Data)
+}
+
+extension SolidityBytesXType {
     func encode() -> SolidityEncodable.EncodeFormat {
-        guard value.count <= length else {
-            fatalError("BytesXBase somehow created with Data that does not fit into \(length) bytes.")
+        return wrapper.encode()
+    }
+    
+    static func decode(source: BaseDecoder.PartitionData) throws -> Self {
+        guard let bytes = try Self.init(BaseDecoder.decodeBytesX(data: source.consume(), length: bytes)) else {
+            throw BivrostError.notImplemented
         }
-        // If data is too small for 32bytes, right pad with 0 elements
-        return value.toHexString().padToSolidity(location: .right)
+        return bytes
     }
 }
 
 // MARK: - BytesXBase
 extension Solidity {
-    public struct Bytes1 {
-        private let wrapper: BytesXBase
+    public struct Bytes1: SolidityBytesXType {
+        fileprivate let wrapper: BytesXBase
+        static let bytes: UInt = 1
         
         init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: 1, value: value) else {
+            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
                 return nil
             }
             self.wrapper = wrapper
         }
-    }
-}
-
-// MARK: - Bytes1 StaticType
-extension Solidity.Bytes1: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        return wrapper.encode()
     }
 }
 
 // MARK: - Bytes2
 extension Solidity {
-    public struct Bytes2 {
-        private let wrapper: BytesXBase
+    public struct Bytes2: SolidityBytesXType {
+        fileprivate let wrapper: BytesXBase
+        static let bytes: UInt = 2
         
         init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: 2, value: value) else {
+            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
                 return nil
             }
             self.wrapper = wrapper
         }
-    }
-}
-
-// MARK: - Bytes2 StaticType
-extension Solidity.Bytes2: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        return wrapper.encode()
     }
 }
 
 // MARK: - Bytes3
 extension Solidity {
-    public struct Bytes3 {
-        private let wrapper: BytesXBase
+    public struct Bytes3: SolidityBytesXType {
+        fileprivate let wrapper: BytesXBase
+        static let bytes: UInt = 3
         
         init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: 3, value: value) else {
+            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
                 return nil
             }
             self.wrapper = wrapper
         }
-    }
-}
-
-// MARK: - Bytes3 StaticType
-extension Solidity.Bytes3: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        return wrapper.encode()
     }
 }
 
 // MARK: - Bytes4
 extension Solidity {
-    public struct Bytes4 {
-        private let wrapper: BytesXBase
+    public struct Bytes4: SolidityBytesXType {
+        fileprivate let wrapper: BytesXBase
+        static let bytes: UInt = 4
         
         init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: 4, value: value) else {
+            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
                 return nil
             }
             self.wrapper = wrapper
         }
-    }
-}
-
-// MARK: - Bytes4 StaticType
-extension Solidity.Bytes4: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        return wrapper.encode()
     }
 }
 
 // MARK: - Bytes24
 extension Solidity {
-    public struct Bytes24 {
-        private let wrapper: BytesXBase
+    public struct Bytes24: SolidityBytesXType {
+        fileprivate let wrapper: BytesXBase
+        static let bytes: UInt = 24
         
         init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: 24, value: value) else {
+            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
                 return nil
             }
             self.wrapper = wrapper
         }
-    }
-}
-
-// MARK: - Bytes32 StaticType
-extension Solidity.Bytes24: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        return wrapper.encode()
     }
 }
 
 // MARK: - Bytes32
 extension Solidity {
-    public struct Bytes32 {
-        private let wrapper: BytesXBase
+    public struct Bytes32: SolidityBytesXType {
+        fileprivate let wrapper: BytesXBase
+        static let bytes: UInt = 32
         
         init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: 32, value: value) else {
+            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
                 return nil
             }
             self.wrapper = wrapper
         }
-    }
-}
-
-// MARK: - Bytes32 StaticType
-extension Solidity.Bytes32: StaticType {
-    func encode() -> SolidityEncodable.EncodeFormat {
-        return wrapper.encode()
     }
 }

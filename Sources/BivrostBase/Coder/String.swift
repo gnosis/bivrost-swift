@@ -22,6 +22,13 @@ extension Solidity {
 
 // MARK: - DynamicType
 extension Solidity.String: DynamicType {
+    static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.String {
+        guard let string = try Solidity.String(BaseDecoder.decodeString(source: source)) else {
+            throw BivrostError.Decoder.couldNotCreateString(source: source)
+        }
+        return string
+    }
+    
     func encode() -> SolidityEncodable.EncodeFormat {
         return wrapper.encode()
     }

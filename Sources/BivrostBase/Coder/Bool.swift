@@ -18,6 +18,10 @@ extension Solidity {
             }
             self.wrapper = wrapper
         }
+        
+        static func decode(source: BaseDecoder.PartitionData) throws -> Bool {
+            return try Bool(BaseDecoder.decodeBool(data: source.consume()))
+        }
     }
 }
 

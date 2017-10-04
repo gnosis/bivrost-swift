@@ -25,6 +25,10 @@ extension Solidity {
 
 // MARK: - DynamicType
 extension Solidity.VariableArray: DynamicType {
+    static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.VariableArray<T> {
+        throw BivrostError.notImplemented
+    }
+    
     func encode() -> SolidityEncodable.EncodeFormat {
         return length.encode() + BaseEncoder.encode(items)
     }

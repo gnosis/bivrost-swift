@@ -17,6 +17,10 @@ extension Solidity {
 }
 
 extension Solidity.FixedArray: SolidityEncodable {
+    static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.FixedArray<T> {
+        throw BivrostError.notImplemented
+    }
+    
     static var isDynamic: Swift.Bool {
         // TODO: For a correct isDynamic response this should look at the
         // allocated capacity for the (generated?) SolidityArray. e.g. bytes[0] is always static.

@@ -38,4 +38,8 @@ extension Solidity.Function: StaticType {
         let unPaddedString = addressHex + functionSelector
         return unPaddedString.padToSolidity(location: .right)
     }
+    
+    static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.Function {
+        throw BivrostError.notImplemented
+    }
 }

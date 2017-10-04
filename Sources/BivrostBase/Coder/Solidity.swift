@@ -12,10 +12,13 @@ import Foundation
 /// Blanket Holder for Solidity Types
 struct Solidity {}
 
+// FIXME: Rename to something more appropriate
 protocol SolidityEncodable {
     typealias EncodeFormat = String
     func encode() -> EncodeFormat
     static var isDynamic: Swift.Bool { get }
+    
+    static func decode(source: BaseDecoder.PartitionData) throws -> Self
 }
 
 /// To be used as a marker protocol as to not always have to add the `isDynamic` var.
@@ -41,7 +44,7 @@ private extension String {
         return characters.count / 2
     }
     
-    static func hexStringSize(forBytes: Int) -> Int {
+    static func hexStringSize(forBytes: UInt) -> UInt {
         return forBytes * 2
     }
 }
@@ -102,20 +105,20 @@ struct BaseEncoder {
 }
 
 struct BaseDecoder {
-    static func partitionData(inHex string: String) -> [String] {
+    static func partitionData(inHex string: SolidityEncodable.EncodeFormat) -> [SolidityEncodable.EncodeFormat] {
         return string.splitSolidityLines()
     }
     
-    static func decodeUInt(data: String) throws -> BigUInt {
+    static func decodeUInt(data: SolidityEncodable.EncodeFormat) throws -> BigUInt {
         guard let bigUInt = BigUInt(data, radix: 16) else {
-            throw BivrostError.invalidUInt(hex: data)
+            throw BivrostError.Decoder.invalidUInt(hex: data)
         }
         return bigUInt
     }
     
-    static func decodeBool(data: String) throws -> Bool {
+    static func decodeBool(data: SolidityEncodable.EncodeFormat) throws -> Bool {
         guard let bigUInt = BigUInt(data, radix: 16) else {
-            throw BivrostError.invalidUInt(hex: data)
+            throw BivrostError.Decoder.invalidUInt(hex: data)
         }
         switch bigUInt {
         case BigUInt(0):
@@ -123,24 +126,24 @@ struct BaseDecoder {
         case BigUInt(1):
             return true
         default:
-            throw BivrostError.invalidBool(hex: data)
+            throw BivrostError.Decoder.invalidBool(hex: data)
         }
     }
     
-    static func decodeInt(data: String) throws -> BigInt {
+    static func decodeInt(data: SolidityEncodable.EncodeFormat) throws -> BigInt {
         guard let bigInt = BigInt(twosComplementHex: data) else {
-            throw BivrostError.invalidInt(hex: data)
+            throw BivrostError.Decoder.invalidInt(hex: data)
         }
         return bigInt
     }
     
-    static func decodeBytesX(data: String, length: Int) throws -> Data {
+    static func decodeBytesX(data: SolidityEncodable.EncodeFormat, length: UInt) throws -> Data {
         let hexStringSize = String.hexStringSize(forBytes: length)
-        let endIndex = data.index(data.startIndex, offsetBy: hexStringSize)
+        let endIndex = data.index(data.startIndex, offsetBy: Int(hexStringSize))
         let hexPartition = String(data[data.startIndex..<endIndex])
         guard let byteData = Data(fromHexEncodedString: hexPartition),
             byteData.count == length else {
-                throw BivrostError.invalidBytesX(hex: data, capacity: length)
+                throw BivrostError.Decoder.invalidBytesX(hex: data, capacity: length)
         }
         return byteData
     }
@@ -148,7 +151,7 @@ struct BaseDecoder {
     static func decodeBytes(source: PartitionData) throws -> Data {
         let sizePart = source.consume()
         guard let size = Int(sizePart, radix: 16) else {
-            throw BivrostError.invalidBytesLength(hex: sizePart)
+            throw BivrostError.Decoder.invalidBytesLength(hex: sizePart)
         }
         
         var byteHolder = Data()
@@ -163,17 +166,17 @@ struct BaseDecoder {
     static func decodeString(source: PartitionData) throws -> String {
         let data = try decodeBytes(source: source)
         guard let string = String(data: data, encoding: .utf8) else {
-            throw BivrostError.invalidStringEncoding(data: data)
+            throw BivrostError.Decoder.invalidStringEncoding(data: data)
         }
         return string
     }
     
-    static func decodeArray<T>(data: String, decoder: (String) throws -> T) throws -> [T] {
+    static func decodeArray<T>(data: SolidityEncodable.EncodeFormat, decoder: (String) throws -> T) throws -> [T] {
         let lines = partitionData(inHex: data)
         let sizePart = lines[0]
         guard let size = Int(sizePart, radix: 16),
             size == lines.count - 1 else {
-            throw BivrostError.invalidArrayLength(hex: sizePart)
+            throw BivrostError.Decoder.invalidArrayLength(hex: sizePart)
         }
         guard size != 0 else {
             return []
@@ -184,8 +187,8 @@ struct BaseDecoder {
 
 extension BaseDecoder {
     class PartitionData {
-        let lines: [String]
-        init(_ lines: [String]) {
+        let lines: [SolidityEncodable.EncodeFormat]
+        init(_ lines: [SolidityEncodable.EncodeFormat]) {
             self.lines = lines
         }
         

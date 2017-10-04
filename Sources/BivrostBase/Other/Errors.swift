@@ -11,23 +11,33 @@ import Foundation
 
 enum BivrostError: Error {
     // Parser Errors
-    
-    case elementTypeInvalid
-    case elementNameInvalid
-    case functionInputInvalid
-    case functionOutputInvalid
-    case eventInputInvalid
-    case parameterTypeInvalid
-    case parameterTypeNotFound
+    enum Parser: Error {
+        case elementTypeInvalid
+        case elementNameInvalid
+        case functionInputInvalid
+        case functionOutputInvalid
+        case eventInputInvalid
+        case parameterTypeInvalid
+        case parameterTypeNotFound
+    }
     
     case notImplemented
     
-    // Decoder Errors
-    case invalidBool(hex: String)
-    case invalidUInt(hex: String)
-    case invalidInt(hex: String)
-    case invalidBytesX(hex: String, capacity: Int)
-    case invalidBytesLength(hex: String)
-    case invalidStringEncoding(data: Data)
-    case invalidArrayLength(hex: String)
+    enum Decoder: Error {
+        // Decoding
+        case invalidBool(hex: String)
+        case invalidUInt(hex: String)
+        case invalidInt(hex: String)
+        case invalidBytesX(hex: String, capacity: UInt)
+        case invalidBytesLength(hex: String)
+        case invalidStringEncoding(data: Data)
+        case invalidArrayLength(hex: String)
+        // Creating Objects
+        case couldNotCreateString(source: BaseDecoder.PartitionData)
+        case couldNotCreateBytes(source: BaseDecoder.PartitionData)
+        case couldNotCreateInt(source: BaseDecoder.PartitionData, bits: UInt)
+        case couldNotCreateUInt(source: BaseDecoder.PartitionData, bits: UInt)
+        case couldNotCreateAddress(source: BaseDecoder.PartitionData)
+    }
+    
 }
