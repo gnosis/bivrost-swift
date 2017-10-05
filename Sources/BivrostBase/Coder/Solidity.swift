@@ -11,6 +11,8 @@ import Foundation
 
 /// Blanket Holder for Solidity Types
 public struct Solidity {}
+/// Blanket holder for Abstract Solidity Types.
+public struct _DoNotUse {}
 
 // FIXME: Rename to something more appropriate
 protocol SolidityCodable {

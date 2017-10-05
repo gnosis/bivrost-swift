@@ -9,4 +9,4 @@
 import BivrostBase
 import BigInt
 
-print(Solidity.UInt256(BigUInt(1234567890)))
+print(Solidity.UInt256(BigUInt(1234567890)) as Any)

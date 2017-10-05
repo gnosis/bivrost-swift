@@ -7,23 +7,25 @@
 //
 
 /// Base type for fixed-length Solidity.Arrays. Do not use directly.
-class _ArrayX<T: SolidityCodable & Equatable> {
-    private let items: [T]
-    class var length: UInt {
-        fatalError("Not meant to be called directly.")
-    }
-    
-    required init(_ items: [T]) throws {
-        let expectedLength = type(of: self).length
-        guard items.count == expectedLength else {
-            throw BivrostError.ArrayX.itemCountMismatch(expected: expectedLength, actual: UInt(items.count))
+extension _DoNotUse {
+    class _ArrayX<T: SolidityCodable & Equatable> {
+        private let items: [T]
+        class var length: UInt {
+            fatalError("Not meant to be called directly.")
         }
-        self.items = items
+        
+        required init(_ items: [T]) throws {
+            let expectedLength = type(of: self).length
+            guard items.count == expectedLength else {
+                throw BivrostError.ArrayX.itemCountMismatch(expected: expectedLength, actual: UInt(items.count))
+            }
+            self.items = items
+        }
     }
 }
 
 // MARK: - SolidityCodable
-extension _ArrayX: SolidityCodable {
+extension _DoNotUse._ArrayX: SolidityCodable {
     static var isDynamic: Swift.Bool {
         guard length != 0 else {
             return false
@@ -41,10 +43,11 @@ extension _ArrayX: SolidityCodable {
 }
 
 // MARK: - Equatable
-extension _ArrayX: Equatable {
-    static func ==(lhs: _ArrayX<T>, rhs: _ArrayX<T>) -> Bool {
-        guard lhs.items.count == rhs.items.count else {
-            return false
+extension _DoNotUse._ArrayX: Equatable {
+    static func ==(lhs: _DoNotUse._ArrayX<T>, rhs: _DoNotUse._ArrayX<T>) -> Bool {
+        guard type(of: lhs).length == type(of: lhs).length,
+            lhs.items.count == rhs.items.count else {
+                return false
         }
         return lhs.items == rhs.items
     }
@@ -53,22 +56,22 @@ extension _ArrayX: Equatable {
 // MARK: - Subclass Definitions
 extension Solidity {
     // TODO: Manual subclasses, can be removed later.
-    final class Array0<T: SolidityCodable & Equatable>: _ArrayX<T> {
+    final class Array0<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
         override class var length: UInt {
             return 0
         }
     }
-    final class Array1<T: SolidityCodable & Equatable>: _ArrayX<T> {
+    final class Array1<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
         override class var length: UInt {
             return 1
         }
     }
-    final class Array2<T: SolidityCodable & Equatable>: _ArrayX<T> {
+    final class Array2<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
         override class var length: UInt {
             return 2
         }
     }
-    final class Array6<T: SolidityCodable & Equatable>: _ArrayX<T> {
+    final class Array6<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
         override class var length: UInt {
             return 6
         }

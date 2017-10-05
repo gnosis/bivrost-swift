@@ -7,147 +7,83 @@
 //
 import Foundation
 
-// MARK: - BytesXBase
-extension Solidity {
-    class BytesXBase {
-        let length: UInt
+// MARK: - _BytesX
+extension _DoNotUse {
+    public class _BytesX {
+        class var length: UInt {
+            fatalError("_BytesX needs to be overridden.")
+        }
+        
         let value: Data
         
-        init?(length: UInt, value: Data) {
-            guard value.count <= length else {
-                return nil
+        required public init(_ value: Data) throws {
+            let maxBytes = type(of: self).length
+            guard value.count <= maxBytes else {
+                throw BivrostError.BytesX.byteCountMismatch(max: maxBytes, actual: UInt(value.count))
             }
-            self.length = length
             self.value = value
         }
-        
-        func encode() -> SolidityCodable.EncodeFormat {
-            guard value.count <= length else {
-                fatalError("BytesXBase somehow created with Data that does not fit into \(length) bytes.")
-            }
-            // If data is too small for 32bytes, right pad with 0 elements
-            return value.toHexString().padToSolidity(location: .right)
-        }
     }
 }
 
-extension Solidity.BytesXBase: Equatable {
-    public static func ==(lhs: Solidity.BytesXBase, rhs: Solidity.BytesXBase) -> Bool {
-        return lhs.length == rhs.length && lhs.value == rhs.value
-    }
-}
-
-protocol SolidityBytesXType: StaticType, Equatable {
-    static var bytes: UInt { get }
-    var wrapper: Solidity.BytesXBase { get }
-    init?(_ value: Data)
-}
-
-extension SolidityBytesXType {
+// MARK: - SolidityCodable
+extension _DoNotUse._BytesX: StaticType {
     func encode() -> SolidityCodable.EncodeFormat {
-        return wrapper.encode()
+        guard value.count <= type(of: self).length else {
+            fatalError("_BytesX somehow created with Data that does not fit into \(type(of: self).length) bytes.")
+        }
+        // If data is too small for 32bytes, right pad with 0 elements
+        return value.toHexString().padToSolidity(location: .right)
     }
     
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
-        guard let bytes = try Self.init(BaseDecoder.decodeBytesX(data: source.consume(), length: bytes)) else {
-            throw BivrostError.notImplemented
+        guard let bytes = try? self.init(BaseDecoder.decodeBytesX(data: source.consume(), length: length)) else {
+            throw BivrostError.Decoder.couldNotCreateBytesX(source: source, length: length)
         }
         return bytes
     }
 }
 
-extension SolidityBytesXType {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.wrapper == rhs.wrapper
+// MARK: - Equatable
+extension _DoNotUse._BytesX: Equatable {
+    public static func ==(lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
+        guard type(of: lhs).length == type(of: rhs).length else {
+            return false
+        }
+        return lhs.value == rhs.value
     }
 }
 
 // MARK: - BytesXBase
 extension Solidity {
-    public struct Bytes1: SolidityBytesXType {
-        let wrapper: BytesXBase
-        static let bytes: UInt = 1
-        
-        init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Bytes1: _DoNotUse._BytesX {
+        override class var length: UInt {
+            return 1
         }
     }
-}
-
-// MARK: - Bytes2
-extension Solidity {
-    public struct Bytes2: SolidityBytesXType {
-        let wrapper: BytesXBase
-        static let bytes: UInt = 2
-        
-        init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Bytes2: _DoNotUse._BytesX {
+        override class var length: UInt {
+            return 2
         }
     }
-}
-
-// MARK: - Bytes3
-extension Solidity {
-    public struct Bytes3: SolidityBytesXType {
-        let wrapper: BytesXBase
-        static let bytes: UInt = 3
-        
-        init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Bytes3: _DoNotUse._BytesX {
+        override class var length: UInt {
+            return 3
         }
     }
-}
-
-// MARK: - Bytes4
-extension Solidity {
-    public struct Bytes4: SolidityBytesXType {
-        let wrapper: BytesXBase
-        static let bytes: UInt = 4
-        
-        init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Bytes4: _DoNotUse._BytesX {
+        override class var length: UInt {
+            return 4
         }
     }
-}
-
-// MARK: - Bytes24
-extension Solidity {
-    public struct Bytes24: SolidityBytesXType {
-        let wrapper: BytesXBase
-        static let bytes: UInt = 24
-        
-        init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Bytes24: _DoNotUse._BytesX {
+        override class var length: UInt {
+            return 24
         }
     }
-}
-
-// MARK: - Bytes32
-extension Solidity {
-    public struct Bytes32: SolidityBytesXType {
-        let wrapper: BytesXBase
-        static let bytes: UInt = 32
-        
-        init?(_ value: Data) {
-            guard let wrapper = BytesXBase(length: type(of: self).bytes, value: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Bytes32: _DoNotUse._BytesX {
+        override class var length: UInt {
+            return 32
         }
     }
 }

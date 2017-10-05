@@ -36,6 +36,7 @@ enum BivrostError: Error {
         // Creating Objects
         case couldNotCreateString(source: BaseDecoder.PartitionData)
         case couldNotCreateBytes(source: BaseDecoder.PartitionData)
+        case couldNotCreateBytesX(source: BaseDecoder.PartitionData, length: UInt)
         case couldNotCreateInt(source: BaseDecoder.PartitionData, bits: UInt)
         case couldNotCreateUInt(source: BaseDecoder.PartitionData, bits: UInt)
         case couldNotCreateAddress(source: BaseDecoder.PartitionData)
@@ -44,5 +45,9 @@ enum BivrostError: Error {
     
     enum ArrayX: Error {
         case itemCountMismatch(expected: UInt, actual: UInt)
+    }
+    
+    enum BytesX: Error {
+        case byteCountMismatch(max: UInt, actual: UInt)
     }
 }
