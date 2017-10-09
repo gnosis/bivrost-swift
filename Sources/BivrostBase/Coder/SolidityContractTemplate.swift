@@ -17,7 +17,7 @@ protocol SolidityFunction {
     
     static func encodeCall(arguments: Arguments) -> String
     static func decode(return: String) -> Return
-    static func decode(arguments: String) -> Arguments
+    static func decode(arguments: String) throws -> Arguments
 }
 
 // FIXME: remove this once we have code generation going, this is just for testing
@@ -36,9 +36,9 @@ struct StandardToken {
             // FIXME: implement
             return Return(true)
         }
-        static func decode(arguments: String) -> Arguments {
+        static func decode(arguments: String) throws -> Arguments {
             // FIXME: implement
-            return Arguments(spender: Solidity.Address("FF")!, value: Solidity.UInt256(BigUInt(1))!)
+            return Arguments(spender: try Solidity.Address("FF"), value: Solidity.UInt256(BigUInt(1))!)
         }
     }
     

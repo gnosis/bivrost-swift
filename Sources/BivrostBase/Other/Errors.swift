@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import BigInt
 
 enum BivrostError: Error {
     // Parser Errors
@@ -49,5 +50,14 @@ enum BivrostError: Error {
     
     enum BytesX: Error {
         case byteCountMismatch(max: UInt, actual: UInt)
+    }
+    
+    enum Address: Error {
+        case invalidAddress(String)
+        case invalidBigUInt(BigUInt)
+    }
+    
+    enum Function: Error {
+        case invalidFunctionSelector(String)
     }
 }

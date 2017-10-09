@@ -19,29 +19,29 @@ class SolidityTypesSpec: QuickSpec {
             // MARK: Static Types
             context("Address") {
                 it("should be able to parse a hex address with or without leading 0x") {
-                    expect(Solidity.Address("0xFF")).toNot(beNil())
-                    expect(Solidity.Address("FF")).toNot(beNil())
+                    expect((try? Solidity.Address("0xFF"))).toNot(beNil())
+                    expect(try? Solidity.Address("FF")).toNot(beNil())
                 }
                 
                 it("should return exactly 40 chars when encoding unpadded") {
-                    expect(Solidity.Address("0xFF")?.encodeUnpadded()) == "00000000000000000000000000000000000000ff"
-                    expect(Solidity.Address("0x0")?.encodeUnpadded().characters.count) == 40
-                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encodeUnpadded()) == "ffffffffffffffffffffffffffffffffffffffff"
-                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encodeUnpadded().characters.count) == 40
+                    expect((try? Solidity.Address("0xFF"))?.encodeUnpadded()) == "00000000000000000000000000000000000000ff"
+                    expect((try? Solidity.Address("0x0"))?.encodeUnpadded().characters.count) == 40
+                    expect((try? Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))?.encodeUnpadded()) == "ffffffffffffffffffffffffffffffffffffffff"
+                    expect((try? Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))?.encodeUnpadded().characters.count) == 40
                 }
                 
                 it("should return exactly 64 chars when encoding normally") {
-                    expect(Solidity.Address("0xFF")?.encode()) == "00000000000000000000000000000000000000000000000000000000000000ff"
-                    expect(Solidity.Address("0x0")?.encode().characters.count) == 64
+                    expect((try? Solidity.Address("0xFF"))?.encode()) == "00000000000000000000000000000000000000000000000000000000000000ff"
+                    expect((try? Solidity.Address("0x0"))?.encode().characters.count) == 64
                     
-                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encode()) == "000000000000000000000000ffffffffffffffffffffffffffffffffffffffff"
-                    expect(Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")?.encode().characters.count) == 64
+                    expect((try? Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))?.encode()) == "000000000000000000000000ffffffffffffffffffffffffffffffffffffffff"
+                    expect((try? Solidity.Address("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))?.encode().characters.count) == 64
                 }
                 
                 it("should return nil when handling invalid address (too large)") {
                     
                     // Exactly one nibble too large (20.5 bytes)
-                    expect(Solidity.Address("0xfdadadafa000000000000000000fdadadafafffff")).to(beNil())
+                    expect((try? Solidity.Address("0xfdadadafa000000000000000000fdadadafafffff"))).to(beNil())
                 }
             }
             context("UIntX") {
@@ -262,22 +262,32 @@ class SolidityTypesSpec: QuickSpec {
             
             context("Function") {
                 it("should reject invalid function selectors") {
-                    let testAddress = Solidity.Address("0xFF")!
+                    let testAddress = try! Solidity.Address("0xFF")
                     // Function selector too small (only 4 chars/ 2 bytes)
-                    expect(Solidity.Function("0000", at: testAddress)).to(beNil())
+                    expect((try? Solidity.Function("0000", at: testAddress))).to(beNil())
                     // Function selector too long (9 chars/ 4.5 bytes)
-                    expect(Solidity.Function("000000000", at: testAddress)).to(beNil())
+                    expect((try? Solidity.Function("000000000", at: testAddress))).to(beNil())
                     // Function selector empty
-                    expect(Solidity.Function("", at: testAddress)).to(beNil())
+                    expect((try? Solidity.Function("", at: testAddress))).to(beNil())
                 }
                 
                 it("should encode correctly") {
-                    let testAddress = Solidity.Address("0xFF")!
+                    let testAddress = try! Solidity.Address("0xFF")
                     let functionSelector = "095ea7b3"
                     // Address encoded as 20 bytes, then 4 bytes function selector,
                     // then padding to 32 bytes on the right
                     let testString = "00000000000000000000000000000000000000ff\(functionSelector)0000000000000000"
-                    expect(Solidity.Function(functionSelector, at: testAddress)?.encode()) == testString
+                    expect((try? Solidity.Function(functionSelector, at: testAddress))?.encode()) == testString
+                }
+                
+                it("should decode correctly") {
+                    let testAddress = try! Solidity.Address("0xFF")
+                    let functionSelector = "095ea7b3"
+                    // Address encoded as 20 bytes, then 4 bytes function selector,
+                    // then padding to 32 bytes on the right
+                    let testString = "00000000000000000000000000000000000000ff\(functionSelector)0000000000000000"
+                    let expectedFunction = try! Solidity.Function(functionSelector, at: testAddress)
+                    expect { try Solidity.Function.decode(source: BaseDecoder.PartitionData(data: testString)) } == expectedFunction
                 }
             }
         }

@@ -24,7 +24,7 @@ extension String {
         return range.lowerBound
     }
     
-    func endIndex(startDistance distance: Int) -> String.Index {
+    func index(startDistance distance: Int) -> String.Index {
         return index(startIndex, offsetBy: distance)
     }
 }
