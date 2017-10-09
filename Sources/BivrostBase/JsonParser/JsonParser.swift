@@ -7,7 +7,7 @@
 //
 //
 
-struct JsonParser {
+public struct JsonParser {
     /// Parses a list of json contract elements into a Contract struct.
     ///
     /// - Parameter json: Should be a valid JSON array containing functions and
@@ -18,5 +18,10 @@ struct JsonParser {
     static func parseContract(from json: [[String: Any]]) throws -> Contract {
         let elements = try json.map { try ElementJsonParser.parseContractElement(from: $0) }
         return Contract(elements: elements)
+    }
+    
+    public static func parseContract(from json: [[String: Any]]) throws -> String {
+        let contract: Contract = try parseContract(from: json)
+        return String(describing: contract)
     }
 }
