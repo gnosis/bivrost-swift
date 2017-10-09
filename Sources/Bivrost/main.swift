@@ -6,7 +6,12 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import BivrostBase
-import BigInt
+import Commander
 
-print(try! Solidity.UInt256(BigUInt(1234567890)) as Any)
+let group = Group {
+    $0.command("generate", description: "Generates necessary Solidity files for Swift") { (path: String) in
+        print("Running bivrost in path \(path)")
+    }
+}
+
+group.run()
