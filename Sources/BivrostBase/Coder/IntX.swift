@@ -8,113 +8,80 @@
 
 import BigInt
 
-extension Solidity {
-    struct IntXBase {
+// MARK: - _UIntX
+extension _DoNotUse {
+    public class _IntX {
+        /// Content of the Int
         let value: BigInt
-        
-        public init?(bits: UInt, bigInt: BigInt) {
-            guard bigInt.bitWidth <= bits else {
-                return nil
-            }
-            value = bigInt
+        /// Specifies how wide this int is
+        class var bitWidth: UInt {
+            fatalError("_IntX.bitWidth needs to be overridden.")
         }
         
-        func encode() -> SolidityCodable.EncodeFormat {
-            // BigInt returns an empty Data when serializing '0' which will be
-            // turned into the empty string. Check early here to guarantee that
-            // we actually return 32bytes of 0.
-            guard value.signum() != 0 else {
-                return "0".padToSolidity()
+        required public init(_ int: BigInt) throws {
+            let bits = type(of: self).bitWidth
+            guard int.bitWidth <= bits else {
+                throw BivrostError.IntX.bitWidthMismatch(max: bits, actual: UInt(int.bitWidth))
             }
-            let padCharacter: Character = value.sign == .plus ? "0" : "F"
-            return value.serialize().toHexString().padToSolidity(character: padCharacter).lowercased()
+            value = int
         }
     }
 }
 
-extension Solidity.IntXBase: Equatable {
-    public static func ==(lhs: Solidity.IntXBase, rhs: Solidity.IntXBase) -> Bool {
-        return lhs.value == rhs.value
-    }
-}
-
-protocol SolidityIntType: StaticType, Equatable {
-    static var bits: UInt { get }
-    var wrapper: Solidity.IntXBase { get }
-    init?(_ value: BigInt)
-}
-
-extension SolidityIntType {
+// MARK: - SolidityCodable
+extension _DoNotUse._IntX: StaticType {
     func encode() -> SolidityCodable.EncodeFormat {
-        return wrapper.encode()
+        guard value.bitWidth <= type(of: self).bitWidth else {
+            fatalError("_IntX somehow created with value that does not fit into \(type(of: self).bitWidth) bits.")
+        }
+        // BigInt returns an empty Data when serializing '0' which will be
+        // turned into the empty string. Check early here to guarantee that
+        // we actually return 32bytes of 0.
+        guard value.signum() != 0 else {
+            return "0".padToSolidity()
+        }
+        let padCharacter: Character = value.sign == .plus ? "0" : "F"
+        return value.serialize().toHexString().padToSolidity(character: padCharacter).lowercased()
     }
     
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
-        guard let int = try Self.init(BaseDecoder.decodeInt(data: source.consume())) else {
-            throw BivrostError.Decoder.couldNotCreateInt(source: source, bits: bits)
+        guard let int = try? self.init(BaseDecoder.decodeInt(data: source.consume())) else {
+            throw BivrostError.Decoder.couldNotCreateInt(source: source, bits: bitWidth)
         }
         return int
     }
 }
 
-extension SolidityIntType {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.wrapper == rhs.wrapper
+// MARK: - Equatable
+extension _DoNotUse._IntX: Equatable {
+    public static func ==(lhs: _DoNotUse._IntX, rhs: _DoNotUse._IntX) -> Bool {
+        guard type(of: lhs).bitWidth == type(of: rhs).bitWidth else {
+            return false
+        }
+        return lhs.value == rhs.value
     }
 }
 
+// MARK: - Reference Types
 extension Solidity {
-    public struct Int8: SolidityIntType {
-        let wrapper: Solidity.IntXBase
-        static var bits: UInt = 8
-        
-        init?(_ value: BigInt) {
-            guard let wrapper = Solidity.IntXBase(bits: type(of: self).bits, bigInt: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Int8: _DoNotUse._IntX {
+        override class var bitWidth: UInt {
+            return 8
         }
     }
-}
-
-extension Solidity {
-    public struct Int16: SolidityIntType {
-        let wrapper: Solidity.IntXBase
-        static var bits: UInt = 16
-        
-        init?(_ value: BigInt) {
-            guard let wrapper = Solidity.IntXBase(bits: type(of: self).bits, bigInt: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Int32: _DoNotUse._IntX {
+        override class var bitWidth: UInt {
+            return 32
         }
     }
-}
-
-extension Solidity {
-    public struct Int160: SolidityIntType {
-        let wrapper: Solidity.IntXBase
-        static var bits: UInt = 160
-        
-        init?(_ value: BigInt) {
-            guard let wrapper = Solidity.IntXBase(bits: type(of: self).bits, bigInt: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Int160: _DoNotUse._IntX {
+        override class var bitWidth: UInt {
+            return 160
         }
     }
-}
-
-extension Solidity {
-    public struct Int256: SolidityIntType {
-        let wrapper: Solidity.IntXBase
-        static var bits: UInt = 256
-        
-        init?(_ value: BigInt) {
-            guard let wrapper = Solidity.IntXBase(bits: type(of: self).bits, bigInt: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class Int256: _DoNotUse._IntX {
+        override class var bitWidth: UInt {
+            return 256
         }
     }
 }

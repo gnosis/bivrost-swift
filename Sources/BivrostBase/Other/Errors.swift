@@ -64,4 +64,8 @@ enum BivrostError: Error {
     enum UIntX: Error {
         case bitWidthMismatch(max: UInt, actual: UInt)
     }
+    
+    enum IntX: Error {
+        case bitWidthMismatch(max: UInt, actual: UInt)
+    }
 }

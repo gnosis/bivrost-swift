@@ -77,21 +77,21 @@ class SolidityTypesSpec: QuickSpec {
             context("IntX") {
                 it("should not be created when the given value does not fit into 256 bits") {
                     // Random large number bigger than 2**255
-                    expect(Solidity.Int256(BigInt("65767676766576587658679697687685765765765765765765t765765765765765765765765765765765765765765757657657657657657657657657657657657657657657657657657657657657657657657657657657657657657657658768768768768687687687876876876876876876876876876876876876876876876876876876", radix: 36)!)).to(beNil())
+                    expect(try? Solidity.Int256(BigInt("65767676766576587658679697687685765765765765765765765765765765765765765765765765765765765765757657657657657657657657657657657657657657657657657657657657657657657657657657657657657657657658768768768768687687687876876876876876876876876876876876876876876876876876876", radix: 36)!)).to(beNil())
                 }
                 
                 it("should encode negative numbers correctly") {
-                    expect(Solidity.Int256(BigInt(-1))?.encode()) == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                    expect((try? Solidity.Int256(BigInt(-1)))?.encode()) == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
                 }
                 
                 it("should encode positive numbers correctly") {
-                    expect(Solidity.Int8(BigInt(123))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
+                    expect((try? Solidity.Int8(BigInt(123)))?.encode()) == "000000000000000000000000000000000000000000000000000000000000007b"
                 }
                 
                 it("should encode 0 correctly") {
-                    expect(Solidity.Int8(BigInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
-                    expect(Solidity.Int160(BigInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
-                    expect(Solidity.Int256(BigInt(0))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect((try? Solidity.Int8(BigInt(0)))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect((try? Solidity.Int160(BigInt(0)))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
+                    expect((try? Solidity.Int256(BigInt(0)))!.encode()) == "0000000000000000000000000000000000000000000000000000000000000000"
                 }
             }
             
@@ -134,11 +134,9 @@ class SolidityTypesSpec: QuickSpec {
             }
             
             context("ArrayX") {
-                it("should encode multiple positive numbers correctly") {
-                    expect { try Solidity.Array2([
-                        Solidity.Int256(BigInt(-1))!,
-                        Solidity.Int256(BigInt(123))!
-                    ]).encode() } == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000007b"
+                it("should encode multiple numbers correctly") {
+                    let numbers = [-1, 123].flatMap { try? Solidity.Int256($0) }
+                    expect { try Solidity.Array2(numbers).encode() } == "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000007b"
                 }
                 
                 it("should encode a string array correctly") {
