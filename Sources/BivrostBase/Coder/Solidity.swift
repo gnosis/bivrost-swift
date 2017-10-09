@@ -14,7 +14,6 @@ public struct Solidity {}
 /// Blanket holder for Abstract Solidity Types.
 public struct _DoNotUse {}
 
-// FIXME: Rename to something more appropriate
 protocol SolidityCodable {
     typealias EncodeFormat = String
     static var isDynamic: Swift.Bool { get }

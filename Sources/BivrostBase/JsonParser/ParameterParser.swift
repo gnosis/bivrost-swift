@@ -229,23 +229,8 @@ fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
 
     return ParameterType.staticType(.array(unwrappedType, length: length))
 }
-//
-//// MARK: - AbiDecoding
-//protocol AbiDecoding {
-//    init?(abiRepresentation: String)
-//}
-//
-//extension ParameterType: AbiDecoding {
-//    init?(abiRepresentation: String) {
-//        guard let type = try? parameterType(from: abiRepresentation) else {
-//            return nil
-//        }
-//        self = type
-//    }
-//}
 
 // MARK: - AbiEncoding
-
 protocol AbiEncoding {
     var abiRepresentation: String { get }
 }

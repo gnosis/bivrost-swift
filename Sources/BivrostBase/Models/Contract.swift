@@ -116,7 +116,6 @@ extension Contract.Element.ParameterType.DynamicType: Equatable {
     }
 }
 
-
 // MARK: - ParameterType Equatable
 extension Contract.Element.ParameterType: Equatable {
     public static func ==(lhs: Contract.Element.ParameterType, rhs: Contract.Element.ParameterType) -> Bool {
