@@ -75,7 +75,7 @@ struct BaseEncoder {
         parts.forEach { pair in
             if pair.dynamic {
                 let location = sizeOfStaticBlockInBytes + dynamicPart.hexStringByteSize
-                guard let locationUint = Solidity.UInt256(BigUInt(location)) else {
+                guard let locationUint = try? Solidity.UInt256(BigUInt(location)) else {
                     fatalError("BaseEncoder calculated invalid location for dynamic part. This should not happen.")
                 }
                 staticPart = staticPart + locationUint.encode()

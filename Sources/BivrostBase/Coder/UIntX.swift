@@ -8,122 +8,73 @@
 
 import BigInt
 
-extension Solidity {
-    class UIntXBase {
+// MARK: - _UIntX
+extension _DoNotUse {
+    public class _UIntX {
+        /// Content of the UInt
         let value: BigUInt
-        let bitWidth: UInt
+        /// Specifies how wide this uint is
+        class var bitWidth: UInt {
+            fatalError("_UIntX.bitWidth needs to be overridden.")
+        }
         
-        public init?(bits: UInt, bigUint: BigUInt) {
-            guard bigUint.bitWidth <= bits else {
-                return nil
+        required public init(_ uint: BigUInt) throws {
+            let bits = type(of: self).bitWidth
+            guard uint.bitWidth <= bits else {
+                throw BivrostError.UIntX.bitWidthMismatch(max: bits, actual: UInt(uint.bitWidth))
             }
-            value = bigUint
-            bitWidth = bits
-        }
-        
-        func encode() -> SolidityCodable.EncodeFormat {
-            return BaseEncoder.encodeUnPadded(uint: value, bitWidth: bitWidth).padToSolidity()
+            value = uint
         }
     }
 }
 
-extension Solidity.UIntXBase: Equatable {
-    public static func ==(lhs: Solidity.UIntXBase, rhs: Solidity.UIntXBase) -> Bool {
-        return lhs.bitWidth == rhs.bitWidth && lhs.value == rhs.value
-    }
-}
-
-protocol SolidityUIntType: StaticType, Equatable {
-    static var bits: UInt { get }
-    var wrapper: Solidity.UIntXBase { get }
-    init?(_ value: BigUInt)
-}
-
-extension SolidityUIntType {
+// MARK: - SolidityCodable
+extension _DoNotUse._UIntX: StaticType {
     func encode() -> SolidityCodable.EncodeFormat {
-        return wrapper.encode()
+        guard value.bitWidth <= type(of: self).bitWidth else {
+            fatalError("_UIntX somehow created with value that does not fit into \(type(of: self).bitWidth) bits.")
+        }
+        return BaseEncoder.encodeUnPadded(uint: value, bitWidth: type(of: self).bitWidth).padToSolidity()
     }
     
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
-        guard let uint = try Self.init(BaseDecoder.decodeUInt(data: source.consume())) else {
-            throw BivrostError.Decoder.couldNotCreateUInt(source: source, bits: bits)
+        guard let uint = try? self.init(BaseDecoder.decodeUInt(data: source.consume())) else {
+            throw BivrostError.Decoder.couldNotCreateUInt(source: source, bits: bitWidth)
         }
         return uint
     }
 }
 
-extension SolidityUIntType {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.wrapper == rhs.wrapper
+// MARK: - Equatable
+extension _DoNotUse._UIntX: Equatable {
+    public static func ==(lhs: _DoNotUse._UIntX, rhs: _DoNotUse._UIntX) -> Bool {
+        guard type(of: lhs).bitWidth == type(of: rhs).bitWidth else {
+            return false
+        }
+        return lhs.value == rhs.value
     }
 }
 
+// MARK: - Reference Types
 extension Solidity {
-    public struct UInt8: SolidityUIntType {
-        let wrapper: UIntXBase
-        static var bits: UInt = 8
-        
-        public init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class UInt8: _DoNotUse._UIntX {
+        override class var bitWidth: UInt {
+            return 8
         }
     }
-}
-
-extension Solidity {
-    public struct UInt32: SolidityUIntType {
-        let wrapper: UIntXBase
-        static var bits: UInt = 32
-        
-        public init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class UInt32: _DoNotUse._UIntX {
+        override class var bitWidth: UInt {
+            return 32
         }
     }
-}
-
-extension Solidity {
-    public struct UInt128: SolidityUIntType {
-        let wrapper: UIntXBase
-        static var bits: UInt = 128
-        
-        public init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class UInt160: _DoNotUse._UIntX {
+        override class var bitWidth: UInt {
+            return 160
         }
     }
-}
-
-extension Solidity {
-    public struct UInt160: SolidityUIntType {
-        let wrapper: UIntXBase
-        static var bits: UInt = 160
-        
-        public init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
-        }
-    }
-}
-
-extension Solidity {
-    public struct UInt256: SolidityUIntType {
-        let wrapper: UIntXBase
-        static var bits: UInt = 256
-        
-        public init?(_ value: BigUInt) {
-            guard let wrapper = UIntXBase(bits: type(of: self).bits, bigUint: value) else {
-                return nil
-            }
-            self.wrapper = wrapper
+    public final class UInt256: _DoNotUse._UIntX {
+        override class var bitWidth: UInt {
+            return 256
         }
     }
 }

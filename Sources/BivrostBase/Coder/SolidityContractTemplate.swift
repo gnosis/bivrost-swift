@@ -38,7 +38,7 @@ struct StandardToken {
         }
         static func decode(arguments: String) throws -> Arguments {
             // FIXME: implement
-            return Arguments(spender: try Solidity.Address("FF"), value: Solidity.UInt256(BigUInt(1))!)
+            return Arguments(spender: try Solidity.Address("FF"), value: try Solidity.UInt256(BigUInt(1)))
         }
     }
     

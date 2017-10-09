@@ -13,7 +13,7 @@ extension Solidity {
         private let wrapper: UInt8
         
         init(_ value: Swift.Bool) {
-            guard let wrapper = UInt8(BigUInt(value ? 1 : 0)) else {
+            guard let wrapper = try? UInt8(BigUInt(value ? 1 : 0)) else {
                 fatalError("Solidity.Bool could not be created with value of \(value). This should not happen.")
             }
             self.wrapper = wrapper

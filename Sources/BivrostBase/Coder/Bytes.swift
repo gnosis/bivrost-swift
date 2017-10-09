@@ -15,7 +15,7 @@ extension Solidity {
         let length: UInt256
         
         init?(_ value: Data) {
-            guard let length = Solidity.UInt256(BigUInt(value.count)) else {
+            guard let length = try? Solidity.UInt256(BigUInt(value.count)) else {
                 return nil
             }
             self.value = value

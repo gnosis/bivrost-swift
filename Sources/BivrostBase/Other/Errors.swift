@@ -60,4 +60,8 @@ enum BivrostError: Error {
     enum Function: Error {
         case invalidFunctionSelector(String)
     }
+    
+    enum UIntX: Error {
+        case bitWidthMismatch(max: UInt, actual: UInt)
+    }
 }

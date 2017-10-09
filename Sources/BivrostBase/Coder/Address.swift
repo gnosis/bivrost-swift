@@ -23,7 +23,7 @@ extension Solidity {
         }
         
         init(bigUInt: BigUInt) throws {
-            guard let uint = Solidity.UInt160(bigUInt) else {
+            guard let uint = try? Solidity.UInt160(bigUInt) else {
                 throw BivrostError.Address.invalidBigUInt(bigUInt)
             }
             value = uint
@@ -36,9 +36,10 @@ extension Solidity {
         ///
         /// - Returns: A 20 byte/40 character hex representation of the address.
         func encodeUnpadded() -> SolidityCodable.EncodeFormat {
-            let paddedSize = Int(type(of: value).bits) / 8 * 2
+            let bitWidth = type(of: value).bitWidth
+            let paddedSize = Int(bitWidth) / 8 * 2
             return BaseEncoder
-                .encodeUnPadded(uint: bigInt, bitWidth: type(of: value).bits)
+                .encodeUnPadded(uint: bigInt, bitWidth: bitWidth)
                 .pad(toMultipleOf: paddedSize, character: "0", location: .left)
         }
     }

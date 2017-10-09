@@ -11,7 +11,7 @@ import Foundation
 extension _DoNotUse {
     public class _BytesX {
         class var length: UInt {
-            fatalError("_BytesX needs to be overridden.")
+            fatalError("_BytesX.length needs to be overridden.")
         }
         
         let value: Data
@@ -54,7 +54,7 @@ extension _DoNotUse._BytesX: Equatable {
     }
 }
 
-// MARK: - BytesXBase
+// MARK: - Reference Types
 extension Solidity {
     public final class Bytes1: _DoNotUse._BytesX {
         override class var length: UInt {
