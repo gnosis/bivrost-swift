@@ -72,9 +72,7 @@ extension String {
     func splitSolidityLines() -> [String] {
         return splitByLength(solidityLineLengthHexString)
     }
-}
-
-extension String {
+    
     fileprivate func splitByLength(_ length: Int) -> [String] {
         var result = [String]()
         var collectedCharacters = [Character]()
@@ -98,5 +96,16 @@ extension String {
         }
         
         return result
+    }
+}
+
+// MARK: - Hex String Calculations
+extension String {
+    var _hexStringByteSize: Int {
+        return characters.count / 2
+    }
+    
+    static func _hexStringSize(forBytes: UInt) -> UInt {
+        return forBytes * 2
     }
 }

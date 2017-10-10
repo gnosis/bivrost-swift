@@ -1,109 +1,11 @@
 //
-//  Solidity.swift
-//  Bivrost
+//  BaseDecoder.swift
+//  BivrostBase
 //
-//  Created by Luis Reisewitz on 26.09.17.
-//  Copyright © 2017 Gnosis. All rights reserved.
+//  Created by Luis Reisewitz on 10.10.17.
 //
-
-import BigInt
 import Foundation
-
-/// Blanket Holder for Solidity Types
-public struct Solidity {}
-/// Blanket holder for Abstract Solidity Types.
-public struct _DoNotUse {}
-
-protocol SolidityCodable {
-    typealias EncodeFormat = String
-    static var isDynamic: Swift.Bool { get }
-    
-    func encode() -> EncodeFormat
-    static func decode(source: BaseDecoder.PartitionData) throws -> Self
-}
-
-/// To be used as a marker protocol as to not always have to add the `isDynamic` var.
-/// Can only be used if the type is always static.
-protocol StaticType: SolidityCodable {}
-extension StaticType {
-    static var isDynamic: Bool {
-        return false
-    }
-}
-
-/// To be used as a marker protocol as to not always have to add the `isDynamic` var.
-/// Can only be used if the type is always dynamic.
-protocol DynamicType: SolidityCodable {}
-extension DynamicType {
-    static var isDynamic: Bool {
-        return true
-    }
-}
-
-private extension String {
-    var hexStringByteSize: Int {
-        return characters.count / 2
-    }
-    
-    static func hexStringSize(forBytes: UInt) -> UInt {
-        return forBytes * 2
-    }
-}
-
-struct BaseEncoder {
-    private static let solidityLocationSizeInBytes = 32
-
-    static func encode(_ arguments: [SolidityCodable]) -> SolidityCodable.EncodeFormat {
-        var parts = [(data: SolidityCodable.EncodeFormat, dynamic: Bool)]()
-        var sizeOfStaticBlockInBytes = 0
-        
-        arguments.forEach {
-            let encoded = $0.encode()
-            if type(of: $0).isDynamic {
-                parts.append((data: encoded, dynamic: true))
-                // Add length of location entry to static block
-                sizeOfStaticBlockInBytes = sizeOfStaticBlockInBytes + solidityLocationSizeInBytes
-            } else {
-                parts.append((data: encoded, dynamic: false))
-                // Add byte size (hexString / 2)
-                sizeOfStaticBlockInBytes = sizeOfStaticBlockInBytes + encoded.hexStringByteSize
-            }
-        }
-        var staticPart = ""
-        var dynamicPart = ""
-        parts.forEach { pair in
-            if pair.dynamic {
-                let location = sizeOfStaticBlockInBytes + dynamicPart.hexStringByteSize
-                guard let locationUint = try? Solidity.UInt256(BigUInt(location)) else {
-                    fatalError("BaseEncoder calculated invalid location for dynamic part. This should not happen.")
-                }
-                staticPart = staticPart + locationUint.encode()
-                dynamicPart = dynamicPart + pair.data
-            } else {
-                staticPart = staticPart + pair.data
-            }
-        }
-        
-        return staticPart + dynamicPart
-    }
-    
-    static func encode(arguments: SolidityCodable...) -> SolidityCodable.EncodeFormat {
-        return encode(arguments)
-    }
-    
-    static func encodeUnPadded(uint: BigUInt, bitWidth: UInt) -> SolidityCodable.EncodeFormat {
-        guard uint.bitWidth <= bitWidth else {
-            fatalError("\(#function) called with UInt \(uint) that is too big for bit width \(bitWidth).")
-        }
-        // BigUInt returns an empty Data when serializing '0' which will be
-        // turned into the empty string. Check early here to guarantee that
-        // we actually return 0.
-        guard uint.signum() != 0 else {
-            return "0"
-        }
-        return uint.serialize().toHexString()
-    }
-}
+import BigInt
 
 struct BaseDecoder {
     static func partitionData(inHex string: SolidityCodable.EncodeFormat) -> [SolidityCodable.EncodeFormat] {
@@ -139,7 +41,7 @@ struct BaseDecoder {
     }
     
     static func decodeBytesX(data: SolidityCodable.EncodeFormat, length: UInt) throws -> Data {
-        let hexStringSize = String.hexStringSize(forBytes: length)
+        let hexStringSize = String._hexStringSize(forBytes: length)
         let endIndex = data.index(data.startIndex, offsetBy: Int(hexStringSize))
         let hexPartition = String(data[data.startIndex..<endIndex])
         guard let byteData = Data(fromHexEncodedString: hexPartition),
@@ -177,7 +79,7 @@ struct BaseDecoder {
         let sizePart = lines[0]
         guard let size = Int(sizePart, radix: 16),
             size == lines.count - 1 else {
-            throw BivrostError.Decoder.invalidArrayLength(hex: sizePart)
+                throw BivrostError.Decoder.invalidArrayLength(hex: sizePart)
         }
         guard size != 0 else {
             return []
@@ -225,3 +127,4 @@ extension BaseDecoder {
         }
     }
 }
+

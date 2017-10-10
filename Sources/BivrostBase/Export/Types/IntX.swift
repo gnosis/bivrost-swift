@@ -64,6 +64,7 @@ extension _DoNotUse._IntX: Equatable {
 
 // MARK: - Reference Types
 extension Solidity {
+    // TODO: Manual subclasses, can be removed later.
     public final class Int8: _DoNotUse._IntX {
         override class var bitWidth: UInt {
             return 8

@@ -57,6 +57,7 @@ extension _DoNotUse._UIntX: Equatable {
 
 // MARK: - Reference Types
 extension Solidity {
+    // TODO: Manual subclasses, can be removed later.
     public final class UInt8: _DoNotUse._UIntX {
         override class var bitWidth: UInt {
             return 8

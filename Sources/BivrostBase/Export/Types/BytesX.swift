@@ -56,6 +56,7 @@ extension _DoNotUse._BytesX: Equatable {
 
 // MARK: - Reference Types
 extension Solidity {
+    // TODO: Manual subclasses, can be removed later.
     public final class Bytes1: _DoNotUse._BytesX {
         override class var length: UInt {
             return 1

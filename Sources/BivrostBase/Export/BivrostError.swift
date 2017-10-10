@@ -1,5 +1,5 @@
 //
-//  Errors.swift
+//  BivrostError.swift
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 12.09.17.
@@ -11,21 +11,6 @@ import Foundation
 import BigInt
 
 enum BivrostError: Error {
-    // Parser Errors
-    enum Parser: Error {
-        case elementTypeInvalid
-        case elementNameInvalid
-        case functionInputInvalid
-        case functionOutputInvalid
-        case eventInputInvalid
-        case parameterTypeInvalid
-        case parameterTypeNotFound
-        case contractNameInvalid
-        case contractAbiInvalid
-    }
-    
-    case notImplemented
-    
     enum Decoder: Error {
         // Decoding
         case invalidBool(hex: String)
