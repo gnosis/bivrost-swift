@@ -20,6 +20,8 @@ enum BivrostError: Error {
         case eventInputInvalid
         case parameterTypeInvalid
         case parameterTypeNotFound
+        case contractNameInvalid
+        case contractAbiInvalid
     }
     
     case notImplemented

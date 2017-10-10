@@ -9,6 +9,9 @@
 
 /// Describes the interface of an Ethereum/Solidity Contract
 struct Contract {
+    /// Name of this contract.
+    let name: String
+    /// A list of all the ABI elements this contract contains (functions, events).
     let elements: [Element]
     
     enum Element {
