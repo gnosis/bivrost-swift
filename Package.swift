@@ -15,9 +15,7 @@ let package = Package(
         .package(url: "https://github.com/Quick/Quick.git", .revision("c498edf4aabb694a5b8a861ec3d69f0c5ab57d9e")),
         .package(url: "https://github.com/kylef/Commander.git", .revision("e0cbee1bd73778c1076c675eaf660e97d09f3b32")),
         // PathKit fork supporting SPM4
-        .package(url:"git@github.com:PoissonBallon/PathKit.git", .branch("master")),
-        // Stencil fork supporting SPM4
-        .package(url: "https://github.com/PoissonBallon/Stencil.git", .branch("master"))
+        .package(url:"git@github.com:PoissonBallon/PathKit.git", .branch("master"))
     ],
     targets: [
         .target(
@@ -33,7 +31,6 @@ let package = Package(
             dependencies: [
                 "CryptoSwift",
                 "BigInt",
-                "Stencil",
                 "PathKit"
             ]
         ),
