@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "PathKit",
+        "repositoryURL": "https://github.com/PoissonBallon/PathKit.git",
+        "state": {
+          "branch": null,
+          "revision": "0b109bc868e9a12bc5f23e9d61ec937c75900c40",
+          "version": null
+        }
+      },
+      {
         "package": "Quick",
         "repositoryURL": "https://github.com/Quick/Quick.git",
         "state": {
