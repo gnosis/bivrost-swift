@@ -33,7 +33,8 @@ let package = Package(
             dependencies: [
                 "CryptoSwift",
                 "BigInt",
-                "Stencil"
+                "Stencil",
+                "PathKit"
             ]
         ),
         .testTarget(

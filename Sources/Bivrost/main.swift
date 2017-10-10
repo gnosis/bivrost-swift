@@ -15,14 +15,14 @@ func paths(from pattern: String) -> [String] {
     return Path.glob(pattern).map { $0.absolute().string }
 }
 
-let generateContracts = command(
-    Option<String>("input", default: "./*.json", description: "Input file pattern specifying which json files should be parsed. Needs to be escaped with quotes to prevent the shell from expanding it."),
-    Option<String>("output", default: "./contracts", description: "Output folder for generated contracts.")) { inputPattern, output in
+let generate = command(
+    Option<String>("input", default: "./abi/*.json", description: "Input file pattern specifying which json files should be parsed. Needs to be escaped with quotes to prevent the shell from expanding it."),
+    Option<String>("output", default: "./solidity", description: "Output folder which will contain all necessary Solidity files (generated and auxiliary).")) { inputPattern, output in
         
         let expandedPaths = paths(from: inputPattern)
         let outputFolder = Path(output).absolute().string
         do {
-            try BivrostKit.generateContracts(from: expandedPaths, to: outputFolder)
+            try BivrostKit.generateSolidityFiles(from: expandedPaths, to: outputFolder)
         } catch {
             print("=== An error occurred during contract generation. ===")
             print("=== Error: ===")
@@ -31,9 +31,9 @@ let generateContracts = command(
 }
 
 let group = Group {
-    $0.addCommand("generate-contracts",
-                  "Generates Swift contract classes from contract JSON file.",
-                  generateContracts)
+    $0.addCommand("generate",
+                  "Generates Swift contract classes from contract JSON file and exports them, including all necessary auxiliary files to the specified folder.",
+                  generate)
 }
 
 group.run()
