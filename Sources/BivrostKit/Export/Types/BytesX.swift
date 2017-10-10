@@ -5,7 +5,6 @@
 //  Created by Luis Reisewitz on 26.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
-
 import Foundation
 
 // MARK: - _BytesX
@@ -52,40 +51,5 @@ extension _DoNotUse._BytesX: Equatable {
             return false
         }
         return lhs.value == rhs.value
-    }
-}
-
-// MARK: - Reference Types
-extension Solidity {
-    // TODO: Manual subclasses, can be removed later.
-    public final class Bytes1: _DoNotUse._BytesX {
-        override class var length: UInt {
-            return 1
-        }
-    }
-    public final class Bytes2: _DoNotUse._BytesX {
-        override class var length: UInt {
-            return 2
-        }
-    }
-    public final class Bytes3: _DoNotUse._BytesX {
-        override class var length: UInt {
-            return 3
-        }
-    }
-    public final class Bytes4: _DoNotUse._BytesX {
-        override class var length: UInt {
-            return 4
-        }
-    }
-    public final class Bytes24: _DoNotUse._BytesX {
-        override class var length: UInt {
-            return 24
-        }
-    }
-    public final class Bytes32: _DoNotUse._BytesX {
-        override class var length: UInt {
-            return 32
-        }
     }
 }

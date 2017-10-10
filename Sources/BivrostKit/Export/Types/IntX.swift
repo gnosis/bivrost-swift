@@ -61,28 +61,3 @@ extension _DoNotUse._IntX: Equatable {
         return lhs.value == rhs.value
     }
 }
-
-// MARK: - Reference Types
-extension Solidity {
-    // TODO: Manual subclasses, can be removed later.
-    public final class Int8: _DoNotUse._IntX {
-        override class var bitWidth: UInt {
-            return 8
-        }
-    }
-    public final class Int32: _DoNotUse._IntX {
-        override class var bitWidth: UInt {
-            return 32
-        }
-    }
-    public final class Int160: _DoNotUse._IntX {
-        override class var bitWidth: UInt {
-            return 160
-        }
-    }
-    public final class Int256: _DoNotUse._IntX {
-        override class var bitWidth: UInt {
-            return 256
-        }
-    }
-}
