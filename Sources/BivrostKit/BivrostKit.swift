@@ -24,6 +24,6 @@ public struct BivrostKit {
     ///
     /// - Parameter outputFolder: Generated `.swift` files will be exported to this folder.
     public static func generateTypes(to outputFolder: String) {
-        
+        print("Generating types to folder \(outputFolder)")
     }
 }

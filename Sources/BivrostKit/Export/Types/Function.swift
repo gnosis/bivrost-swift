@@ -3,6 +3,7 @@
 //  BivrostPackageDescription
 //
 //  Created by Luis Reisewitz on 01.10.17.
+//  Copyright © 2017 Gnosis. All rights reserved.
 //
 
 extension Solidity {

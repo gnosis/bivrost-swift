@@ -15,7 +15,9 @@ let package = Package(
         .package(url: "https://github.com/Quick/Quick.git", .revision("c498edf4aabb694a5b8a861ec3d69f0c5ab57d9e")),
         .package(url: "https://github.com/kylef/Commander.git", .revision("e0cbee1bd73778c1076c675eaf660e97d09f3b32")),
         // PathKit fork supporting SPM4
-        .package(url: "https://github.com/PoissonBallon/PathKit.git", .revision("0b109bc868e9a12bc5f23e9d61ec937c75900c40"))
+        .package(url:"git@github.com:PoissonBallon/PathKit.git", .branch("master")),
+        // Stencil fork supporting SPM4
+        .package(url: "https://github.com/PoissonBallon/Stencil.git", .branch("master"))
     ],
     targets: [
         .target(
@@ -30,7 +32,8 @@ let package = Package(
             name: "BivrostKit",
             dependencies: [
                 "CryptoSwift",
-                "BigInt"
+                "BigInt",
+                "Stencil"
             ]
         ),
         .testTarget(
