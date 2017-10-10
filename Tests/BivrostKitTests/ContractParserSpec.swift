@@ -1,6 +1,6 @@
 //
 //  ContractParserSpec.swift
-//  BivrostBaseTests
+//  BivrostKitTests
 //
 //  Created by Luis Reisewitz on 19.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-@testable import BivrostBase
+@testable import BivrostKit
 
 class ContractParserSpec: QuickSpec {
     override func spec() {

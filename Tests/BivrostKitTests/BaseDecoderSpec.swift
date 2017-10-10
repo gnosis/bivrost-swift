@@ -1,13 +1,13 @@
 //
 //  BaseDecoderSpec.swift
-//  BivrostBaseTests
+//  BivrostKitTests
 //
 //  Created by Luis Reisewitz on 02.10.17.
 //
 
 import Quick
 import Nimble
-@testable import BivrostBase
+@testable import BivrostKit
 import BigInt
 import Foundation
 

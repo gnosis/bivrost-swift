@@ -1,6 +1,6 @@
 //
 //  DataExtension.swift
-//  BivrostBase
+//  BivrostKit
 //
 //  Created by Luis Reisewitz on 01.10.17.
 //

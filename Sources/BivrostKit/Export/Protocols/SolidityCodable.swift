@@ -1,6 +1,6 @@
 //
 //  SolidityCodable.swift
-//  BivrostBase
+//  BivrostKit
 //
 //  Created by Luis Reisewitz on 10.10.17.
 //

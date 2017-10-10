@@ -6,7 +6,6 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import CryptoSwift
 import BigInt
 
 protocol SolidityFunction {

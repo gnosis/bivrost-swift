@@ -7,7 +7,7 @@
 //
 
 import Commander
-import BivrostBase
+import BivrostKit
 import Foundation
 import PathKit
 

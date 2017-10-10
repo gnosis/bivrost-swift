@@ -1,6 +1,6 @@
 //
 //  BaseEncoderSpec.swift
-//  BivrostBaseTests
+//  BivrostKitTests
 //
 //  Created by Luis Reisewitz on 25.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-@testable import BivrostBase
+@testable import BivrostKit
 import BigInt
 
 class BaseEncoderSpec: QuickSpec {

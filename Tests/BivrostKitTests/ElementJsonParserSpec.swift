@@ -1,6 +1,6 @@
 //
 //  ElementJsonParserSpec.swift
-//  BivrostBaseTests
+//  BivrostKitTests
 //
 //  Created by Luis Reisewitz on 10.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -9,7 +9,7 @@
 
 import Quick
 import Nimble
-@testable import BivrostBase
+@testable import BivrostKit
 
 fileprivate typealias Element = Contract.Element
 
