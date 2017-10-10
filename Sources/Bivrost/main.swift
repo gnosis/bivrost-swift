@@ -11,16 +11,29 @@ import BivrostKit
 import Foundation
 import PathKit
 
+func paths(from pattern: String) -> [String] {
+    return Path.glob(pattern).map { $0.absolute().string }
+}
+
+let generateContracts = command(
+    Option<String>("input", default: "./*.json", description: "Input file pattern specifying which json files should be parsed. Needs to be escaped with quotes to prevent the shell from expanding it."),
+    Option<String>("output", default: "./contracts", description: "Output folder for generated contracts.")) { inputPattern, output in
+        
+        let expandedPaths = paths(from: inputPattern)
+        let outputFolder = Path(output).absolute().string
+        do {
+            try BivrostKit.generateContracts(from: expandedPaths, to: outputFolder)
+        } catch {
+            print("=== An error occurred during contract generation. ===")
+            print("=== Error: ===")
+            print(error)
+        }
+}
 
 let group = Group {
-    let parseCommand = command(
-        Argument<String>("pattern",
-                         description: "Pattern for json files to be parsed. Needs to be escaped with quotes to prevent the shell from expanding it.")) {
-                            print("Parsing with pattern \($0).")
-    }
-    $0.addCommand("parse",
-                  "Parses ABI files and outputs internal representation",
-                  parseCommand)
+    $0.addCommand("generate-contracts",
+                  "Generates Swift contract classes from contract JSON file.",
+                  generateContracts)
 }
 
 group.run()
