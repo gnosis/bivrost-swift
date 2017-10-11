@@ -19,6 +19,14 @@ extension Templates {
                 static func encodeCall(arguments: Arguments) -> String {
                     return "0x\\(methodId)\\(BaseEncoder.encode(arguments: {{ function.encodeArguments }}))"
                 }
+
+                static func decode(returnData: String) throws -> Return {
+                    let source = BaseDecoder.partition(returnData)
+                    {% for decodedType in function.decodeReturnTypes %}
+                    let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
+                    {% endfor %}
+                    return {{ function.decodeReturnReturnValue }}
+                }
             }
             {% endfor %}
         }
@@ -62,8 +70,6 @@ struct StandardToken {
         
         // TODO: method needs to be called like this: encodeCall(arguments: ())
         static func encodeCall(arguments: Arguments) -> String {
-            // TODO: There are no 1-element tuples in Swift, so we need to directly
-            // encode the only value (in this case it's also Void).
             return "0x\(methodId)\(BaseEncoder.encode(arguments: arguments))"
         }
         
@@ -77,7 +83,7 @@ struct StandardToken {
             return ret0
         }
         
-        static func decode(argumentsData: String) throws -> Void {
+        static func decode(argumentsData: String) throws -> Arguments {
             // TODO: Void arguments cannot be decoded, method needs to be empty
             return
         }

@@ -19,6 +19,14 @@ fileprivate struct TemplateContract {
         let input: String // Direct Arguments Type/Tuple
         let output: String // Direct Return Type/Tuple
         let encodeArguments: String // e.g. arguments.spender, arguments.value
+        
+        let decodeReturnReturnValue: String // Name to be returned at the end of decode(returnData:)
+        let decodeReturnTypes: [DecodeReturnType]
+        
+        struct DecodeReturnType {
+            let name: String
+            let type: String
+        }
     }
 }
 
@@ -41,6 +49,30 @@ struct ContractGenerator {
             }.joined(separator: ", ")
         }
         return returnValue
+    }
+    
+    fileprivate static func decodeReturnTypes(for outputs: [Contract.Element.Function.Output]) -> [TemplateContract.TemplateFunction.DecodeReturnType] {
+        return outputs.enumerated().map { index, element in
+            let name = element.name.isEmpty ? "ret\(index)" : element.name
+            let type = typeString(for: element.type)
+            return TemplateContract.TemplateFunction.DecodeReturnType(name: name, type: type)
+        }
+    }
+    
+    fileprivate static func decodeReturnReturnValue(for decodeReturnTypes: [TemplateContract.TemplateFunction.DecodeReturnType]) -> String {
+        guard !decodeReturnTypes.isEmpty else {
+            // In case of an empty return, we want it to read "return" without any identifier
+            return ""
+        }
+        if decodeReturnTypes.count == 1,
+            let firstType = decodeReturnTypes.first {
+            // If we only have one return type, we want to directly return it (e.g. "return ret0")
+            return firstType.name
+        }
+        
+        // FIXME: Identifiers (name property) are not linked to the corresponding `typeString(for outputs)` identifiers and can break.
+        let returnInvocation = decodeReturnTypes.map { "\($0.name): \($0.name)" }.joined(separator: ", ")
+        return "Return(\(returnInvocation))"
     }
     
     fileprivate static func typeString(for inputs: [Contract.Element.Function.Input]) -> String {
@@ -82,8 +114,10 @@ struct ContractGenerator {
             let outputString = typeString(for: object.outputs)
             
             let encodeArgumentsString = encodeArguments(for: object.inputs)
+            let decodeReturnTypesArray = decodeReturnTypes(for: object.outputs)
+            let decodeReturnReturnValueString = decodeReturnReturnValue(for: decodeReturnTypesArray)
             
-            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString)
+            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray)
         }
         
         return TemplateContract(name: contractName, functions: functions)
