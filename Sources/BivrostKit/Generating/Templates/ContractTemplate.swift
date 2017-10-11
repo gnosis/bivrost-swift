@@ -9,44 +9,20 @@ import BigInt
 
 extension Templates {
     static let Contract = """
-
-        struct {{ contract.name|capitalize }} {
+        struct {{ contract.name }} {
             {% for function in contract.functions %}
             
-            struct {{ function.name|capitalize }}: SolidityFunction {
+            struct {{ function.name }}: SolidityFunction {
                 static let methodId = "{{ function.methodId }}"
-                
-                {% if function.outputs.count == 1 %}
-                  typealias Return = {{ function.outputs[0].type }}
-                {% else %}
-                  typealias Return = (
-                    {% for output in function.outputs %}
-                      {{ output.name }}: {{ output.type }}
-                      {% if not forloop.last %},{% endif %}
-                    {% empty %}
-                      Void
-                    {% endfor %}
-                  )
-                {% endif %}
-                
-                {% if function.inputs.count == 1 %}
-                  typealias Arguments = {{ function.inputs[0].type }}
-                {% else %}
-                  typealias Arguments = (
-                    {% for input in function.inputs.returns %}
-                      {{ input.name }}: {{ input.type }}
-                      {% if not forloop.last %},{% endif %}
-                    {% empty %}
-                      Void
-                    {% endfor %}
-                  )
-                {% endif %}
+                typealias Return = {{ function.output }}
+                typealias Arguments = {{ function.input }}
             }
             
             {% endfor %}
         }
     """
 }
+
 struct StandardToken {
     struct Approve: SolidityFunction {
         static let methodId = "095ea7b3"

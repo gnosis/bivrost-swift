@@ -7,6 +7,7 @@
 //
 
 import PathKit
+import Foundation
 
 public struct BivrostKit {
     /// Generates Solidity types, generates Solidity contracts from JSON files
@@ -37,6 +38,17 @@ public struct BivrostKit {
     ///   - outputFolder: Generated `.swift` files will be exported to this folder.
     public static func generateContracts(from inputFiles: [String], to outputFolder: String) throws {
         print("Exporting files \(inputFiles) to folder \(outputFolder)")
+        
+        let contracts = try inputFiles.map { path -> String in
+            let jsonData = try Path(path).read()
+            let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            let contract = try ContractParser.parseContract(from: jsonDict as! [String: Any])
+            return try ContractGenerator.generateCode(from: contract)
+        }
+        contracts.forEach {
+            print("=== CONTRACT INCOMING ===")
+            print($0)
+        }
     }
     
     /// Generates types that need to be generated (e.g. ArrayX, UIntX variants).

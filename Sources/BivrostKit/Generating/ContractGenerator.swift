@@ -7,6 +7,8 @@
 
 import Stencil
 
+/// Private model only used in getting data into the template renderer.
+/// Created via `ContractGenerator.generateTemplateModel(contract:)`.
 fileprivate struct TemplateContract {
     let name: String
     let functions: [TemplateFunction]
@@ -14,24 +16,41 @@ fileprivate struct TemplateContract {
     struct TemplateFunction {
         let name: String
         let methodId: String
-        let inputs: [TemplateFunctionInput]
-        let outputs: [TemplateFunctionOutput]
-        
-        struct TemplateFunctionInput {
-            let name: String // Can be empty
-            let type: String // e.g. "Solidity.Address"
-        }
-        
-        struct TemplateFunctionOutput {
-            let name: String // Mostly empty
-            let type: String // e.g. "Solidity.Address"
-        }
+        let input: String // Direct Arguments Type/Tuple
+        let output: String // Direct Return Type/Tuple
     }
 }
 
 struct ContractGenerator {
     fileprivate static func typeString(for type: Contract.Element.ParameterType) -> String {
-        return "Solidity.UInt12"
+        // FIXME: implement
+        return String(describing: type)
+    }
+    
+    fileprivate static func typeString(for inputs: [Contract.Element.Function.Input]) -> String {
+        return typeString(for: inputs.map { (name: $0.name, type: $0.type) })
+    }
+    
+    fileprivate static func typeString(for outputs: [Contract.Element.Function.Output]) -> String {
+        return typeString(for: outputs.map { (name: $0.name, type: $0.type) })
+    }
+    
+    fileprivate static func typeString(for namedParameters: [(name: String, type: Contract.Element.ParameterType)]) -> String {
+        let returnValue: String
+        if namedParameters.count == 1,
+            let firstParameter = namedParameters.first {
+            returnValue = typeString(for: firstParameter.type)
+        } else if namedParameters.isEmpty {
+            returnValue = "Void"
+        } else {
+            let tupleString = namedParameters.enumerated().map { index, element in
+                let name = element.name.isEmpty ? "arg\(index)" : element.name
+                let type = typeString(for: element.type)
+                return "\(name): \(type)"
+            }.joined(separator: ", ")
+            returnValue = "(\(tupleString))"
+        }
+        return returnValue
     }
     
     fileprivate static func generateTemplateModel(contract: Contract) -> TemplateContract {
@@ -43,18 +62,9 @@ struct ContractGenerator {
             let functionName = object.name.capitalized
             let functionMethodId = object.methodId
             
-            let inputs = object.inputs.flatMap { input -> TemplateContract.TemplateFunction.TemplateFunctionInput? in
-                let inputName = input.name
-                let inputType = typeString(for: input.type)
-                return TemplateContract.TemplateFunction.TemplateFunctionInput(name: inputName, type: inputType)
-            }
-            let outputs = object.outputs.flatMap { output -> TemplateContract.TemplateFunction.TemplateFunctionOutput? in
-                let outputName = output.name
-                let outputType = typeString(for: output.type)
-                return TemplateContract.TemplateFunction.TemplateFunctionOutput(name: outputName, type: outputType)
-            }
-            
-            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, inputs: inputs, outputs: outputs)
+            let inputString = typeString(for: object.inputs)
+            let outputString = typeString(for: object.outputs)
+            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString)
         }
         
         return TemplateContract(name: contractName, functions: functions)
@@ -63,6 +73,6 @@ struct ContractGenerator {
     static func generateCode(from contract: Contract) throws -> String {
         let templateModel = generateTemplateModel(contract: contract)
         let template = Template(templateString: Templates.Contract)
-        let contract = try template.render(["contract": templateModel])
+        return try template.render(["contract": templateModel])
     }
 }
