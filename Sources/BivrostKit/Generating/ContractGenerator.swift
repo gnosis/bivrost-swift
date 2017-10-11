@@ -18,6 +18,7 @@ fileprivate struct TemplateContract {
         let methodId: String
         let input: String // Direct Arguments Type/Tuple
         let output: String // Direct Return Type/Tuple
+        let encodeArguments: String // e.g. arguments.spender, arguments.value
     }
 }
 
@@ -25,6 +26,21 @@ struct ContractGenerator {
     fileprivate static func typeString(for type: Contract.Element.ParameterType) -> String {
         // FIXME: implement
         return String(describing: type)
+    }
+    
+    fileprivate static func encodeArguments(for inputs: [Contract.Element.Function.Input]) -> String {
+        let returnValue: String
+        if inputs.count <= 1 {
+            // For both 0 & 1 elements we just use BaseEncoder.encode(arguments: arguments)
+            returnValue = "arguments"
+        } else {
+            returnValue = inputs.enumerated().map { index, element in
+                let name = element.name.isEmpty ? "arg\(index)" : element.name
+                
+                return "arguments.\(name)"
+            }.joined(separator: ", ")
+        }
+        return returnValue
     }
     
     fileprivate static func typeString(for inputs: [Contract.Element.Function.Input]) -> String {
@@ -64,7 +80,10 @@ struct ContractGenerator {
             
             let inputString = typeString(for: object.inputs)
             let outputString = typeString(for: object.outputs)
-            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString)
+            
+            let encodeArgumentsString = encodeArguments(for: object.inputs)
+            
+            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString)
         }
         
         return TemplateContract(name: contractName, functions: functions)
