@@ -29,4 +29,11 @@ struct TypeGenerator {
         let bytes = try template.render(["lengths": lengths])
         print(bytes)
     }
+    
+    static func generateArrayX() throws {
+        let lengths = Array(0...256)
+        let template = Template(templateString: Templates.ArrayX)
+        let bytes = try template.render(["lengths": lengths])
+        print(bytes)
+    }
 }
