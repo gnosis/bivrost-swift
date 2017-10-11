@@ -15,38 +15,6 @@ protocol SolidityFunction {
     static var methodId: String { get }
     
     static func encodeCall(arguments: Arguments) -> String
-    static func decode(return: String) -> Return
-    static func decode(arguments: String) throws -> Arguments
-}
-
-// FIXME: remove this once we have code generation going, this is just for testing
-// and seeing how this can work
-struct StandardToken {
-    struct Approve: SolidityFunction {
-        static let methodId = "095ea7b3"
-        typealias Arguments = (spender: Solidity.Address, value: Solidity.UInt256)
-        typealias Return = Solidity.Bool
-        
-        static func encodeCall(arguments: Arguments) -> String {
-            return "0x\(methodId)\(BaseEncoder.encode(arguments: arguments.spender, arguments.value))"
-        }
-        
-        static func decode(return: String) -> Return {
-            // FIXME: implement
-            return Return(true)
-        }
-        static func decode(arguments: String) throws -> Arguments {
-            // FIXME: implement
-            return Arguments(spender: try Solidity.Address("FF"), value: try Solidity.UInt256(BigUInt(1)))
-        }
-    }
-    
-    struct Example {
-        static let methodId = "cdcd77c0"
-        typealias Arguments = (x: Solidity.UInt32, y: Solidity.Bool)
-        
-        static func encodeCall(arguments: Arguments) -> String {
-            return "0x\(methodId)\(BaseEncoder.encode(arguments: arguments.x, arguments.y))"
-        }
-    }
+    static func decode(returnData: String) throws -> Return
+    static func decode(argumentsData: String) throws -> Arguments
 }

@@ -5,7 +5,6 @@
 //  Created by Luis Reisewitz on 12.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
-//
 
 /// Describes the interface of an Ethereum/Solidity Contract
 struct Contract {

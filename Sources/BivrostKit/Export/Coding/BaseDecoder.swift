@@ -9,8 +9,12 @@ import Foundation
 import BigInt
 
 struct BaseDecoder {
-    static func partitionData(inHex string: SolidityCodable.EncodeFormat) -> [SolidityCodable.EncodeFormat] {
+    fileprivate static func partitionData(inHex string: SolidityCodable.EncodeFormat) -> [SolidityCodable.EncodeFormat] {
         return string.splitSolidityLines()
+    }
+    
+    static func partition(_ data: String) -> BaseDecoder.PartitionData {
+        return BaseDecoder.PartitionData(data: data)
     }
     
     static func decodeUInt(data: SolidityCodable.EncodeFormat) throws -> BigUInt {

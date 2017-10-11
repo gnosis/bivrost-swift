@@ -50,6 +50,10 @@ struct BaseEncoder {
         return encode(arguments)
     }
     
+    static func encode(arguments: Void) -> SolidityCodable.EncodeFormat {
+        return ""
+    }
+    
     static func encodeUnPadded(uint: BigUInt, bitWidth: UInt) -> SolidityCodable.EncodeFormat {
         guard uint.bitWidth <= bitWidth else {
             fatalError("\(#function) called with UInt \(uint) that is too big for bit width \(bitWidth).")
