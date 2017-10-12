@@ -7,6 +7,16 @@
 
 import Stencil
 
+struct ContractGenerator {
+    static func generateCode(from contract: Contract) throws -> String {
+        let templateModel = generateTemplateModel(contract: contract)
+        let template = Template(templateString: Templates.Contract)
+        return try template.render(["contract": templateModel])
+    }
+}
+
+// MARK: - TemplateContract Model
+
 /// Private model only used in getting data into the template renderer.
 /// Created via `ContractGenerator.generateTemplateModel(contract:)`.
 fileprivate struct TemplateContract {
@@ -21,62 +31,42 @@ fileprivate struct TemplateContract {
         let encodeArguments: String // e.g. arguments.spender, arguments.value
         
         let decodeReturnReturnValue: String // Name to be returned at the end of decode(returnData:)
-        let decodeReturnTypes: [DecodeReturnType]
+        let decodeReturnTypes: [DecodeType]
         
-        struct DecodeReturnType {
+        let decodeArgumentsReturnValue: String // Name to be returned at the end of decode(argumentsData:)
+        let decodeArgumentsTypes: [DecodeType]
+        
+        struct DecodeType {
             let name: String
             let type: String
         }
     }
 }
 
-struct ContractGenerator {
-    
-    fileprivate static let typePrefix = "Solidity."
-    
-    fileprivate static func typeString(for type: Contract.Element.ParameterType) -> String {
-        switch type {
-        case let .staticType(wrappedType):
-            return typeString(for: wrappedType)
-        case let .dynamicType(wrappedType):
-            return typeString(for: wrappedType)
+// MARK: - TemplateContract Creation
+extension ContractGenerator {
+    fileprivate static func generateTemplateModel(contract: Contract) -> TemplateContract {
+        let contractName = contract.name.capitalized
+        
+        let functions = contract.elements.flatMap { element -> TemplateContract.TemplateFunction? in
+            guard case .function(let object) = element else { return nil }
+            
+            let functionName = object.name.capitalized
+            let functionMethodId = object.methodId
+            
+            let inputString = typeString(for: object.inputs)
+            let outputString = typeString(for: object.outputs)
+            
+            let encodeArgumentsString = encodeArguments(for: object.inputs)
+            let decodeReturnTypesArray = decodeTypes(for: object.outputs)
+            let decodeReturnReturnValueString = decodeReturnReturnValue(for: decodeReturnTypesArray)
+            let decodeArgumentsTypesArray = decodeTypes(for: object.inputs)
+            let decodeArgumentsReturnValueString = decodeArgumentsReturnValue(for: decodeArgumentsTypesArray)
+            
+            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray)
         }
-    }
-    
-    fileprivate static func typeString(for type: Contract.Element.ParameterType.StaticType) -> String {
-        let nonPrefixedTypeString: String
-        switch type {
-        case .uint(let bits):
-            nonPrefixedTypeString = "UInt\(bits)"
-        case .int(let bits):
-            nonPrefixedTypeString = "Int\(bits)"
-        case .address:
-            nonPrefixedTypeString = "Address"
-        case .bool:
-            nonPrefixedTypeString = "Bool"
-        case .bytes(let length):
-            nonPrefixedTypeString = "Bytes\(length)"
-        case .function:
-            nonPrefixedTypeString = "Function"
-        case let .array(type, length: length):
-            let innerType = typeString(for: type)
-            nonPrefixedTypeString = "Array<\(innerType)>\(length)"
-        }
-        return "\(typePrefix)\(nonPrefixedTypeString)"
-    }
-    
-    fileprivate static func typeString(for type: Contract.Element.ParameterType.DynamicType) -> String {
-        let nonPrefixedTypeString: String
-        switch type {
-        case .bytes:
-            nonPrefixedTypeString = "Bytes"
-        case .string:
-            nonPrefixedTypeString = "String"
-        case .array(let type):
-            let innerType = typeString(for: type)
-            nonPrefixedTypeString = "VariableArray<\(innerType)>"
-        }
-        return "\(typePrefix)\(nonPrefixedTypeString)"
+        
+        return TemplateContract(name: contractName, functions: functions)
     }
     
     fileprivate static func encodeArguments(for inputs: [Contract.Element.Function.Input]) -> String {
@@ -94,28 +84,43 @@ struct ContractGenerator {
         return returnValue
     }
     
-    fileprivate static func decodeReturnTypes(for outputs: [Contract.Element.Function.Output]) -> [TemplateContract.TemplateFunction.DecodeReturnType] {
-        return outputs.enumerated().map { index, element in
+    fileprivate static func decodeTypes(for outputs: [Contract.Element.Function.Output]) -> [TemplateContract.TemplateFunction.DecodeType] {
+        return decodeTypes(for: outputs.map { (name: $0.name, type: $0.type) })
+    }
+        
+    fileprivate static func decodeTypes(for inputs: [Contract.Element.Function.Input]) -> [TemplateContract.TemplateFunction.DecodeType] {
+        return decodeTypes(for: inputs.map { (name: $0.name, type: $0.type) })
+    }
+    
+    fileprivate static func decodeTypes(for namedParameters: [(name: String, type: Contract.Element.ParameterType)]) -> [TemplateContract.TemplateFunction.DecodeType] {
+        return namedParameters.enumerated().map { index, element in
             let name = element.name.isEmpty ? "ret\(index)" : element.name
-            let type = typeString(for: element.type)
-            return TemplateContract.TemplateFunction.DecodeReturnType(name: name, type: type)
+            let type = element.type.generatedTypeString
+            return TemplateContract.TemplateFunction.DecodeType(name: name, type: type)
         }
     }
     
-    fileprivate static func decodeReturnReturnValue(for decodeReturnTypes: [TemplateContract.TemplateFunction.DecodeReturnType]) -> String {
-        guard !decodeReturnTypes.isEmpty else {
+    fileprivate static func decodeReturnReturnValue(for decodeReturnTypes: [TemplateContract.TemplateFunction.DecodeType]) -> String {
+        return decodeReturnValue(for: decodeReturnTypes, tupleName: "Return")
+    }
+    
+    fileprivate static func decodeArgumentsReturnValue(for decodeArgumentsTypes: [TemplateContract.TemplateFunction.DecodeType]) -> String {
+        return decodeReturnValue(for: decodeArgumentsTypes, tupleName: "Arguments")
+    }
+    
+    fileprivate static func decodeReturnValue(for decodeTypes: [TemplateContract.TemplateFunction.DecodeType], tupleName: String) -> String {
+        guard !decodeTypes.isEmpty else {
             // In case of an empty return, we want it to read "return" without any identifier
             return ""
         }
-        if decodeReturnTypes.count == 1,
-            let firstType = decodeReturnTypes.first {
+        if decodeTypes.count == 1,
+            let firstType = decodeTypes.first {
             // If we only have one return type, we want to directly return it (e.g. "return ret0")
             return firstType.name
         }
         
-        // FIXME: Identifiers (name property) are not linked to the corresponding `typeString(for outputs)` identifiers and can break.
-        let returnInvocation = decodeReturnTypes.map { "\($0.name): \($0.name)" }.joined(separator: ", ")
-        return "Return(\(returnInvocation))"
+        let invocation = decodeTypes.map { "\($0.name): \($0.name)" }.joined(separator: ", ")
+        return "\(tupleName)(\(invocation))"
     }
     
     fileprivate static func typeString(for inputs: [Contract.Element.Function.Input]) -> String {
@@ -130,45 +135,71 @@ struct ContractGenerator {
         let returnValue: String
         if namedParameters.count == 1,
             let firstParameter = namedParameters.first {
-            returnValue = typeString(for: firstParameter.type)
+            returnValue = firstParameter.type.generatedTypeString
         } else if namedParameters.isEmpty {
             returnValue = "Void"
         } else {
             let tupleString = namedParameters.enumerated().map { index, element in
                 let name = element.name.isEmpty ? "arg\(index)" : element.name
-                let type = typeString(for: element.type)
+                let type = element.type.generatedTypeString
                 return "\(name): \(type)"
             }.joined(separator: ", ")
             returnValue = "(\(tupleString))"
         }
         return returnValue
     }
-    
-    fileprivate static func generateTemplateModel(contract: Contract) -> TemplateContract {
-        let contractName = contract.name.capitalized
-        
-        let functions = contract.elements.flatMap { element -> TemplateContract.TemplateFunction? in
-            guard case .function(let object) = element else { return nil }
-            
-            let functionName = object.name.capitalized
-            let functionMethodId = object.methodId
-            
-            let inputString = typeString(for: object.inputs)
-            let outputString = typeString(for: object.outputs)
-            
-            let encodeArgumentsString = encodeArguments(for: object.inputs)
-            let decodeReturnTypesArray = decodeReturnTypes(for: object.outputs)
-            let decodeReturnReturnValueString = decodeReturnReturnValue(for: decodeReturnTypesArray)
-            
-            return TemplateContract.TemplateFunction(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray)
+}
+
+// MARK: - Parser Type to Code Type
+fileprivate let generatedTypePrefix = "Solidity."
+
+extension Contract.Element.ParameterType {
+    var generatedTypeString: String {
+        switch self {
+        case let .staticType(wrappedType):
+            return wrappedType.generatedTypeString
+        case let .dynamicType(wrappedType):
+            return wrappedType.generatedTypeString
         }
-        
-        return TemplateContract(name: contractName, functions: functions)
     }
-    
-    static func generateCode(from contract: Contract) throws -> String {
-        let templateModel = generateTemplateModel(contract: contract)
-        let template = Template(templateString: Templates.Contract)
-        return try template.render(["contract": templateModel])
+}
+
+extension Contract.Element.ParameterType.StaticType {
+    var generatedTypeString: String {
+        let nonPrefixedTypeString: String
+        switch self {
+        case .uint(let bits):
+            nonPrefixedTypeString = "UInt\(bits)"
+        case .int(let bits):
+            nonPrefixedTypeString = "Int\(bits)"
+        case .address:
+            nonPrefixedTypeString = "Address"
+        case .bool:
+            nonPrefixedTypeString = "Bool"
+        case .bytes(let length):
+            nonPrefixedTypeString = "Bytes\(length)"
+        case .function:
+            nonPrefixedTypeString = "Function"
+        case let .array(type, length: length):
+            let innerType = type.generatedTypeString
+            nonPrefixedTypeString = "Array<\(innerType)>\(length)"
+        }
+        return "\(generatedTypePrefix)\(nonPrefixedTypeString)"
+    }
+}
+
+extension Contract.Element.ParameterType.DynamicType {
+    var generatedTypeString: String {
+        let nonPrefixedTypeString: String
+        switch self {
+        case .bytes:
+            nonPrefixedTypeString = "Bytes"
+        case .string:
+            nonPrefixedTypeString = "String"
+        case .array(let type):
+            let innerType = type.generatedTypeString
+            nonPrefixedTypeString = "VariableArray<\(innerType)>"
+        }
+        return "\(generatedTypePrefix)\(nonPrefixedTypeString)"
     }
 }
