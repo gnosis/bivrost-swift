@@ -6,12 +6,16 @@
 //
 
 import Stencil
+import Foundation
 
 struct ContractGenerator {
     static func generateCode(from contract: Contract) throws -> String {
         let templateModel = generateTemplateModel(contract: contract)
+        let timestamp = Date().timeIntervalSince1970
+        
         let template = Template(templateString: Templates.Contract)
-        return try template.render(["contract": templateModel])
+        return try template.render(["contract": templateModel,
+                                    "timestamp": timestamp])
     }
 }
 
@@ -54,8 +58,8 @@ extension ContractGenerator {
             let functionName = object.name.capitalized
             let functionMethodId = object.methodId
             
-            let inputString = typeString(for: object.inputs)
-            let outputString = typeString(for: object.outputs)
+            let inputString = tupleString(for: object.inputs)
+            let outputString = tupleString(for: object.outputs)
             
             let encodeArgumentsString = encodeArguments(for: object.inputs)
             let decodeReturnTypesArray = decodeTypes(for: object.outputs)
@@ -76,7 +80,7 @@ extension ContractGenerator {
             returnValue = "arguments"
         } else {
             returnValue = inputs.enumerated().map { index, element in
-                let name = element.name.isEmpty ? "arg\(index)" : element.name
+                let name = element.name.isEmpty ? "param\(index)" : element.name
                 
                 return "arguments.\(name)"
             }.joined(separator: ", ")
@@ -94,7 +98,7 @@ extension ContractGenerator {
     
     fileprivate static func decodeTypes(for namedParameters: [(name: String, type: Contract.Element.ParameterType)]) -> [TemplateContract.TemplateFunction.DecodeType] {
         return namedParameters.enumerated().map { index, element in
-            let name = element.name.isEmpty ? "ret\(index)" : element.name
+            let name = element.name.isEmpty ? "param\(index)" : element.name
             let type = element.type.generatedTypeString
             return TemplateContract.TemplateFunction.DecodeType(name: name, type: type)
         }
@@ -123,15 +127,15 @@ extension ContractGenerator {
         return "\(tupleName)(\(invocation))"
     }
     
-    fileprivate static func typeString(for inputs: [Contract.Element.Function.Input]) -> String {
-        return typeString(for: inputs.map { (name: $0.name, type: $0.type) })
+    fileprivate static func tupleString(for inputs: [Contract.Element.Function.Input]) -> String {
+        return tupleString(for: inputs.map { (name: $0.name, type: $0.type) })
     }
     
-    fileprivate static func typeString(for outputs: [Contract.Element.Function.Output]) -> String {
-        return typeString(for: outputs.map { (name: $0.name, type: $0.type) })
+    fileprivate static func tupleString(for outputs: [Contract.Element.Function.Output]) -> String {
+        return tupleString(for: outputs.map { (name: $0.name, type: $0.type) })
     }
     
-    fileprivate static func typeString(for namedParameters: [(name: String, type: Contract.Element.ParameterType)]) -> String {
+    fileprivate static func tupleString(for namedParameters: [(name: String, type: Contract.Element.ParameterType)]) -> String {
         let returnValue: String
         if namedParameters.count == 1,
             let firstParameter = namedParameters.first {
@@ -140,7 +144,7 @@ extension ContractGenerator {
             returnValue = "Void"
         } else {
             let tupleString = namedParameters.enumerated().map { index, element in
-                let name = element.name.isEmpty ? "arg\(index)" : element.name
+                let name = element.name.isEmpty ? "param\(index)" : element.name
                 let type = element.type.generatedTypeString
                 return "\(name): \(type)"
             }.joined(separator: ", ")
