@@ -9,31 +9,31 @@
 import Stencil
 
 struct TypeGenerator {
-    static func generateUIntX() throws {
+    static func generateUIntX() throws -> String {
         let bitWidths = (1...256).filter { $0 % 8 == 0 }
         let template = Template(templateString: Templates.UIntX)
         let uints = try template.render(["bitWidths": bitWidths])
-        print(uints)
+        return uints
     }
     
-    static func generateIntX() throws {
+    static func generateIntX() throws -> String {
         let bitWidths = (1...256).filter { $0 % 8 == 0 }
         let template = Template(templateString: Templates.IntX)
         let ints = try template.render(["bitWidths": bitWidths])
-        print(ints)
+        return ints
     }
     
-    static func generateBytesX() throws {
+    static func generateBytesX() throws -> String {
         let lengths = Array(1...32)
         let template = Template(templateString: Templates.BytesX)
         let bytes = try template.render(["lengths": lengths])
-        print(bytes)
+        return bytes
     }
     
-    static func generateArrayX() throws {
+    static func generateArrayX() throws -> String {
         let lengths = Array(0...256)
         let template = Template(templateString: Templates.ArrayX)
-        let bytes = try template.render(["lengths": lengths])
-        print(bytes)
+        let arrays = try template.render(["lengths": lengths])
+        return arrays
     }
 }
