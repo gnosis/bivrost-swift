@@ -37,18 +37,7 @@ public struct BivrostKit {
     ///     JSON containing a `contract_name` and an `abi` field.
     ///   - outputFolder: Generated `.swift` files will be exported to this folder.
     public static func generateContracts(from inputFiles: [String], to outputFolder: String) throws {
-        print("Exporting files \(inputFiles) to folder \(outputFolder)")
-        
-        let contracts = try inputFiles.map { path -> String in
-            let jsonData = try Path(path).read()
-            let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: [])
-            let contract = try ContractParser.parseContract(from: jsonDict as! [String: Any])
-            return try ContractGenerator.generateCode(from: contract)
-        }
-        contracts.forEach {
-            print("=== CONTRACT INCOMING ===")
-            print($0)
-        }
+        try ContractWriter.writeContracts(from: inputFiles, to: outputFolder)
     }
     
     /// Generates types that need to be generated (e.g. ArrayX, UIntX variants).
@@ -56,7 +45,7 @@ public struct BivrostKit {
     ///
     /// - Parameter outputFolder: Generated `.swift` files will be exported to this folder.
     public static func generateTypes(to outputFolder: String) throws {
-        print("Generating types to folder \(outputFolder)")
+        try TypeWriter.writeTypes(to: outputFolder)
     }
     
     /// Copies auxiliary files to the specified output folder.

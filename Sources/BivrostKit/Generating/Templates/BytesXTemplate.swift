@@ -6,6 +6,7 @@
 //
 
 extension Templates {
+    // FIXME: add file header to template, like in the contract
     static let BytesX = """
         extension Solidity {
             {% for length in lengths %}
