@@ -104,7 +104,7 @@ struct Contract {
 
 // MARK: - DynamicType Equatable
 extension Contract.Element.ParameterType.DynamicType: Equatable {
-    public static func ==(lhs: Contract.Element.ParameterType.DynamicType, rhs: Contract.Element.ParameterType.DynamicType) -> Bool {
+    static func ==(lhs: Contract.Element.ParameterType.DynamicType, rhs: Contract.Element.ParameterType.DynamicType) -> Bool {
         switch (lhs, rhs) {
         case (.bytes, .bytes):
             return true
@@ -120,7 +120,7 @@ extension Contract.Element.ParameterType.DynamicType: Equatable {
 
 // MARK: - ParameterType Equatable
 extension Contract.Element.ParameterType: Equatable {
-    public static func ==(lhs: Contract.Element.ParameterType, rhs: Contract.Element.ParameterType) -> Bool {
+    static func ==(lhs: Contract.Element.ParameterType, rhs: Contract.Element.ParameterType) -> Bool {
         switch (lhs, rhs) {
         case (.dynamicType(let value1), .dynamicType(let value2)):
             return value1 == value2
@@ -134,7 +134,7 @@ extension Contract.Element.ParameterType: Equatable {
 
 // MARK: - StaticType Equatable
 extension Contract.Element.ParameterType.StaticType: Equatable {
-    public static func ==(lhs: Contract.Element.ParameterType.StaticType, rhs: Contract.Element.ParameterType.StaticType) -> Bool {
+    static func ==(lhs: Contract.Element.ParameterType.StaticType, rhs: Contract.Element.ParameterType.StaticType) -> Bool {
         switch (lhs, rhs) {
         case let (.uint(length1), .uint(length2)):
             return length1 == length2
