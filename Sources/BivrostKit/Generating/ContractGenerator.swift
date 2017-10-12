@@ -31,9 +31,52 @@ fileprivate struct TemplateContract {
 }
 
 struct ContractGenerator {
+    
+    fileprivate static let typePrefix = "Solidity."
+    
     fileprivate static func typeString(for type: Contract.Element.ParameterType) -> String {
-        // FIXME: implement
-        return String(describing: type)
+        switch type {
+        case let .staticType(wrappedType):
+            return typeString(for: wrappedType)
+        case let .dynamicType(wrappedType):
+            return typeString(for: wrappedType)
+        }
+    }
+    
+    fileprivate static func typeString(for type: Contract.Element.ParameterType.StaticType) -> String {
+        let nonPrefixedTypeString: String
+        switch type {
+        case .uint(let bits):
+            nonPrefixedTypeString = "UInt\(bits)"
+        case .int(let bits):
+            nonPrefixedTypeString = "Int\(bits)"
+        case .address:
+            nonPrefixedTypeString = "Address"
+        case .bool:
+            nonPrefixedTypeString = "Bool"
+        case .bytes(let length):
+            nonPrefixedTypeString = "Bytes\(length)"
+        case .function:
+            nonPrefixedTypeString = "Function"
+        case let .array(type, length: length):
+            let innerType = typeString(for: type)
+            nonPrefixedTypeString = "Array<\(innerType)>\(length)"
+        }
+        return "\(typePrefix)\(nonPrefixedTypeString)"
+    }
+    
+    fileprivate static func typeString(for type: Contract.Element.ParameterType.DynamicType) -> String {
+        let nonPrefixedTypeString: String
+        switch type {
+        case .bytes:
+            nonPrefixedTypeString = "Bytes"
+        case .string:
+            nonPrefixedTypeString = "String"
+        case .array(let type):
+            let innerType = typeString(for: type)
+            nonPrefixedTypeString = "VariableArray<\(innerType)>"
+        }
+        return "\(typePrefix)\(nonPrefixedTypeString)"
     }
     
     fileprivate static func encodeArguments(for inputs: [Contract.Element.Function.Input]) -> String {
