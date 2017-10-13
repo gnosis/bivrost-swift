@@ -5,7 +5,8 @@ let package = Package(
     name: "Bivrost",
     products: [
         .executable(name: "bivrost", targets: ["Bivrost"]),
-        .library(name: "BivrostKit", targets: ["BivrostKit"])
+        .library(name: "BivrostKit", targets: ["BivrostKit"]),
+        .library(name: "BivrostHelper", targets: ["BivrostHelper"])
     ],
     dependencies: [
         // CryptoSwift fork including Keccak in master
@@ -37,10 +38,25 @@ let package = Package(
                 "PathKit"
             ]
         ),
+        .target(
+            name: "BivrostHelper",
+            dependencies: [
+                "CryptoSwift",
+                "BigInt"
+            ]
+        ),
         .testTarget(
             name: "BivrostKitTests",
             dependencies: [
                 "BivrostKit",
+                "Quick",
+                "Nimble"
+            ]
+        ),
+        .testTarget(
+            name: "BivrostHelperTests",
+            dependencies: [
+                "BivrostHelper",
                 "Quick",
                 "Nimble"
             ]

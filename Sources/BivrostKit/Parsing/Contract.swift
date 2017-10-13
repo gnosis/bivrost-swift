@@ -6,6 +6,8 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
+import CryptoSwift
+
 /// Describes the interface of an Ethereum/Solidity Contract
 struct Contract {
     /// Name of this contract.

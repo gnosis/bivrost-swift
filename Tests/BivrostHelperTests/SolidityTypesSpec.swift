@@ -1,6 +1,6 @@
 //
 //  SolidityTypesSpec.swift
-//  BivrostKitTests
+//  BivrostHelperTests
 //
 //  Created by Luis Reisewitz on 25.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -9,7 +9,7 @@
 
 import Quick
 import Nimble
-@testable import BivrostKit
+@testable import BivrostHelper
 import BigInt
 import Foundation
 
