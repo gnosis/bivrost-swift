@@ -52,7 +52,6 @@ public struct BivrostKit {
     ///
     /// - Parameter outputFolder: Auxiliary `.swift` files will be copied to this folder.
     public static func copyAuxiliaryFiles(to outputFolder: String) throws {
-        // TODO: Hardest part. Figure out how to copy all files in `Export` folder
-        // to the outputFolder without resources in SPM. 
+        try AuxWriter.writeAuxiliaryFiles(to: outputFolder)
     }
 }

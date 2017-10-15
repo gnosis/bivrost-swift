@@ -30,7 +30,6 @@ struct FileTool {
         let sourcePath = Path(source)
         let destination = Path(destinationFolder) + (useSourceName ? sourcePath.lastComponent : "")
         try sourcePath.copy(destination)
-        print("Source \(source), SourcePath: \(sourcePath), DestinationFolder: \(destinationFolder), Destination: \(destination)")
     }
     
     static func create(path: String) throws {
