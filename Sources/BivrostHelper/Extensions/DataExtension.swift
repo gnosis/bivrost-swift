@@ -43,4 +43,21 @@ extension Data {
         }
         guard even else { return nil }
     }
+    
+    public func toHexString() -> String {
+        return Array(self).toHexString()
+    }
+}
+
+
+fileprivate extension Array where Element == UInt8 {
+    func toHexString() -> String {
+        return `lazy`.reduce("") {
+            var s = String($1, radix: 16)
+            if s.count == 1 {
+                s = "0" + s
+            }
+            return $0 + s
+        }
+    }
 }

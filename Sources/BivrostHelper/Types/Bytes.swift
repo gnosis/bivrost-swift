@@ -8,7 +8,6 @@
 
 import Foundation
 import BigInt
-import CryptoSwift
 
 extension Solidity {
     public struct Bytes {
