@@ -32,12 +32,12 @@ struct ContractTemplateModel {
     }
     
     init(contract: Contract) {
-        name = contract.name
+        name = contract.name.asTypeName
         
         functions = contract.elements.flatMap { element -> ContractTemplateModel.Function? in
             guard case .function(let object) = element else { return nil }
             
-            let functionName = object.name.capitalized
+            let functionName = object.name.asTypeName
             let functionMethodId = object.methodId
             
             let inputString = tupleString(for: object.inputs)
@@ -51,6 +51,20 @@ struct ContractTemplateModel {
             
             return ContractTemplateModel.Function(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray)
         }
+    }
+}
+
+fileprivate extension String {
+    var asTypeName: String {
+        return capitalizingFirstLetter()
+    }
+    
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).uppercased() + dropFirst()
+    }
+    
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
     }
 }
 
