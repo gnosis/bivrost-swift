@@ -27,6 +27,7 @@ struct ContractTemplateModel {
         struct DecodeType {
             let name: String
             let type: String
+            let isDynamic: Bool
         }
     }
     
@@ -77,7 +78,9 @@ fileprivate func decodeTypes(for namedParameters: [(name: String, type: Contract
     return namedParameters.enumerated().map { index, element in
         let name = element.name.isEmpty ? "param\(index)" : element.name
         let type = element.type.generatedTypeString
-        return ContractTemplateModel.Function.DecodeType(name: name, type: type)
+        let isDynamic = element.type.isDynamic
+        
+        return ContractTemplateModel.Function.DecodeType(name: name, type: type, isDynamic: isDynamic)
     }
 }
 
@@ -140,6 +143,15 @@ extension Contract.Element.ParameterType {
             return wrappedType.generatedTypeString
         case let .dynamicType(wrappedType):
             return wrappedType.generatedTypeString
+        }
+    }
+    
+    var isDynamic: Bool {
+        switch self {
+        case .dynamicType(_):
+            return true
+        case .staticType(_):
+            return false
         }
     }
 }

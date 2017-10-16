@@ -28,16 +28,38 @@ extension Templates {
                 
                 static func decode(returnData: String) throws -> Return {
                     let source = BaseDecoder.partition(returnData)
+                    // Static Types & Location
                     {% for decodedType in function.decodeReturnTypes %}
+                        {% if decodedType.isDynamic %}
+                    source.consume()
+                        {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
+                        {% endif %}
+                    {% endfor %}
+                    // Dynamic Types
+                    {% for decodedType in function.decodeReturnTypes %}
+                        {% if decodedType.isDynamic %}
+                    let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
+                        {% endif %}
                     {% endfor %}
                     return {{ function.decodeReturnReturnValue }}
                 }
                 
                 static func decode(argumentsData: String) throws -> Arguments {
                     let source = BaseDecoder.partition(argumentsData)
+                    // Static Types & Location
                     {% for decodedType in function.decodeArgumentsTypes %}
+                        {% if decodedType.isDynamic %}
+                    source.consume()
+                        {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
+                        {% endif %}
+                    {% endfor %}
+                    // Dynamic Types
+                    {% for decodedType in function.decodeArgumentsTypes %}
+                        {% if decodedType.isDynamic %}
+                    let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
+                        {% endif %}
                     {% endfor %}
                     return {{ function.decodeArgumentsReturnValue }}
                 }
