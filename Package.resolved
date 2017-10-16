@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/attaswift/BigInt.git",
         "state": {
           "branch": null,
-          "revision": "31d0f6fa0aa945c09eff091ad26cb5b44e956f79",
+          "revision": "e3879c569817a844ca2c54a9095c59e1d779cd5d",
           "version": "3.0.1"
         }
       },
@@ -39,7 +39,7 @@
       },
       {
         "package": "PathKit",
-        "repositoryURL": "git@github.com:PoissonBallon/PathKit.git",
+        "repositoryURL": "https://github.com/PoissonBallon/PathKit.git",
         "state": {
           "branch": "master",
           "revision": "0b109bc868e9a12bc5f23e9d61ec937c75900c40",
@@ -75,10 +75,19 @@
       },
       {
         "package": "Stencil",
-        "repositoryURL": "https://github.com/PoissonBallon/Stencil.git",
+        "repositoryURL": "https://github.com/zweigraf/Stencil.git",
         "state": {
           "branch": "master",
-          "revision": "a0671a9aca30f9cf9d5959d86c31756d8488caac",
+          "revision": "2bcdbd3bc29c1447552c1e5e4d5263ec97f758c2",
+          "version": null
+        }
+      },
+      {
+        "package": "StencilSwiftKit",
+        "repositoryURL": "https://github.com/zweigraf/StencilSwiftKit.git",
+        "state": {
+          "branch": null,
+          "revision": "82a0099e5c446348692a2ba40ffbba980c6b8898",
           "version": null
         }
       }

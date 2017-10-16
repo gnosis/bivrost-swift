@@ -10,6 +10,8 @@ import Foundation
 
 // Parser Errors
 enum ParsingError: Error {
+    case invalidJsonFile
+    
     case elementTypeInvalid
     case elementNameInvalid
     case functionInputInvalid

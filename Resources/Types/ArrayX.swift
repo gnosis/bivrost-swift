@@ -52,28 +52,3 @@ extension _DoNotUse._ArrayX: Equatable {
         return lhs.items == rhs.items
     }
 }
-
-// MARK: - Subclass Definitions
-extension Solidity {
-    // TODO: Manual subclasses, can be removed later.
-    final class Array0<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
-        override class var length: UInt {
-            return 0
-        }
-    }
-    final class Array1<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
-        override class var length: UInt {
-            return 1
-        }
-    }
-    final class Array2<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
-        override class var length: UInt {
-            return 2
-        }
-    }
-    final class Array6<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
-        override class var length: UInt {
-            return 6
-        }
-    }
-}

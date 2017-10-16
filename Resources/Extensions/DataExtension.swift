@@ -43,4 +43,8 @@ extension Data {
         }
         guard even else { return nil }
     }
+    
+    func hexEncodedString() -> String {
+        return map { String(format: "%02hhx", $0) }.joined()
+    }
 }

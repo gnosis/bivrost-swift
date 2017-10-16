@@ -8,7 +8,6 @@
 
 import Foundation
 import BigInt
-import CryptoSwift
 
 extension Solidity {
     public struct Bytes {
@@ -35,7 +34,7 @@ extension Solidity.Bytes: DynamicType {
     }
     
     func encode() -> SolidityCodable.EncodeFormat {
-        return length.encode() + value.toHexString().padToSolidity(location: .right)
+        return length.encode() + value.hexEncodedString().padToSolidity(location: .right)
     }
 }
 
