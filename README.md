@@ -69,6 +69,47 @@ Run `$ mint run gnosis/bivrost-swift "bivrost --help"` for current help.
         ]
     }
 
+## Output
+
+`bivrost` generates following folder structure in the output folder:
+
+    <output folder>
+      - BivrostError.swift
+      - Coding
+        - BaseEncoder.swift
+        - BaseDecoder.swift
+      - Extensions
+        - BigIntExtension.swift
+        - DataExtension.swift
+        - StringExtension.swift
+      - Generated Contracts
+        - ContractName1.swift
+        - ContractName2.swift
+      - Generated Types
+        - ArrayX-Generated.swift
+        - BytesX-Generated.swift
+        - IntX-Generated.swift
+        - UIntX-Generated.swift
+      - Protocols
+        - DynamicType.swift
+        - SolidityCodable.swift
+        - SolidityFunction.swift
+        - StaticType.swift
+      - Types
+        - Address.swift
+        - ArrayX.swift
+        - Bool.swift
+        - Bytes.swift
+        - BytesX.swift
+        - Function.swift
+        - IntX.swift
+        - Solidity.swift
+        - String.swift
+        - UIntX.swift
+        - VariableArray.swift
+
+The generated code depends on [BigInt](https://github.com/attaswift/BigInt) (`import BigInt`) so make sure you make that available for the generated code.
+
 ## License
 
 Bivrost is available under the MIT license. See the LICENSE file for more info.
