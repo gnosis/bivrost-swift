@@ -81,6 +81,15 @@
           "revision": "2bcdbd3bc29c1447552c1e5e4d5263ec97f758c2",
           "version": null
         }
+      },
+      {
+        "package": "StencilSwiftKit",
+        "repositoryURL": "https://github.com/zweigraf/StencilSwiftKit.git",
+        "state": {
+          "branch": null,
+          "revision": "82a0099e5c446348692a2ba40ffbba980c6b8898",
+          "version": null
+        }
       }
     ]
   },

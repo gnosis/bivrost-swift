@@ -5,7 +5,7 @@
 //  Created by Luis Reisewitz on 11.10.17.
 //
 
-import Stencil
+import StencilSwiftKit
 import Foundation
 
 struct ContractGenerator {
@@ -13,7 +13,7 @@ struct ContractGenerator {
         let templateModel = ContractTemplateModel(contract: contract)
         let timestamp = Date().timeIntervalSince1970
         
-        let template = Template(templateString: Templates.Contract)
+        let template = StencilSwiftTemplate(templateString: Templates.Contract)
         return try template.render(["contract": templateModel,
                                     "timestamp": timestamp])
     }

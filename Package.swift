@@ -17,7 +17,9 @@ let package = Package(
         // PathKit fork supporting SPM4
         .package(url: "https://github.com/PoissonBallon/PathKit.git", .branch("master")),
         // Stencil fork supporting SPM4
-        .package(url: "https://github.com/zweigraf/Stencil.git", .branch("master"))
+        .package(url: "https://github.com/zweigraf/Stencil.git", .branch("master")),
+        // StencilSwiftKit fork supporting SPM4
+        .package(url: "https://github.com/zweigraf/StencilSwiftKit.git", .revision("82a0099e5c446348692a2ba40ffbba980c6b8898"))
     ],
     targets: [
         .target(
@@ -34,6 +36,7 @@ let package = Package(
                 "CryptoSwift",
                 "BigInt",
                 "Stencil",
+                "StencilSwiftKit",
                 "PathKit"
             ]
         ),
