@@ -70,7 +70,3 @@ fastlane/test_output
 # Xcodeproj generated with `swift package generate-xcodeproj`.
 # Can be safely ignored and recreated, as it's only used for development. 
 Bivrost.xcodeproj
-
-# FakeBundle generates a Resources.swift from BivrostHelper folder. 
-# Ignore this folder
-Sources/BivrostKit/Generating/Resources.swift

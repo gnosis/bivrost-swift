@@ -45,6 +45,4 @@ struct FileTool {
     static func delete(path: String) throws {
         try Path(path).delete()
     }
-    
-    
 }

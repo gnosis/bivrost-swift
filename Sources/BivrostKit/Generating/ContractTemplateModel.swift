@@ -49,24 +49,20 @@ struct ContractTemplateModel {
             let decodeArgumentsReturnValueString = decodeArgumentsReturnValue(for: decodeArgumentsTypesArray)
             
             return ContractTemplateModel.Function(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray)
-            }
+        }
     }
 }
 
 // MARK: - Conversion Helper Methods
 fileprivate func encodeArguments(for inputs: [Contract.Element.Function.Input]) -> String {
-    let returnValue: String
-    if inputs.count <= 1 {
+    guard inputs.count > 1 else {
         // For both 0 & 1 elements we just use BaseEncoder.encode(arguments: arguments)
-        returnValue = "arguments"
-    } else {
-        returnValue = inputs.enumerated().map { index, element in
-            let name = element.name.isEmpty ? "param\(index)" : element.name
-            
-            return "arguments.\(name)"
-            }.joined(separator: ", ")
+        return "arguments"
     }
-    return returnValue
+    return inputs.enumerated().map { index, element in
+        let name = element.name.isEmpty ? "param\(index)" : element.name
+        return "arguments.\(name)"
+    }.joined(separator: ", ")
 }
 
 fileprivate func decodeTypes(for outputs: [Contract.Element.Function.Output]) -> [ContractTemplateModel.Function.DecodeType] {
@@ -128,7 +124,7 @@ fileprivate func tupleString(for namedParameters: [(name: String, type: Contract
             let name = element.name.isEmpty ? "param\(index)" : element.name
             let type = element.type.generatedTypeString
             return "\(name): \(type)"
-            }.joined(separator: ", ")
+        }.joined(separator: ", ")
         returnValue = "(\(tupleString))"
     }
     return returnValue
