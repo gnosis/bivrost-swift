@@ -9,8 +9,7 @@ let package = Package(
         .library(name: "BivrostHelper", targets: ["BivrostHelper"])
     ],
     dependencies: [
-        // CryptoSwift fork including Keccak in master
-        .package(url: "https://github.com/zweigraf/CryptoSwift.git", .revision("fdd115318528c9c25a06c0a89553f71bde7233da")),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift", .upToNextMinor(from: "0.8.0")),
         .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMajor(from: "3.0.0")),
         .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "7.0.2")),
         .package(url: "https://github.com/Quick/Quick.git", .revision("c498edf4aabb694a5b8a861ec3d69f0c5ab57d9e")),
@@ -41,7 +40,6 @@ let package = Package(
         .target(
             name: "BivrostHelper",
             dependencies: [
-                "CryptoSwift",
                 "BigInt"
             ]
         ),

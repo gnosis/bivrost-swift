@@ -33,7 +33,7 @@ extension _DoNotUse._BytesX: StaticType {
             fatalError("_BytesX somehow created with Data that does not fit into \(type(of: self).length) bytes.")
         }
         // If data is too small for 32bytes, right pad with 0 elements
-        return value.toHexString().padToSolidity(location: .right)
+        return value.hexEncodedString().padToSolidity(location: .right)
     }
     
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {

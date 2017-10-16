@@ -41,7 +41,7 @@ extension _DoNotUse._IntX: StaticType {
             return "0".padToSolidity()
         }
         let padCharacter: Character = value.sign == .plus ? "0" : "F"
-        return value.serialize().toHexString().padToSolidity(character: padCharacter).lowercased()
+        return value.serialize().hexEncodedString().padToSolidity(character: padCharacter).lowercased()
     }
     
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {

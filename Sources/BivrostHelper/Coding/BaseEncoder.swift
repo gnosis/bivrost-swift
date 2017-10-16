@@ -64,6 +64,6 @@ struct BaseEncoder {
         guard uint.signum() != 0 else {
             return "0"
         }
-        return uint.serialize().toHexString()
+        return uint.serialize().hexEncodedString()
     }
 }
