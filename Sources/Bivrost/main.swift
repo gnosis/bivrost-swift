@@ -17,12 +17,13 @@ func paths(from pattern: String) -> [String] {
 
 let generate = command(
     Option<String>("input", default: "./abi/*.json", description: "Input file pattern specifying which json files should be parsed. Needs to be escaped with quotes to prevent the shell from expanding it."),
-    Option<String>("output", default: "./solidity", description: "Output folder which will contain all necessary Solidity files (generated and auxiliary).")) { inputPattern, output in
+    Option<String>("output", default: "./solidity", description: "Output folder which will contain all necessary Solidity files (generated and auxiliary)."),
+    Flag("force", default: false, flag: "f", disabledName: nil, disabledFlag: nil, description: "If set, deletes all contents of the output folder before recreating it. Make sure there is nothing else in there.")) { inputPattern, output, force in
         
         let expandedPaths = paths(from: inputPattern)
         let outputFolder = Path(output).absolute().string
         do {
-            try BivrostKit.generateSolidityFiles(from: expandedPaths, to: outputFolder)
+            try BivrostKit.generateSolidityFiles(from: expandedPaths, to: outputFolder, force: force)
         } catch {
             print("=== An error occurred during contract generation. ===")
             print("=== Error: ===")
@@ -30,10 +31,4 @@ let generate = command(
         }
 }
 
-let group = Group {
-    $0.addCommand("generate",
-                  "Generates Swift contract classes from contract JSON file and exports them, including all necessary auxiliary files to the specified folder.",
-                  generate)
-}
-
-group.run()
+generate.run()

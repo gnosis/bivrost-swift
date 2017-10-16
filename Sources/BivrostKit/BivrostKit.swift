@@ -18,12 +18,18 @@ public struct BivrostKit {
     ///   - inputFiles: A list of JSON file paths. JSON files should be valid contract
     ///     JSON containing a `contract_name` and an `abi` field.
     ///   - outputFolder: Solidity `.swift` files will be exported to this folder.
-    public static func generateSolidityFiles(from inputFiles: [String], to outputFolder: String) throws {
+    ///   - force: If `true`, deletes all contents of the outputFolder before
+    ///     recreating it. Make sure there is nothing else in there.
+    public static func generateSolidityFiles(from inputFiles: [String], to outputFolder: String, force: Bool = false) throws {
         let typeFolderName = "Generated Types"
         let contractFolderName = "Generated Contracts"
         let typeFolderPath = (Path(outputFolder) + Path(typeFolderName)).absolute().string
         let contractFolderPath = (Path(outputFolder) + Path(contractFolderName)).absolute().string
         
+        if force {
+            try FileTool.delete(path: outputFolder)
+        }
+        // Cleanup output folder first, in case it exists
         try copyAuxiliaryFiles(to: outputFolder)
         try generateTypes(to: typeFolderPath)
         try generateContracts(from: inputFiles, to: contractFolderPath)

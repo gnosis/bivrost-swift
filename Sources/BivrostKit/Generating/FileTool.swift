@@ -32,7 +32,19 @@ struct FileTool {
         try sourcePath.copy(destination)
     }
     
+    /// Creates the specified path, including all intermediate directories.
+    ///
+    /// - Parameter path: Path to create.
     static func create(path: String) throws {
         try Path(path).mkpath()
     }
+    
+    /// Deletes the specified path, including all contents in case of a directory.
+    ///
+    /// - Parameter path: Path to delete.
+    static func delete(path: String) throws {
+        try Path(path).delete()
+    }
+    
+    
 }
