@@ -18,10 +18,6 @@ func paths(from pattern: String) -> [String] {
 let generate = command(
     Option<String>("input", default: "./abi/*.json", description: "Input file pattern specifying which json files should be parsed. Needs to be escaped with quotes to prevent the shell from expanding it."),
     Option<String>("output", default: "./solidity", description: "Output folder which will contain all necessary Solidity files (generated and auxiliary).")) { inputPattern, output in
-        let path = Path("/Users/zweigraf/Development/gnosis/testshit/blub")
-        let blaPath = try Path("/Users/zweigraf/Development/gnosis/bivrost-swift/Resources")
-        try print(blaPath.absolute().children())
-        try blaPath.copy(path)
         
         let expandedPaths = paths(from: inputPattern)
         let outputFolder = Path(output).absolute().string
