@@ -26,7 +26,7 @@ public struct BivrostKit {
         let typeFolderPath = (Path(outputFolder) + Path(typeFolderName)).absolute().string
         let contractFolderPath = (Path(outputFolder) + Path(contractFolderName)).absolute().string
         
-        if force {
+        if Path(outputFolder).exists && force  {
             try FileTool.delete(path: outputFolder)
         }
         // Cleanup output folder first, in case it exists
