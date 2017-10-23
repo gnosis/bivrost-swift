@@ -34,22 +34,39 @@ struct ContractTemplateModel {
     init(contract: Contract) {
         name = contract.name.asTypeName
         
-        functions = contract.elements.flatMap { element -> ContractTemplateModel.Function? in
-            guard case .function(let object) = element else { return nil }
-            
-            let functionName = object.name.asTypeName
-            let functionMethodId = object.methodId
-            
-            let inputString = tupleString(for: object.inputs)
-            let outputString = tupleString(for: object.outputs)
-            
-            let encodeArgumentsString = encodeArguments(for: object.inputs)
-            let decodeReturnTypesArray = decodeTypes(for: object.outputs)
-            let decodeReturnReturnValueString = decodeReturnReturnValue(for: decodeReturnTypesArray)
-            let decodeArgumentsTypesArray = decodeTypes(for: object.inputs)
-            let decodeArgumentsReturnValueString = decodeArgumentsReturnValue(for: decodeArgumentsTypesArray)
-            
-            return ContractTemplateModel.Function(name: functionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray)
+        // In code generation function names are used for struct names.
+        // This means they have to be unique, so filter for duplicate entries
+        // and append the method id on all of them (group by name, mark non-uniques
+        // and treat them accordingly)
+        functions = contract.elements
+            .flatMap {
+                guard case .function(let object) = $0 else { return nil }
+                return object
+            }
+            .group(by: { $0.name })
+            .flatMap { entry -> [(Contract.Element.Function, Bool)] in
+                // flatMap grouped array (dictionary) into an array of
+                // (object, useMethodId) tuples
+                return entry.value.map { ($0, entry.value.count > 1) }
+            }
+            .flatMap { pair -> ContractTemplateModel.Function? in
+                let object = pair.0
+                let shouldAppendMethodId = pair.1
+                
+                let functionMethodId = object.methodId
+                let functionName = object.name.asTypeName
+                let preparedFunctionName = shouldAppendMethodId ? "\(functionName)_\(object.methodId)" : functionName
+                
+                let inputString = tupleString(for: object.inputs)
+                let outputString = tupleString(for: object.outputs)
+                
+                let encodeArgumentsString = encodeArguments(for: object.inputs)
+                let decodeReturnTypesArray = decodeTypes(for: object.outputs)
+                let decodeReturnReturnValueString = decodeReturnReturnValue(for: decodeReturnTypesArray)
+                let decodeArgumentsTypesArray = decodeTypes(for: object.inputs)
+                let decodeArgumentsReturnValueString = decodeArgumentsReturnValue(for: decodeArgumentsTypesArray)
+                
+                return ContractTemplateModel.Function(name: preparedFunctionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray)
         }
     }
 }
