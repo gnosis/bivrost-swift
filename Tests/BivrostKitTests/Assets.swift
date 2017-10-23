@@ -7,6 +7,49 @@
 //
 
 struct Assets {
+    static let duplicateMethodJson = """
+    {
+        "contract_name": "DuplicateMethod",
+        "abi": [
+          {
+            "constant": true,
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [
+              {
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "payable": false,
+            "type": "function"
+          },
+          {
+            "constant": true,
+            "inputs": [
+              {
+                "name": "spender",
+                "type": "address"
+              },
+              {
+                "name": "value",
+                "type": "uint256"
+              }
+            ],
+            "name": "totalSupply",
+            "outputs": [
+              {
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "payable": false,
+            "type": "function"
+          }
+        ]
+    }
+
+    """
     static let multiSigWalletJson = """
         {
           "contract_name": "MultiSigWalletWithDailyLimit",
