@@ -68,5 +68,6 @@ extension Templates {
             }
             {% endfor %}
         }
+
         """
 }

@@ -8,13 +8,14 @@
 extension Templates {
     static let IntX = """
         extension Solidity {
-            {% for bitWidth in bitWidths %}
-            public final class Int{{ bitWidth }}: _DoNotUse._IntX {
+        {% for bitWidth in bitWidths %}
+            final class Int{{ bitWidth }}: _DoNotUse._IntX {
                 override class var bitWidth: UInt {
                     return {{ bitWidth }}
                 }
             }
-            {% endfor %}
+        {% endfor %}
         }
-    """
+
+        """
 }

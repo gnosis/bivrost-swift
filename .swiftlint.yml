@@ -4,6 +4,7 @@ included:
   - Resources
 
 excluded:
+  # basically only excluded because of file_length requirement
   - "Resources/Generated Types"
 
 disabled_rules:

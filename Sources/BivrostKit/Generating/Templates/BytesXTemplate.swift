@@ -8,13 +8,14 @@
 extension Templates {
     static let BytesX = """
         extension Solidity {
-            {% for length in lengths %}
-            public final class Bytes{{ length }}: _DoNotUse._BytesX {
+        {% for length in lengths %}
+            final class Bytes{{ length }}: _DoNotUse._BytesX {
                 override class var length: UInt {
                     return {{ length }}
                 }
             }
-            {% endfor %}
+        {% endfor %}
         }
-    """
+
+        """
 }
