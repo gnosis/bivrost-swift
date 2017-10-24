@@ -8,6 +8,7 @@
 
 /// Base type for fixed-length Solidity.Arrays. Do not use directly.
 extension _DoNotUse {
+    // swiftlint:disable:next type_name
     class _ArrayX<T: SolidityCodable & Equatable> {
         private let items: [T]
         class var length: UInt {

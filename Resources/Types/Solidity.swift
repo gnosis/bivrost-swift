@@ -11,4 +11,5 @@ public struct Solidity {}
 
 /// Struct containing all Abstract Solidity Types. Do not try to use them directly,
 /// instead use the subclasses defined in the `Solidity` struct.
+// swiftlint:disable:next type_name
 public struct _DoNotUse {}

@@ -10,6 +10,7 @@ import BigInt
 
 // MARK: - _UIntX
 extension _DoNotUse {
+    // swiftlint:disable:next type_name
     public class _IntX {
         /// Content of the Int
         let value: BigInt

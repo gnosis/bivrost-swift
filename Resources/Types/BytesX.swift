@@ -9,6 +9,7 @@ import Foundation
 
 // MARK: - _BytesX
 extension _DoNotUse {
+    // swiftlint:disable:next type_name
     public class _BytesX {
         class var length: UInt {
             fatalError("_BytesX.length needs to be overridden.")

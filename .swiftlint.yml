@@ -1,6 +1,10 @@
 included:
   - Source
   - Tests
+  - Resources
+
+excluded:
+  - "Resources/Generated Types"
 
 opt_in_rules: # some rules are only opt-in
   - attributes
