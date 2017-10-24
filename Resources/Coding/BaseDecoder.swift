@@ -123,7 +123,7 @@ extension BaseDecoder {
         
         func consume() -> String {
             let returnValue = lines[index]
-            index = index + 1
+            index += 1
             return returnValue
         }
         

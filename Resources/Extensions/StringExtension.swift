@@ -76,11 +76,11 @@ extension String {
 
 // MARK: - Hex String Calculations
 extension String {
-    var _hexStringByteSize: Int {
+    var hexStringByteSize: Int {
         return characters.count / 2
     }
     
-    static func _hexStringSize(forBytes: UInt) -> UInt {
+    static func hexStringSize(forBytes: UInt) -> UInt {
         return forBytes * 2
     }
 }

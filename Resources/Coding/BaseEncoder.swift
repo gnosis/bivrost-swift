@@ -21,25 +21,25 @@ struct BaseEncoder {
             if type(of: $0).isDynamic {
                 parts.append((data: encoded, dynamic: true))
                 // Add length of location entry to static block
-                sizeOfStaticBlockInBytes = sizeOfStaticBlockInBytes + solidityLocationSizeInBytes
+                sizeOfStaticBlockInBytes += solidityLocationSizeInBytes
             } else {
                 parts.append((data: encoded, dynamic: false))
                 // Add byte size (hexString / 2)
-                sizeOfStaticBlockInBytes = sizeOfStaticBlockInBytes + encoded._hexStringByteSize
+                sizeOfStaticBlockInBytes += encoded.hexStringByteSize
             }
         }
         var staticPart = ""
         var dynamicPart = ""
         parts.forEach { pair in
             if pair.dynamic {
-                let location = sizeOfStaticBlockInBytes + dynamicPart._hexStringByteSize
+                let location = sizeOfStaticBlockInBytes + dynamicPart.hexStringByteSize
                 guard let locationUint = try? Solidity.UInt256(BigUInt(location)) else {
                     fatalError("BaseEncoder calculated invalid location for dynamic part. This should not happen.")
                 }
-                staticPart = staticPart + locationUint.encode()
-                dynamicPart = dynamicPart + pair.data
+                staticPart += locationUint.encode()
+                dynamicPart += pair.data
             } else {
-                staticPart = staticPart + pair.data
+                staticPart += pair.data
             }
         }
         
