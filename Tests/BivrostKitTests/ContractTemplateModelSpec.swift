@@ -6,11 +6,10 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-
-import Foundation
-import Quick
-import Nimble
 @testable import BivrostKit
+import Foundation
+import Nimble
+import Quick
 
 class ContractTemplateModelSpec: QuickSpec {
     override func spec() {
@@ -23,7 +22,7 @@ class ContractTemplateModelSpec: QuickSpec {
                     expect($0.name).to(contain($0.methodId))
                 }
             }
-            
+
             it("should not append method ids to generated function names in case of no duplicates") {
                 let json = jsonDict(from: Assets.standardTokenJson)
                 let contract = try! ContractParser.parseContract(from: json)
@@ -34,9 +33,9 @@ class ContractTemplateModelSpec: QuickSpec {
             }
         }
     }
-    
+
 }
 
-fileprivate func jsonDict(from jsonString: String) -> [String: Any] {
+private func jsonDict(from jsonString: String) -> [String: Any] {
     return try! JSONSerialization.jsonObject(with: jsonString.data(using: .utf8)!, options: []) as! [String: Any]
 }

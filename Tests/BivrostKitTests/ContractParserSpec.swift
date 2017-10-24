@@ -6,10 +6,10 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import Foundation
-import Quick
-import Nimble
 @testable import BivrostKit
+import Foundation
+import Nimble
+import Quick
 
 class ContractParserSpec: QuickSpec {
     override func spec() {
@@ -19,7 +19,7 @@ class ContractParserSpec: QuickSpec {
                 expect { try ContractParser.parseContract(from: json) }.toNot(throwError())
                 expect { (try ContractParser.parseContract(from: json)).name } == "MultiSigWalletWithDailyLimit"
             }
-            
+
             it("should not throw when parsing StandardToken") {
                 let json = jsonDict(from: Assets.standardTokenJson)
                 expect { try ContractParser.parseContract(from: json) }.toNot(throwError())
@@ -29,6 +29,6 @@ class ContractParserSpec: QuickSpec {
     }
 }
 
-fileprivate func jsonDict(from jsonString: String) -> [String: Any] {
+private func jsonDict(from jsonString: String) -> [String: Any] {
     return try! JSONSerialization.jsonObject(with: jsonString.data(using: .utf8)!, options: []) as! [String: Any]
 }
