@@ -1,4 +1,4 @@
-# Bivrost
+# Bivrost [![Build Status](https://travis-ci.org/gnosis/bivrost-swift.svg?branch=master)](https://travis-ci.org/gnosis/bivrost-swift)
 
 🔥 🌈 Bridge between Solidity Contracts and Swift
 
