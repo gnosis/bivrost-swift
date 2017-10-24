@@ -12,7 +12,7 @@ extension Solidity {
     struct VariableArray<T: SolidityCodable & Equatable> {
         let items: [T]
         let length: Solidity.UInt256
-        
+
         init?(_ items: [T]) {
             guard let length = try? Solidity.UInt256(BigUInt(items.count)) else {
                 return nil
@@ -36,7 +36,7 @@ extension Solidity.VariableArray: DynamicType {
         }
         return array
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return length.encode() + BaseEncoder.encode(items)
     }

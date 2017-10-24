@@ -9,7 +9,7 @@
 extension Solidity {
     public struct String {
         let wrapper: Solidity.Bytes
-        
+
         init?(_ value: Swift.String) {
             guard let data = value.data(using: .utf8),
                 let bytes = Solidity.Bytes(data) else {
@@ -28,7 +28,7 @@ extension Solidity.String: DynamicType {
         }
         return string
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
     }

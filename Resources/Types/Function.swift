@@ -10,7 +10,7 @@ extension Solidity {
     struct Function {
         let address: Address
         let functionSelector: Swift.String
-        
+
         /// Represents a function to be called on any contract. Function selector
         /// has to be passed as a hex string with exactly 8 characters (4 bytes).
         /// Refer to https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#function-selector
@@ -35,11 +35,11 @@ extension Solidity.Function: StaticType {
     func encode() -> SolidityCodable.EncodeFormat {
         // Address string padded to 20 bytes
         let addressHex = address.encodeUnpadded()
-        
+
         let unPaddedString = addressHex + functionSelector
         return unPaddedString.padToSolidity(location: .right)
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.Function {
         let line = source.consume()
         // 20 bytes / 40 chars for Address as UInt160

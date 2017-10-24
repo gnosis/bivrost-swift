@@ -12,7 +12,7 @@ import Foundation
 
 extension Data {
     init?(fromHexEncodedString string: String) {
-        
+
         // Convert 0 ... 9, a ... f, A ...F to their decimal value,
         // return nil for all other input characters
         func decode(nibble: UInt16) -> UInt8? {
@@ -27,8 +27,8 @@ extension Data {
                 return nil
             }
         }
-        
-        self.init(capacity: string.utf16.count/2)
+
+        self.init(capacity: string.utf16.count / 2)
         var even = true
         var byte: UInt8 = 0
         for codePoint in string.utf16 {
@@ -43,7 +43,7 @@ extension Data {
         }
         guard even else { return nil }
     }
-    
+
     func hexEncodedString() -> String {
         return map { String(format: "%02hhx", $0) }.joined()
     }

@@ -11,11 +11,11 @@ import BigInt
 
 struct BaseEncoder {
     private static let solidityLocationSizeInBytes = 32
-    
+
     static func encode(_ arguments: [SolidityCodable]) -> SolidityCodable.EncodeFormat {
         var parts = [(data: SolidityCodable.EncodeFormat, dynamic: Bool)]()
         var sizeOfStaticBlockInBytes = 0
-        
+
         arguments.forEach {
             let encoded = $0.encode()
             if type(of: $0).isDynamic {
@@ -42,18 +42,18 @@ struct BaseEncoder {
                 staticPart += pair.data
             }
         }
-        
+
         return staticPart + dynamicPart
     }
-    
+
     static func encode(arguments: SolidityCodable...) -> SolidityCodable.EncodeFormat {
         return encode(arguments)
     }
-    
+
     static func encode(arguments: Void) -> SolidityCodable.EncodeFormat {
         return ""
     }
-    
+
     static func encodeUnPadded(uint: BigUInt, bitWidth: UInt) -> SolidityCodable.EncodeFormat {
         guard uint.bitWidth <= bitWidth else {
             fatalError("\(#function) called with UInt \(uint) that is too big for bit width \(bitWidth).")

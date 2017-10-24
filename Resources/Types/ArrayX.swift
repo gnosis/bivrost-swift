@@ -14,7 +14,7 @@ extension _DoNotUse {
         class var length: UInt {
             fatalError("Not meant to be called directly.")
         }
-        
+
         required init(_ items: [T]) throws {
             let expectedLength = type(of: self).length
             guard items.count == expectedLength else {
@@ -33,11 +33,11 @@ extension _DoNotUse._ArrayX: SolidityCodable {
         }
         return T.isDynamic
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return BaseEncoder.encode(items)
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
         return try self.init(BaseDecoder.decodeArray(source: source, capacity: length, decoder: T.decode))
     }

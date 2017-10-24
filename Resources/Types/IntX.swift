@@ -18,7 +18,7 @@ extension _DoNotUse {
         class var bitWidth: UInt {
             fatalError("_IntX.bitWidth needs to be overridden.")
         }
-        
+
         required public init(_ int: BigInt) throws {
             let bits = type(of: self).bitWidth
             guard int.bitWidth <= bits else {
@@ -44,7 +44,7 @@ extension _DoNotUse._IntX: StaticType {
         let padCharacter: Character = value.sign == .plus ? "0" : "F"
         return value.serialize().hexEncodedString().padToSolidity(character: padCharacter).lowercased()
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
         guard let int = try? self.init(BaseDecoder.decodeInt(data: source.consume())) else {
             throw BivrostError.Decoder.couldNotCreateInt(source: source, bits: bitWidth)

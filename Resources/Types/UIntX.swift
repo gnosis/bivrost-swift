@@ -18,7 +18,7 @@ extension _DoNotUse {
         class var bitWidth: UInt {
             fatalError("_UIntX.bitWidth needs to be overridden.")
         }
-        
+
         required public init(_ uint: BigUInt) throws {
             let bits = type(of: self).bitWidth
             guard uint.bitWidth <= bits else {
@@ -37,7 +37,7 @@ extension _DoNotUse._UIntX: StaticType {
         }
         return BaseEncoder.encodeUnPadded(uint: value, bitWidth: type(of: self).bitWidth).padToSolidity()
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
         guard let uint = try? self.init(BaseDecoder.decodeUInt(data: source.consume())) else {
             throw BivrostError.Decoder.couldNotCreateUInt(source: source, bits: bitWidth)

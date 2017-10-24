@@ -13,7 +13,7 @@ extension Solidity {
         let value: Solidity.UInt160
         /// Only used for some internal calculations, do not use otherwise.
         private let bigInt: BigUInt
-        
+
         init(_ address: Swift.String) throws {
             let hex = address.hasPrefix("0x") ? Swift.String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
             guard let bigInt = BigUInt(hex, radix: 16) else {
@@ -21,7 +21,7 @@ extension Solidity {
             }
             try self.init(bigUInt: bigInt)
         }
-        
+
         init(bigUInt: BigUInt) throws {
             guard let uint = try? Solidity.UInt160(bigUInt) else {
                 throw BivrostError.Address.invalidBigUInt(bigUInt)
@@ -29,7 +29,7 @@ extension Solidity {
             value = uint
             self.bigInt = bigUInt
         }
-        
+
         /// Returns an unpadded hex string version of the underlying number.
         /// We only pad to 40 characters = 20 bytes in case of an address that
         /// can be represented in less bytes (e.g. 0 address).
@@ -50,7 +50,7 @@ extension Solidity.Address: StaticType {
     func encode() -> SolidityCodable.EncodeFormat {
         return value.encode()
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.Address {
         let uint = try BaseDecoder.decodeUInt(data: source.consume())
         let address = try Solidity.Address(bigUInt: uint)

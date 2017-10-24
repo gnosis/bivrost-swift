@@ -13,7 +13,7 @@ extension Solidity {
     public struct Bytes {
         let value: Data
         let length: UInt256
-        
+
         init?(_ value: Data) {
             guard let length = try? Solidity.UInt256(BigUInt(value.count)) else {
                 return nil
@@ -32,7 +32,7 @@ extension Solidity.Bytes: DynamicType {
         }
         return bytes
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return length.encode() + value.hexEncodedString().padToSolidity(location: .right)
     }
