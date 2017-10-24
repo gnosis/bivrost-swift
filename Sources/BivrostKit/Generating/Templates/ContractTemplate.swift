@@ -31,7 +31,8 @@ extension Templates {
                     // Static Types & Location
                     {% for decodedType in function.decodeReturnTypes %}
                         {% if decodedType.isDynamic %}
-                    source.consume()
+                    // Ignore location for dynamic type
+                    _ = source.consume()
                         {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
                         {% endif %}
@@ -50,7 +51,8 @@ extension Templates {
                     // Static Types & Location
                     {% for decodedType in function.decodeArgumentsTypes %}
                         {% if decodedType.isDynamic %}
-                    source.consume()
+                    // Ignore location for dynamic type
+                    _ = source.consume()
                         {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
                         {% endif %}
