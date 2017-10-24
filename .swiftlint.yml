@@ -39,4 +39,4 @@ opt_in_rules: # some rules are only opt-in
 # Make certain rules give out an error
 force_cast: error
 force_try: error
-force_unwrapping: error
+force_unwrapping: warning
