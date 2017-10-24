@@ -6,11 +6,11 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
-extension Solidity {
-    public struct Bytes {
+public extension Solidity {
+    struct Bytes {
         let value: Data
         let length: UInt256
 
@@ -39,7 +39,7 @@ extension Solidity.Bytes: DynamicType {
 }
 
 extension Solidity.Bytes: Equatable {
-    public static func ==(lhs: Solidity.Bytes, rhs: Solidity.Bytes) -> Bool {
+    public static func == (lhs: Solidity.Bytes, rhs: Solidity.Bytes) -> Bool {
         return lhs.length == rhs.length && lhs.value == rhs.value
     }
 }

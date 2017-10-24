@@ -61,7 +61,7 @@ extension Solidity.Function: StaticType {
 //}
 
 extension Solidity.Function: Equatable {
-    static func ==(lhs: Solidity.Function, rhs: Solidity.Function) -> Bool {
+    static func == (lhs: Solidity.Function, rhs: Solidity.Function) -> Bool {
         return lhs.address == rhs.address && lhs.functionSelector == rhs.functionSelector
     }
 }

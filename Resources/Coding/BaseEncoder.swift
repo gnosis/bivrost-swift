@@ -6,8 +6,8 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 struct BaseEncoder {
     private static let solidityLocationSizeInBytes = 32

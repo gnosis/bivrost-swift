@@ -7,8 +7,8 @@
 //
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 enum BivrostError: Error {
     enum Decoder: Error {

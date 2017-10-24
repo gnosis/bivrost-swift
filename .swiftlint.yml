@@ -6,6 +6,9 @@ included:
 excluded:
   - "Resources/Generated Types"
 
+disabled_rules:
+  - file_header
+
 opt_in_rules: # some rules are only opt-in
   - attributes
   - closure_spacing

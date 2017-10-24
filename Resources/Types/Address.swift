@@ -8,14 +8,16 @@
 
 import BigInt
 
-extension Solidity {
-    public struct Address {
+public extension Solidity {
+    struct Address {
         let value: Solidity.UInt160
         /// Only used for some internal calculations, do not use otherwise.
         private let bigInt: BigUInt
 
         init(_ address: Swift.String) throws {
-            let hex = address.hasPrefix("0x") ? Swift.String(address[address.index(address.startIndex, offsetBy: 2)...]) : address
+            let hex = address.hasPrefix("0x")
+                ? Swift.String(address[address.index(address.startIndex, offsetBy: 2)...])
+                : address
             guard let bigInt = BigUInt(hex, radix: 16) else {
                 throw BivrostError.Address.invalidAddress(hex)
             }
@@ -58,8 +60,8 @@ extension Solidity.Address: StaticType {
     }
 }
 
-extension Solidity.Address: Equatable {
-    public static func ==(lhs: Solidity.Address, rhs: Solidity.Address) -> Bool {
+public extension Solidity.Address: Equatable {
+    static func == (lhs: Solidity.Address, rhs: Solidity.Address) -> Bool {
         return lhs.value == rhs.value
     }
 }

@@ -5,12 +5,14 @@
 //  Created by Luis Reisewitz on 10.10.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
-import Foundation
+
 import BigInt
+import Foundation
 
 struct BaseDecoder {
-    fileprivate static func partitionData(inHex string: SolidityCodable.EncodeFormat) -> [SolidityCodable.EncodeFormat] {
-        return string.splitSolidityLines()
+    fileprivate static func partitionData(
+        inHex string: SolidityCodable.EncodeFormat) -> [SolidityCodable.EncodeFormat] {
+            return string.splitSolidityLines()
     }
 
     static func partition(_ data: String) -> BaseDecoder.PartitionData {
@@ -79,7 +81,8 @@ struct BaseDecoder {
         return string
     }
 
-    static func decodeArray<T>(data: SolidityCodable.EncodeFormat, decoder: (SolidityCodable.EncodeFormat) throws -> T) throws -> [T] {
+    static func decodeArray<T>(data: SolidityCodable.EncodeFormat,
+                               decoder: (SolidityCodable.EncodeFormat) throws -> T) throws -> [T] {
         let lines = partitionData(inHex: data)
         let sizePart = lines[0]
         guard let size = Int(sizePart, radix: 16),
@@ -92,7 +95,9 @@ struct BaseDecoder {
         return try (1..<lines.count).map { try decoder(lines[$0]) }
     }
 
-    static func decodeArray<T: SolidityCodable>(source: PartitionData, capacity: UInt, decoder: (PartitionData) throws -> T) throws -> [T] {
+    static func decodeArray<T: SolidityCodable>(source: PartitionData,
+                                                capacity: UInt,
+                                                decoder: (PartitionData) throws -> T) rethrows -> [T] {
         guard capacity != 0 else {
             return []
         }

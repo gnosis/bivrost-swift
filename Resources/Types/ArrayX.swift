@@ -45,7 +45,7 @@ extension _DoNotUse._ArrayX: SolidityCodable {
 
 // MARK: - Equatable
 extension _DoNotUse._ArrayX: Equatable {
-    static func ==(lhs: _DoNotUse._ArrayX<T>, rhs: _DoNotUse._ArrayX<T>) -> Bool {
+    static func == (lhs: _DoNotUse._ArrayX<T>, rhs: _DoNotUse._ArrayX<T>) -> Bool {
         guard type(of: lhs).length == type(of: lhs).length,
             lhs.items.count == rhs.items.count else {
                 return false

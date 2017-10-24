@@ -9,9 +9,9 @@
 import BigInt
 
 // MARK: - _UIntX
-extension _DoNotUse {
+public extension _DoNotUse {
     // swiftlint:disable:next type_name
-    public class _IntX {
+    class _IntX {
         /// Content of the Int
         let value: BigInt
         /// Specifies how wide this int is
@@ -55,7 +55,7 @@ extension _DoNotUse._IntX: StaticType {
 
 // MARK: - Equatable
 extension _DoNotUse._IntX: Equatable {
-    public static func ==(lhs: _DoNotUse._IntX, rhs: _DoNotUse._IntX) -> Bool {
+    public static func == (lhs: _DoNotUse._IntX, rhs: _DoNotUse._IntX) -> Bool {
         guard type(of: lhs).bitWidth == type(of: rhs).bitWidth else {
             return false
         }

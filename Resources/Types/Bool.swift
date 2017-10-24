@@ -8,8 +8,8 @@
 
 import BigInt
 
-extension Solidity {
-    public struct Bool {
+public extension Solidity {
+    struct Bool {
         private let wrapper: UInt8
 
         init(_ value: Swift.Bool) {
@@ -32,8 +32,8 @@ extension Solidity.Bool: StaticType {
     }
 }
 
-extension Solidity.Bool: Equatable {
-    public static func ==(lhs: Solidity.Bool, rhs: Solidity.Bool) -> Bool {
+public extension Solidity.Bool: Equatable {
+    static func == (lhs: Solidity.Bool, rhs: Solidity.Bool) -> Bool {
         return lhs.wrapper == rhs.wrapper
     }
 }

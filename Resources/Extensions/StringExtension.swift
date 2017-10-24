@@ -57,7 +57,7 @@ extension String {
         for character in self.characters {
             collectedCharacters.append(character)
             count += 1
-            if (count == length) {
+            if count == length {
                 // Reached the desired length
                 count = 0
                 result.append(String(collectedCharacters))

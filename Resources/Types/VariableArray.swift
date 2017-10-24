@@ -43,7 +43,7 @@ extension Solidity.VariableArray: DynamicType {
 }
 
 extension Solidity.VariableArray: Equatable {
-    static func ==(lhs: Solidity.VariableArray<T>, rhs: Solidity.VariableArray<T>) -> Bool {
+    static func == (lhs: Solidity.VariableArray<T>, rhs: Solidity.VariableArray<T>) -> Bool {
         return lhs.length == rhs.length && lhs.items == rhs.items
     }
 }

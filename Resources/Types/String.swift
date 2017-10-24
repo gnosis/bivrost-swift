@@ -6,8 +6,8 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-extension Solidity {
-    public struct String {
+public extension Solidity {
+    struct String {
         let wrapper: Solidity.Bytes
 
         init?(_ value: Swift.String) {
@@ -34,8 +34,8 @@ extension Solidity.String: DynamicType {
     }
 }
 
-extension Solidity.String: Equatable {
-    public static func ==(lhs: Solidity.String, rhs: Solidity.String) -> Bool {
+public extension Solidity.String: Equatable {
+    static func == (lhs: Solidity.String, rhs: Solidity.String) -> Bool {
         return lhs.wrapper == rhs.wrapper
     }
 }

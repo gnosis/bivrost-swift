@@ -8,9 +8,9 @@
 import Foundation
 
 // MARK: - _BytesX
-extension _DoNotUse {
+public extension _DoNotUse {
     // swiftlint:disable:next type_name
-    public class _BytesX {
+    class _BytesX {
         class var length: UInt {
             fatalError("_BytesX.length needs to be overridden.")
         }
@@ -46,8 +46,8 @@ extension _DoNotUse._BytesX: StaticType {
 }
 
 // MARK: - Equatable
-extension _DoNotUse._BytesX: Equatable {
-    public static func ==(lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
+public extension _DoNotUse._BytesX: Equatable {
+    static func == (lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
         guard type(of: lhs).length == type(of: rhs).length else {
             return false
         }

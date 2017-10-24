@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Extension taken from https://stackoverflow.com/a/40278391/972993
+// Extension taken from https://stackoverflow.com/a/40278391/972993 (with slight modifications)
 
 extension Data {
     init?(fromHexEncodedString string: String) {
@@ -16,7 +16,7 @@ extension Data {
         // Convert 0 ... 9, a ... f, A ...F to their decimal value,
         // return nil for all other input characters
         func decode(nibble: UInt16) -> UInt8? {
-            switch(nibble) {
+            switch nibble {
             case 0x30 ... 0x39:
                 return UInt8(nibble - 0x30)
             case 0x41 ... 0x46:
