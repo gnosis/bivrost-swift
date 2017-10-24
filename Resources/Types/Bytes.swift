@@ -1,6 +1,6 @@
 //
 //  Bytes.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 27.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.

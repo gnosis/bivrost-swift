@@ -1,6 +1,6 @@
 //
 //  SolidityFunction.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 12.10.17.
 //

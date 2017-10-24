@@ -1,6 +1,6 @@
 //
 //  ArrayX-Generated.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 11.10.17.
 //

@@ -1,6 +1,6 @@
 //
 //  VariableArray.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 28.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.

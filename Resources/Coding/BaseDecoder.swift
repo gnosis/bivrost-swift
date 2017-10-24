@@ -1,6 +1,6 @@
 //
 //  BaseDecoder.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 10.10.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
