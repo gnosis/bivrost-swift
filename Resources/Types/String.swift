@@ -34,8 +34,8 @@ extension Solidity.String: DynamicType {
     }
 }
 
-public extension Solidity.String: Equatable {
-    static func == (lhs: Solidity.String, rhs: Solidity.String) -> Bool {
+extension Solidity.String: Equatable {
+    public static func == (lhs: Solidity.String, rhs: Solidity.String) -> Bool {
         return lhs.wrapper == rhs.wrapper
     }
 }

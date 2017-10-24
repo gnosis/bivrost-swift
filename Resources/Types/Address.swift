@@ -60,8 +60,8 @@ extension Solidity.Address: StaticType {
     }
 }
 
-public extension Solidity.Address: Equatable {
-    static func == (lhs: Solidity.Address, rhs: Solidity.Address) -> Bool {
+extension Solidity.Address: Equatable {
+    public static func == (lhs: Solidity.Address, rhs: Solidity.Address) -> Bool {
         return lhs.value == rhs.value
     }
 }

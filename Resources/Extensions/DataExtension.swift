@@ -32,7 +32,7 @@ extension Data {
         var even = true
         var byte: UInt8 = 0
         for codePoint in string.utf16 {
-            guard let val = decodeNibble(u: codePoint) else { return nil }
+            guard let val = decode(nibble: codePoint) else { return nil }
             if even {
                 byte = val << 4
             } else {

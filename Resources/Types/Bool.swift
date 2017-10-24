@@ -32,8 +32,8 @@ extension Solidity.Bool: StaticType {
     }
 }
 
-public extension Solidity.Bool: Equatable {
-    static func == (lhs: Solidity.Bool, rhs: Solidity.Bool) -> Bool {
+extension Solidity.Bool: Equatable {
+    public static func == (lhs: Solidity.Bool, rhs: Solidity.Bool) -> Bool {
         return lhs.wrapper == rhs.wrapper
     }
 }

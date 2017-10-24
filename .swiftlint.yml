@@ -35,3 +35,8 @@ opt_in_rules: # some rules are only opt-in
   - trailing_closure
   - unneeded_parentheses_in_closure_argument
   - vertical_parameter_alignment_on_call
+
+# Make certain rules give out an error
+force_cast: error
+force_try: error
+force_unwrapping: error

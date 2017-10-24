@@ -46,8 +46,8 @@ extension _DoNotUse._BytesX: StaticType {
 }
 
 // MARK: - Equatable
-public extension _DoNotUse._BytesX: Equatable {
-    static func == (lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
+extension _DoNotUse._BytesX: Equatable {
+    public static func == (lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
         guard type(of: lhs).length == type(of: rhs).length else {
             return false
         }
