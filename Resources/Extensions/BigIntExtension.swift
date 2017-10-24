@@ -6,8 +6,8 @@
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 extension BigInt {
     /// Returns the binary data for the two's complement.
@@ -19,7 +19,7 @@ extension BigInt {
         }
         return ((~magnitude) + 1).serialize()
     }
-    
+
     init?(twosComplementHex: String) {
         let lowercase = twosComplementHex.lowercased()
         // Check if we have a negative number, else just return
@@ -34,7 +34,7 @@ extension BigInt {
                 self.init(lowercase, radix: 16)
                 return
         }
-        
+
         guard let uint = BigUInt(lowercase, radix: 16) else {
             return nil
         }

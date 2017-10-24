@@ -7,11 +7,11 @@
 //
 //
 
-import Quick
-import Nimble
 @testable import BivrostKit
+import Nimble
+import Quick
 
-fileprivate typealias Element = Contract.Element
+private typealias Element = Contract.Element
 
 class ElementJsonParserSpec: QuickSpec {
     override func spec() {
@@ -21,7 +21,7 @@ class ElementJsonParserSpec: QuickSpec {
                 expect { try ElementJsonParser.parseContractElement(from: [:]) }
                     .to(throwError())
             }
-            
+
             context("Fallback Function") {
                 it("should parse an empty fallback element correctly with defaults") {
                     let json = ["type": "fallback"]
@@ -31,7 +31,7 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(fallback.payable) == false
                         })
                 }
-                
+
                 it("should parse a fallback element correctly") {
                     let json: [String: Any] = ["type": "fallback", "constant": true, "payable": true]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
@@ -41,7 +41,7 @@ class ElementJsonParserSpec: QuickSpec {
                         })
                 }
             }
-            
+
             context("Constructor Function") {
                 it("should parse an empty constructor element correctly with defaults") {
                     let json = ["type": "constructor"]
@@ -52,7 +52,7 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(constructor.payable) == false
                         })
                 }
-                
+
                 it("should parse a constructor element correctly") {
                     let json: [String: Any] = ["type": "constructor",
                                                "constant": true,
@@ -69,14 +69,14 @@ class ElementJsonParserSpec: QuickSpec {
                         })
                 }
             }
-            
+
             context("Function Function") {
                 it("should throw when given a function element without proper fields") {
                     let json = ["type": "function"]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(throwError())
                 }
-                
+
                 it("should parse a mostly empty function element correctly with defaults") {
                     let json = ["type": "function", "name": "foo"]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
@@ -90,24 +90,24 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(function.methodId) == "c2985578"
                         })
                 }
-                
+
                 it("should parse a function element without type correctly") {
                     let json: [String: Any] = ["name": "foo2",
                                                "constant": true,
                                                "payable": false,
-                                               "inputs": [["name":"a", "type":"string"]],
-                                               "outputs": [["name":"b", "type":"uint"]]
+                                               "inputs": [["name": "a", "type": "string"]],
+                                               "outputs": [["name": "b", "type": "uint"]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFunction { function in
                             expect(function.inputs.count) == 1
                             expect(function.inputs.first?.name) == "a"
                             expect(function.inputs.first?.type) == .dynamicType(.string)
-                            
+
                             expect(function.outputs.count) == 1
                             expect(function.outputs.first?.name) == "b"
                             expect(function.outputs.first?.type) == .staticType(.uint(bits: 256))
-                            
+
                             expect(function.constant) == true
                             expect(function.payable) == false
                             expect(function.name) == "foo2"
@@ -115,19 +115,19 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(function.methodId) == "bfe4a119"
                         })
                 }
-                
+
                 it("should parse a function element with all exact parameter types correctly") {
                     let json: [String: Any] = ["name": "foo2",
                                                "constant": true,
                                                "payable": false,
-                                               "inputs": [["name":"a", "type":"address"],
-                                                          ["name":"b", "type":"uint"],
-                                                          ["name":"c", "type":"int"],
-                                                          ["name":"d", "type":"bool"],
-                                                          ["name":"e", "type":"function"],
-                                                          ["name":"f", "type":"bytes"],
-                                                          ["name":"g", "type":"string"]],
-                                               "outputs": [["name":"b", "type":"uint"]]
+                                               "inputs": [["name": "a", "type": "address"],
+                                                          ["name": "b", "type": "uint"],
+                                                          ["name": "c", "type": "int"],
+                                                          ["name": "d", "type": "bool"],
+                                                          ["name": "e", "type": "function"],
+                                                          ["name": "f", "type": "bytes"],
+                                                          ["name": "g", "type": "string"]],
+                                               "outputs": [["name": "b", "type": "uint"]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beFunction { function in
@@ -159,8 +159,7 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(function.methodId) == "ebd557ad"
                         })
                 }
-                
-                
+
             }
             context("Event Element") {
                 it("should throw when given an event element without proper fields") {
@@ -168,7 +167,7 @@ class ElementJsonParserSpec: QuickSpec {
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(throwError())
                 }
-                
+
                 it("should parse a mostly empty event element correctly with defaults") {
                     let json = ["type": "event", "name": "foo"]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
@@ -178,12 +177,12 @@ class ElementJsonParserSpec: QuickSpec {
                             expect(event.anonymous) == false
                         })
                 }
-                
+
                 it("should parse an event element correctly") {
                     let json: [String: Any] = ["type": "event",
                                                "name": "foo2",
                                                "anonymous": true,
-                                               "inputs": [["name":"a", "type":"bytes", "indexed": true]]
+                                               "inputs": [["name": "a", "type": "bytes", "indexed": true]]
                     ]
                     expect { try ElementJsonParser.parseContractElement(from: json) }
                         .to(beEvent { event in
@@ -202,7 +201,7 @@ class ElementJsonParserSpec: QuickSpec {
 
 // MARK: - Matchers
 
-fileprivate func beFallback(test: @escaping (Element.Fallback) -> () = { _ in } ) -> Predicate<Element> {
+private func beFallback(test: @escaping (Element.Fallback) -> Void = { _ in }) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be a Fallback object")
         if let actual = try expression.evaluate(),
@@ -214,7 +213,7 @@ fileprivate func beFallback(test: @escaping (Element.Fallback) -> () = { _ in } 
     }
 }
 
-fileprivate func beConstructor(test: @escaping (Element.Constructor) -> () = { _ in } ) -> Predicate<Element> {
+private func beConstructor(test: @escaping (Element.Constructor) -> Void = { _ in }) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be a Constructor object")
         if let actual = try expression.evaluate(),
@@ -226,7 +225,7 @@ fileprivate func beConstructor(test: @escaping (Element.Constructor) -> () = { _
     }
 }
 
-fileprivate func beFunction(test: @escaping (Element.Function) -> () = { _ in } ) -> Predicate<Element> {
+private func beFunction(test: @escaping (Element.Function) -> Void = { _ in }) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be a Function object")
         if let actual = try expression.evaluate(),
@@ -238,7 +237,7 @@ fileprivate func beFunction(test: @escaping (Element.Function) -> () = { _ in } 
     }
 }
 
-fileprivate func beEvent(test: @escaping (Element.Event) -> () = { _ in } ) -> Predicate<Element> {
+private func beEvent(test: @escaping (Element.Event) -> Void = { _ in }) -> Predicate<Element> {
     return Predicate { expression in
         let message = ExpectationMessage.expectedTo("be an Event object")
         if let actual = try expression.evaluate(),

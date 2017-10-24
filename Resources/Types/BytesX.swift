@@ -8,14 +8,15 @@
 import Foundation
 
 // MARK: - _BytesX
-extension _DoNotUse {
-    public class _BytesX {
+public extension _DoNotUse {
+    // swiftlint:disable:next type_name
+    class _BytesX {
         class var length: UInt {
             fatalError("_BytesX.length needs to be overridden.")
         }
-        
+
         let value: Data
-        
+
         required public init(_ value: Data) throws {
             let maxBytes = type(of: self).length
             guard value.count <= maxBytes else {
@@ -35,7 +36,7 @@ extension _DoNotUse._BytesX: StaticType {
         // If data is too small for 32bytes, right pad with 0 elements
         return value.hexEncodedString().padToSolidity(location: .right)
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
         guard let bytes = try? self.init(BaseDecoder.decodeBytesX(data: source.consume(), length: length)) else {
             throw BivrostError.Decoder.couldNotCreateBytesX(source: source, length: length)
@@ -46,7 +47,7 @@ extension _DoNotUse._BytesX: StaticType {
 
 // MARK: - Equatable
 extension _DoNotUse._BytesX: Equatable {
-    public static func ==(lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
+    public static func == (lhs: _DoNotUse._BytesX, rhs: _DoNotUse._BytesX) -> Bool {
         guard type(of: lhs).length == type(of: rhs).length else {
             return false
         }

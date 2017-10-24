@@ -1,0 +1,42 @@
+included:
+  - Source
+  - Tests
+  - Resources
+
+excluded:
+  # basically only excluded because of file_length requirement
+  - "Resources/Generated Types"
+
+disabled_rules:
+  - file_header
+
+opt_in_rules: # some rules are only opt-in
+  - attributes
+  - closure_spacing
+  - contains_over_first_not_nil
+  - empty_count
+  - explicit_init
+  - extension_access_modifier
+  - fatal_error_message
+  - file_header
+  - force_unwrapping
+  - implicit_return
+  - implicitly_unwrapped_optional
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_parameters
+  - number_separator
+  - object_literal
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - sorted_imports
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+
+# Make certain rules give out an error
+force_cast: error
+force_try: error
+force_unwrapping: error

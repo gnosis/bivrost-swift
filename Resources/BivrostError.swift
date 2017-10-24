@@ -7,8 +7,8 @@
 //
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 enum BivrostError: Error {
     enum Decoder: Error {
@@ -20,7 +20,7 @@ enum BivrostError: Error {
         case invalidBytesLength(hex: String)
         case invalidStringEncoding(data: Data)
         case invalidArrayLength(hex: String)
-        
+
         // Creating Objects
         case couldNotCreateString(source: BaseDecoder.PartitionData)
         case couldNotCreateBytes(source: BaseDecoder.PartitionData)
@@ -30,28 +30,28 @@ enum BivrostError: Error {
         case couldNotCreateAddress(source: BaseDecoder.PartitionData)
         case couldNotCreateVariableArray(source: BaseDecoder.PartitionData)
     }
-    
+
     enum ArrayX: Error {
         case itemCountMismatch(expected: UInt, actual: UInt)
     }
-    
+
     enum BytesX: Error {
         case byteCountMismatch(max: UInt, actual: UInt)
     }
-    
+
     enum Address: Error {
         case invalidAddress(String)
         case invalidBigUInt(BigUInt)
     }
-    
+
     enum Function: Error {
         case invalidFunctionSelector(String)
     }
-    
+
     enum UIntX: Error {
         case bitWidthMismatch(max: UInt, actual: UInt)
     }
-    
+
     enum IntX: Error {
         case bitWidthMismatch(max: UInt, actual: UInt)
     }

@@ -1,15 +1,15 @@
 //
 //  String.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 28.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-extension Solidity {
-    public struct String {
+public extension Solidity {
+    struct String {
         let wrapper: Solidity.Bytes
-        
+
         init?(_ value: Swift.String) {
             guard let data = value.data(using: .utf8),
                 let bytes = Solidity.Bytes(data) else {
@@ -28,14 +28,14 @@ extension Solidity.String: DynamicType {
         }
         return string
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return wrapper.encode()
     }
 }
 
 extension Solidity.String: Equatable {
-    public static func ==(lhs: Solidity.String, rhs: Solidity.String) -> Bool {
+    public static func == (lhs: Solidity.String, rhs: Solidity.String) -> Bool {
         return lhs.wrapper == rhs.wrapper
     }
 }

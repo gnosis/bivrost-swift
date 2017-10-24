@@ -8,12 +8,13 @@
 
 /// Base type for fixed-length Solidity.Arrays. Do not use directly.
 extension _DoNotUse {
+    // swiftlint:disable:next type_name
     class _ArrayX<T: SolidityCodable & Equatable> {
         private let items: [T]
         class var length: UInt {
             fatalError("Not meant to be called directly.")
         }
-        
+
         required init(_ items: [T]) throws {
             let expectedLength = type(of: self).length
             guard items.count == expectedLength else {
@@ -32,11 +33,11 @@ extension _DoNotUse._ArrayX: SolidityCodable {
         }
         return T.isDynamic
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return BaseEncoder.encode(items)
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
         return try self.init(BaseDecoder.decodeArray(source: source, capacity: length, decoder: T.decode))
     }
@@ -44,7 +45,7 @@ extension _DoNotUse._ArrayX: SolidityCodable {
 
 // MARK: - Equatable
 extension _DoNotUse._ArrayX: Equatable {
-    static func ==(lhs: _DoNotUse._ArrayX<T>, rhs: _DoNotUse._ArrayX<T>) -> Bool {
+    static func == (lhs: _DoNotUse._ArrayX<T>, rhs: _DoNotUse._ArrayX<T>) -> Bool {
         guard type(of: lhs).length == type(of: lhs).length,
             lhs.items.count == rhs.items.count else {
                 return false

@@ -1,6 +1,6 @@
 //
 //  VariableArray.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 28.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
@@ -12,7 +12,7 @@ extension Solidity {
     struct VariableArray<T: SolidityCodable & Equatable> {
         let items: [T]
         let length: Solidity.UInt256
-        
+
         init?(_ items: [T]) {
             guard let length = try? Solidity.UInt256(BigUInt(items.count)) else {
                 return nil
@@ -36,14 +36,14 @@ extension Solidity.VariableArray: DynamicType {
         }
         return array
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return length.encode() + BaseEncoder.encode(items)
     }
 }
 
 extension Solidity.VariableArray: Equatable {
-    static func ==(lhs: Solidity.VariableArray<T>, rhs: Solidity.VariableArray<T>) -> Bool {
+    static func == (lhs: Solidity.VariableArray<T>, rhs: Solidity.VariableArray<T>) -> Bool {
         return lhs.length == rhs.length && lhs.items == rhs.items
     }
 }

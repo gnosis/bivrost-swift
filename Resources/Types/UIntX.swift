@@ -9,15 +9,16 @@
 import BigInt
 
 // MARK: - _UIntX
-extension _DoNotUse {
-    public class _UIntX {
+public extension _DoNotUse {
+    // swiftlint:disable:next type_name
+    class _UIntX {
         /// Content of the UInt
         let value: BigUInt
         /// Specifies how wide this uint is
         class var bitWidth: UInt {
             fatalError("_UIntX.bitWidth needs to be overridden.")
         }
-        
+
         required public init(_ uint: BigUInt) throws {
             let bits = type(of: self).bitWidth
             guard uint.bitWidth <= bits else {
@@ -36,7 +37,7 @@ extension _DoNotUse._UIntX: StaticType {
         }
         return BaseEncoder.encodeUnPadded(uint: value, bitWidth: type(of: self).bitWidth).padToSolidity()
     }
-    
+
     static func decode(source: BaseDecoder.PartitionData) throws -> Self {
         guard let uint = try? self.init(BaseDecoder.decodeUInt(data: source.consume())) else {
             throw BivrostError.Decoder.couldNotCreateUInt(source: source, bits: bitWidth)
@@ -47,7 +48,7 @@ extension _DoNotUse._UIntX: StaticType {
 
 // MARK: - Equatable
 extension _DoNotUse._UIntX: Equatable {
-    public static func ==(lhs: _DoNotUse._UIntX, rhs: _DoNotUse._UIntX) -> Bool {
+    public static func == (lhs: _DoNotUse._UIntX, rhs: _DoNotUse._UIntX) -> Bool {
         guard type(of: lhs).bitWidth == type(of: rhs).bitWidth else {
             return false
         }

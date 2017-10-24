@@ -8,13 +8,14 @@
 extension Templates {
     static let ArrayX = """
         extension Solidity {
-            {% for length in lengths %}
+        {% for length in lengths %}
             final class Array{{ length }}<T: SolidityCodable & Equatable>: _DoNotUse._ArrayX<T> {
                 override class var length: UInt {
                     return {{ length }}
                 }
             }
-            {% endfor %}
+        {% endfor %}
         }
-    """
+
+        """
 }

@@ -1,19 +1,19 @@
 //
 //  Bytes.swift
-//  BivrostKit
+//  BivrostHelper
 //
 //  Created by Luis Reisewitz on 27.09.17.
 //  Copyright © 2017 Gnosis. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
-extension Solidity {
-    public struct Bytes {
+public extension Solidity {
+    struct Bytes {
         let value: Data
         let length: UInt256
-        
+
         init?(_ value: Data) {
             guard let length = try? Solidity.UInt256(BigUInt(value.count)) else {
                 return nil
@@ -32,14 +32,14 @@ extension Solidity.Bytes: DynamicType {
         }
         return bytes
     }
-    
+
     func encode() -> SolidityCodable.EncodeFormat {
         return length.encode() + value.hexEncodedString().padToSolidity(location: .right)
     }
 }
 
 extension Solidity.Bytes: Equatable {
-    public static func ==(lhs: Solidity.Bytes, rhs: Solidity.Bytes) -> Bool {
+    public static func == (lhs: Solidity.Bytes, rhs: Solidity.Bytes) -> Bool {
         return lhs.length == rhs.length && lhs.value == rhs.value
     }
 }
