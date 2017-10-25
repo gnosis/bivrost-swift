@@ -21,11 +21,11 @@
       },
       {
         "package": "CryptoSwift",
-        "repositoryURL": "https://github.com/zweigraf/CryptoSwift.git",
+        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift",
         "state": {
           "branch": null,
-          "revision": "fdd115318528c9c25a06c0a89553f71bde7233da",
-          "version": null
+          "revision": "d0084e4a6fe9490b3baab3d3c2aad58d3a852daf",
+          "version": "0.8.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/Quick/Quick.git",
         "state": {
           "branch": null,
-          "revision": "c498edf4aabb694a5b8a861ec3d69f0c5ab57d9e",
-          "version": null
+          "revision": "0ff81f2c665b4381f526bd656f8708dd52a9ea2f",
+          "version": "1.2.0"
         }
       },
       {

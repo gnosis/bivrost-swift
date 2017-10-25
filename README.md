@@ -114,4 +114,8 @@ Bivrost is available under the MIT license. See the LICENSE file for more info.
 
 ## Issues
 
-Tests currently do not work when generating an Xcode project via `swift package generate-xcodeproj`. This issue is described at the bottom of <https://github.com/Quick/Quick/issues/707>. Drop to the CMD and use `swift test` for testing.
+Tests currently do not work when generating an Xcode project via `swift package generate-xcodeproj`. This issue is described in <https://github.com/Quick/Quick/issues/751>. 
+
+Workarounds:
+- Drop to the CMD and use `swift test` for testing.
+- Go to the `QuickSpecBase` target build settings in the generated Xcode project. Set `Enables Module` to `YES` (`CLANG_ENABLE_MODULES=YES`). Now testing should work.
