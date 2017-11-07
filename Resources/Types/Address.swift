@@ -15,9 +15,7 @@ public extension Solidity {
         private let bigInt: BigUInt
 
         init(_ address: Swift.String) throws {
-            let hex = address.hasPrefix("0x")
-                ? Swift.String(address[address.index(address.startIndex, offsetBy: 2)...])
-                : address
+            let hex = address.withoutHexPrefix
             guard let bigInt = BigUInt(hex, radix: 16) else {
                 throw BivrostError.Address.invalidAddress(hex)
             }

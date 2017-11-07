@@ -24,6 +24,10 @@ public extension _DoNotUse {
             }
             self.value = value
         }
+
+        func unwrap() -> Data {
+            return value
+        }
     }
 }
 

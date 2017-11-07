@@ -84,3 +84,13 @@ extension String {
         return forBytes * 2
     }
 }
+
+// MARK: - Hex Helper
+extension String {
+    /// Returns a new string, removing a '0x' prefix if present.
+    var withoutHexPrefix: String {
+        return hasPrefix("0x")
+            ? String(dropFirst(2))
+            : self
+    }
+}
