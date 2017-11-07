@@ -32,7 +32,7 @@ extension Templates {
                     {% for decodedType in function.decodeReturnTypes %}
                         {% if decodedType.isDynamic %}
                     // Ignore location for dynamic type
-                    _ = source.consume()
+                    _ = try source.consume()
                         {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
                         {% endif %}
@@ -52,7 +52,7 @@ extension Templates {
                     {% for decodedType in function.decodeArgumentsTypes %}
                         {% if decodedType.isDynamic %}
                     // Ignore location for dynamic type
-                    _ = source.consume()
+                    _ = try source.consume()
                         {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
                         {% endif %}

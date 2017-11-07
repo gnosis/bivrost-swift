@@ -59,14 +59,14 @@ struct BaseDecoder {
     }
 
     static func decodeBytes(source: PartitionData) throws -> Data {
-        let sizePart = source.consume()
+        let sizePart = try source.consume()
         guard let size = Int(sizePart, radix: 16) else {
             throw BivrostError.Decoder.invalidBytesLength(hex: sizePart)
         }
 
         var byteHolder = Data()
         while byteHolder.count < size {
-            if let data = Data(fromHexEncodedString: source.consume()) {
+            if let data = Data(fromHexEncodedString: try source.consume()) {
                 byteHolder.append(data)
             }
         }
@@ -107,7 +107,7 @@ struct BaseDecoder {
         }
         // We have dynamic types, we need to check the dynamic array
         // Consume all locations to jump cursor ahead to dynamic section
-        (0..<capacity).forEach { _ in _ = source.consume() }
+        try (0..<capacity).forEach { _ in _ = try source.consume() }
         return try (0..<capacity).map { _ in try decoder(source) }
     }
 }
@@ -126,7 +126,10 @@ extension BaseDecoder {
 
         var index: Int = 0
 
-        func consume() -> String {
+        func consume() throws -> String {
+            guard index < lines.count else {
+                throw BivrostError.Decoder.endOfSourceData
+            }
             let returnValue = lines[index]
             index += 1
             return returnValue
