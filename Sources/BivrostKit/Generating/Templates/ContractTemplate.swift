@@ -22,7 +22,7 @@ extension Templates {
                 static let methodId = "{{ function.methodId }}"
                 typealias Return = {{ function.output }}
                 typealias Arguments = {{ function.input }}
-                
+
                 static func encodeCall(arguments: Arguments) -> String {
                     return "0x\\(methodId)\\(BaseEncoder.encode(arguments: {{ function.encodeArguments }}))"
                 }
