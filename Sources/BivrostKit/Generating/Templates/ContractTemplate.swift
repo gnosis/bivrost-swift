@@ -17,6 +17,7 @@ extension Templates {
 
         struct {{ contract.name }} {
             {% for function in contract.functions %}
+
             struct {{ function.name }}: SolidityFunction {
                 static let methodId = "{{ function.methodId }}"
                 typealias Return = {{ function.output }}
@@ -25,7 +26,10 @@ extension Templates {
                 static func encodeCall(arguments: Arguments) -> String {
                     return "0x\\(methodId)\\(BaseEncoder.encode(arguments: {{ function.encodeArguments }}))"
                 }
-                
+
+                {% if function.hasEmptyDecodeReturnFunction %}
+                static func decode(returnData: String) throws -> Return {}
+                {% else %}
                 static func decode(returnData: String) throws -> Return {
                     let source = BaseDecoder.partition(returnData)
                     // Static Types & Location
@@ -45,7 +49,11 @@ extension Templates {
                     {% endfor %}
                     return {{ function.decodeReturnReturnValue }}
                 }
-                
+                {% endif %}
+
+                {% if function.hasEmptyDecodeArgumentsFunction %}
+                static func decode(argumentsData: String) throws -> Arguments {}
+                {% else %}
                 static func decode(argumentsData: String) throws -> Arguments {
                     let source = BaseDecoder.partition(argumentsData)
                     // Static Types & Location
@@ -65,6 +73,7 @@ extension Templates {
                     {% endfor %}
                     return {{ function.decodeArgumentsReturnValue }}
                 }
+                {% endif %}
             }
             {% endfor %}
         }

@@ -20,9 +20,11 @@ struct ContractTemplateModel {
         
         let decodeReturnReturnValue: String // Name to be returned at the end of decode(returnData:)
         let decodeReturnTypes: [DecodeType]
+        let hasEmptyDecodeReturnFunction: Bool
         
         let decodeArgumentsReturnValue: String // Name to be returned at the end of decode(argumentsData:)
         let decodeArgumentsTypes: [DecodeType]
+        let hasEmptyDecodeArgumentsFunction: Bool
         
         struct DecodeType {
             let name: String
@@ -61,12 +63,16 @@ struct ContractTemplateModel {
                 let outputString = tupleString(for: object.outputs)
                 
                 let encodeArgumentsString = encodeArguments(for: object.inputs)
+
                 let decodeReturnTypesArray = decodeTypes(for: object.outputs)
+                let hasEmptyDecodeReturnFunction = decodeReturnTypesArray.isEmpty
                 let decodeReturnReturnValueString = decodeReturnReturnValue(for: decodeReturnTypesArray)
+
                 let decodeArgumentsTypesArray = decodeTypes(for: object.inputs)
+                let hasEmptyDecodeArgumentsFunction = decodeArgumentsTypesArray.isEmpty
                 let decodeArgumentsReturnValueString = decodeArgumentsReturnValue(for: decodeArgumentsTypesArray)
                 
-                return ContractTemplateModel.Function(name: preparedFunctionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray)
+                return ContractTemplateModel.Function(name: preparedFunctionName, methodId: functionMethodId, input: inputString, output: outputString, encodeArguments: encodeArgumentsString, decodeReturnReturnValue: decodeReturnReturnValueString, decodeReturnTypes: decodeReturnTypesArray, hasEmptyDecodeReturnFunction: hasEmptyDecodeReturnFunction, decodeArgumentsReturnValue: decodeArgumentsReturnValueString, decodeArgumentsTypes: decodeArgumentsTypesArray, hasEmptyDecodeArgumentsFunction: hasEmptyDecodeArgumentsFunction)
         }
     }
 }
