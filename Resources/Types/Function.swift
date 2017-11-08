@@ -41,7 +41,7 @@ extension Solidity.Function: StaticType {
     }
 
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.Function {
-        let line = source.consume()
+        let line = try source.consume()
         // 20 bytes / 40 chars for Address as UInt160
         let addressHex = String(line[line.startIndex ..< line.index(startDistance: 40)])
         let uint = try BaseDecoder.decodeUInt(data: addressHex)

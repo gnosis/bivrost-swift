@@ -10,7 +10,7 @@
 extension _DoNotUse {
     // swiftlint:disable:next type_name
     class _ArrayX<T: SolidityCodable & Equatable> {
-        private let items: [T]
+        let items: [T]
         class var length: UInt {
             fatalError("Not meant to be called directly.")
         }

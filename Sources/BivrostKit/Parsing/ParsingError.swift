@@ -19,6 +19,6 @@ enum ParsingError: Error {
     case eventInputInvalid
     case parameterTypeInvalid
     case parameterTypeNotFound
-    case contractNameInvalid
+    case contractNameInvalid(json: [String: Any])
     case contractAbiInvalid
 }

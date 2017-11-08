@@ -26,6 +26,10 @@ public extension _DoNotUse {
             }
             value = uint
         }
+
+        func unwrap() -> BigUInt {
+            return value
+        }
     }
 }
 

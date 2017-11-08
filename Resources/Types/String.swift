@@ -9,13 +9,20 @@
 public extension Solidity {
     struct String {
         let wrapper: Solidity.Bytes
+        let value: Swift.String
 
         init?(_ value: Swift.String) {
+            self.value = value
+
             guard let data = value.data(using: .utf8),
                 let bytes = Solidity.Bytes(data) else {
                 return nil
             }
             self.wrapper = bytes
+        }
+
+        func unwrap() -> Swift.String {
+            return value
         }
     }
 }

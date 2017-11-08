@@ -10,13 +10,19 @@ import BigInt
 
 public extension Solidity {
     struct Bool {
+        private let value: Swift.Bool
         private let wrapper: UInt8
 
         init(_ value: Swift.Bool) {
+            self.value = value
             guard let wrapper = try? UInt8(BigUInt(value ? 1 : 0)) else {
                 fatalError("Solidity.Bool could not be created with value of \(value). This should not happen.")
             }
             self.wrapper = wrapper
+        }
+
+        func unwrap() -> Swift.Bool {
+            return value
         }
     }
 }

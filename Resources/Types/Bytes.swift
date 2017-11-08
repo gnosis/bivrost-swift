@@ -21,6 +21,10 @@ public extension Solidity {
             self.value = value
             self.length = length
         }
+
+        func unwrap() -> Data {
+            return value
+        }
     }
 }
 

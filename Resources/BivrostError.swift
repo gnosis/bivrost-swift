@@ -12,6 +12,8 @@ import Foundation
 
 enum BivrostError: Error {
     enum Decoder: Error {
+        case endOfSourceData
+
         // Decoding
         case invalidBool(hex: String)
         case invalidUInt(hex: String)

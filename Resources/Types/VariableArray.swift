@@ -26,7 +26,7 @@ extension Solidity {
 // MARK: - DynamicType
 extension Solidity.VariableArray: DynamicType {
     static func decode(source: BaseDecoder.PartitionData) throws -> Solidity.VariableArray<T> {
-        let sizePart = source.consume()
+        let sizePart = try source.consume()
         guard let size = UInt(sizePart, radix: 16) else {
             throw BivrostError.Decoder.invalidArrayLength(hex: sizePart)
         }
