@@ -7,7 +7,7 @@
 //
 
 struct Assets {
-    static let duplicateMethodJson = """
+    static let duplicateMethodJsonTruffle3 = """
     {
         "contract_name": "DuplicateMethod",
         "abi": [
@@ -3350,7 +3350,7 @@ struct Assets {
         }
     """
 
-    static let standardTokenJson = """
+    static let standardTokenJsonTruffle3 = """
         {
           "contract_name": "StandardToken",
           "abi": [

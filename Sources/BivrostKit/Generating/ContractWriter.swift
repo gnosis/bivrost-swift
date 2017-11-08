@@ -9,10 +9,11 @@ import PathKit
 import Foundation
 
 struct ContractWriter {
-    static func writeContracts(from inputFiles: [String], to outputFolder: String) throws {
+    static func writeContracts(from inputFiles: [String], to outputFolder: String, format: JsonFormat) throws {
         try FileTool.create(path: outputFolder)
         try inputFiles.forEach { path in
-            let contract = try ContractParser.parseContract(from: path)
+            let parserType = format.parserType
+            let contract = try parserType.parseContract(from: path)
             let outputFile = (Path(outputFolder) + fileName(for: contract)).absolute().string
             try FileTool.write(ContractGenerator.generateCode(from: contract), to: outputFile)
         }

@@ -10,27 +10,11 @@
 import PathKit
 import Foundation
 
-struct ContractParser {
-    /// Parses a dictionary of json contract elements into a Contract struct.
-    ///
-    /// - Parameter json: Should be a valid JSON dictionary containing name and
-    ///     elements of the contract. Elements include functions and events,
-    ///     according to
-    ///     https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#json
-    /// - Returns: An initialised contract struct.
-    /// - Throws: Throws if the json was malformed, e.g. a required field was missing.
-    static func parseContract(from json: [String: Any]) throws -> Contract {
-        guard let name = json[.contractName] as? String else {
-            throw ParsingError.contractNameInvalid
-        }
-        guard let elementsJson = json[.abi] as? [[String: Any]] else {
-            throw ParsingError.contractAbiInvalid
-        }
-        
-        let elements = try elementsJson.map { try ElementJsonParser.parseContractElement(from: $0) }
-        return Contract(name: name, elements: elements)
-    }
-    
+protocol ContractParser {
+    static func parseContract(from json: [String: Any]) throws -> Contract
+}
+
+extension ContractParser {
     /// Reads the given file and parses the content into a `Contract` struct.
     /// File should contain a valid JSON dictionary containing the contract
     /// metadata and abi.
@@ -39,10 +23,20 @@ struct ContractParser {
     /// - Returns: An initialised contract struct.
     /// - Throws: Throws if the json was malformed, e.g. a required field was missing.
     static func parseContract(from file: String) throws -> Contract {
+        return try parseContract(from: jsonDict(from: file))
+    }
+
+    /// Reads the given file and parses the contents as a json dictionary.
+    /// File should contain a valid JSON dictionary.
+    ///
+    /// - Parameter file: Absolute file path of the JSON file.
+    /// - Returns: A dictionary of the json contents.
+    /// - Throws: Throws if the json was malformed or was not a dictionary.
+    private static func jsonDict(from file: String) throws -> [String: Any] {
         let jsonData = try Path(file).read()
         guard let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
-            throw ParsingError.invalidJsonFile
+            throw ParsingError.jsonFileNotADictionary
         }
-        return try parseContract(from: jsonDict)
+        return jsonDict
     }
 }

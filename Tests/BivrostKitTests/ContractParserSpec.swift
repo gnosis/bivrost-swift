@@ -13,17 +13,17 @@ import Quick
 
 class ContractParserSpec: QuickSpec {
     override func spec() {
-        describe("ContractParser") {
+        describe("Truffle3ContractParser") {
             it("should not throw when parsing MultiSigWalletWithDailyLimit.json") {
                 let json = jsonDict(from: Assets.multiSigWalletJson)
-                expect { try ContractParser.parseContract(from: json) }.toNot(throwError())
-                expect { (try ContractParser.parseContract(from: json)).name } == "MultiSigWalletWithDailyLimit"
+                expect { try Truffle3ContractParser.parseContract(from: json) }.toNot(throwError())
+                expect { (try Truffle3ContractParser.parseContract(from: json)).name } == "MultiSigWalletWithDailyLimit"
             }
 
             it("should not throw when parsing StandardToken") {
-                let json = jsonDict(from: Assets.standardTokenJson)
-                expect { try ContractParser.parseContract(from: json) }.toNot(throwError())
-                expect { (try ContractParser.parseContract(from: json)).name } == "StandardToken"
+                let json = jsonDict(from: Assets.standardTokenJsonTruffle3)
+                expect { try Truffle3ContractParser.parseContract(from: json) }.toNot(throwError())
+                expect { (try Truffle3ContractParser.parseContract(from: json)).name } == "StandardToken"
             }
         }
     }

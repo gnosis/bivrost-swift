@@ -10,7 +10,8 @@ import Foundation
 
 // Parser Errors
 enum ParsingError: Error {
-    case invalidJsonFile
+    case noInputFiles
+    case jsonFileNotADictionary
     
     case elementTypeInvalid
     case elementNameInvalid
@@ -21,4 +22,7 @@ enum ParsingError: Error {
     case parameterTypeNotFound
     case contractNameInvalid
     case contractAbiInvalid
+
+    // Solc0.4
+    case contractsDictInvalid
 }
