@@ -32,16 +32,16 @@ extension Templates {
                 {% else %}
                 static func decode(returnData: String) throws -> Return {
                     let source = BaseDecoder.partition(returnData)
-                    // Static Types & Location
+                    // Decode Static Types & Locations for Dynamic Types
                     {% for decodedType in function.decodeReturnTypes %}
                         {% if decodedType.isDynamic %}
-                    // Ignore location for dynamic type
+                    // Ignore location for {{ decodedType.name }} (dynamic type)
                     _ = try source.consume()
                         {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
                         {% endif %}
                     {% endfor %}
-                    // Dynamic Types
+                    // Dynamic Types (if any)
                     {% for decodedType in function.decodeReturnTypes %}
                         {% if decodedType.isDynamic %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
@@ -56,16 +56,16 @@ extension Templates {
                 {% else %}
                 static func decode(argumentsData: String) throws -> Arguments {
                     let source = BaseDecoder.partition(argumentsData)
-                    // Static Types & Location
+                    // Decode Static Types & Locations for Dynamic Types
                     {% for decodedType in function.decodeArgumentsTypes %}
                         {% if decodedType.isDynamic %}
-                    // Ignore location for dynamic type
+                    // Ignore location for {{ decodedType.name }} (dynamic type)
                     _ = try source.consume()
                         {% else %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
                         {% endif %}
                     {% endfor %}
-                    // Dynamic Types
+                    // Dynamic Types (if any)
                     {% for decodedType in function.decodeArgumentsTypes %}
                         {% if decodedType.isDynamic %}
                     let {{ decodedType.name }} = try {{ decodedType.type }}.decode(source: source)
