@@ -3,7 +3,7 @@
 //  BivrostHelperTests
 //
 //  Created by Luis Reisewitz on 02.10.17.
-//  Copyright © 2017 Gnosis. All rights reserved.
+//  Copyright © 2017 Gnosis Ltd. All rights reserved.
 //
 
 import BigInt

@@ -3,7 +3,7 @@
 //  BivrostKitTests
 //
 //  Created by Luis Reisewitz on 23.10.17.
-//  Copyright © 2017 Gnosis. All rights reserved.
+//  Copyright © 2017 Gnosis Ltd. All rights reserved.
 //
 
 @testable import BivrostKit

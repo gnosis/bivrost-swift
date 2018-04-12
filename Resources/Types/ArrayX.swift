@@ -3,7 +3,7 @@
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 26.09.17.
-//  Copyright © 2017 Gnosis. All rights reserved.
+//  Copyright © 2017 Gnosis Ltd. All rights reserved.
 //
 
 /// Base type for fixed-length Solidity.Arrays. Do not use directly.

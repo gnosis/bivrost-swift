@@ -3,7 +3,7 @@
 //  Bivrost
 //
 //  Created by Luis Reisewitz on 26.09.17.
-//  Copyright © 2017 Gnosis. All rights reserved.
+//  Copyright © 2017 Gnosis Ltd. All rights reserved.
 //
 
 /// Struct containing all Solidity Types
