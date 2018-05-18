@@ -17,7 +17,7 @@ enum JsonKey: String {
     case anonymous
     case indexed
     case abi
-    case contractName = "contract_name"
+    case contractName
 }
 
 extension Dictionary where Key == String {
