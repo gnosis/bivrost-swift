@@ -16,7 +16,7 @@ public struct BivrostKit {
     ///
     /// - Parameters:
     ///   - inputFiles: A list of JSON file paths. JSON files should be valid contract
-    ///     JSON containing a `contract_name` and an `abi` field.
+    ///     JSON containing a `contractName` and an `abi` field.
     ///   - outputFolder: Solidity `.swift` files will be exported to this folder.
     ///   - force: If `true`, deletes all contents of the outputFolder before
     ///     recreating it. Make sure there is nothing else in there.
@@ -40,7 +40,7 @@ public struct BivrostKit {
     ///
     /// - Parameters:
     ///   - inputFiles: A list of JSON file paths. JSON files should be valid contract
-    ///     JSON containing a `contract_name` and an `abi` field.
+    ///     JSON containing a `contractName` and an `abi` field.
     ///   - outputFolder: Generated `.swift` files will be exported to this folder.
     public static func generateContracts(from inputFiles: [String], to outputFolder: String) throws {
         try ContractWriter.writeContracts(from: inputFiles, to: outputFolder)

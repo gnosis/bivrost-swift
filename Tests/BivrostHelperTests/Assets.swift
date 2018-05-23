@@ -9,7 +9,7 @@
 struct Assets {
     static let multiSigWalletJson = """
         {
-          "contract_name": "MultiSigWalletWithDailyLimit",
+          "contractName": "MultiSigWalletWithDailyLimit",
           "abi": [
             {
               "constant": true,
@@ -3309,7 +3309,7 @@ struct Assets {
 
     static let standardTokenJson = """
         {
-          "contract_name": "StandardToken",
+          "contractName": "StandardToken",
           "abi": [
             {
               "constant": false,

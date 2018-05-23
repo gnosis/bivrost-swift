@@ -1,9 +1,5 @@
-osx_image: xcode9 
-language: objective-c
-before_install:
-  - brew tap yonaskolb/mint https://github.com/yonaskolb/mint.git
-  - brew install mint
+osx_image: xcode9.3 
+language: swift
 script:
-  - mint run realm/swiftlint@0.23.1
-  - swift build
+  - swiftlint
   - swift test
